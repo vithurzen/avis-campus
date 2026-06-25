@@ -1,0 +1,359 @@
+Project AvisCampus {
+  database_type: "PostgreSQL"
+  Note: "MCD du projet Avis Campus - plateforme d'avis sur les cours et UE"
+}
+
+/*
+|--------------------------------------------------------------------------
+| UTILISATEURS & PROFILS
+|--------------------------------------------------------------------------
+*/
+
+Table users {
+  id int [pk, increment]
+  email varchar(180) [not null, unique]
+  password varchar(255) [not null]
+  roles json [not null]
+  is_verified boolean [default: false]
+  created_at datetime [not null]
+  updated_at datetime
+
+  Note: "Compte principal utilisé pour l'authentification Symfony"
+}
+
+Table profiles {
+  id int [pk, increment]
+  user_id int [not null, unique]
+  profile_type varchar(50) [not null] // student, moderator, admin
+
+  first_name varchar(100) [not null]
+  last_name varchar(100) [not null]
+  avatar varchar(255)
+  bio text
+
+  // Champs spécifiques étudiant
+  level varchar(100)
+  current_year int
+  formation_id int
+
+  // Champs spécifiques modérateur
+  moderation_area varchar(150)
+  handled_reports_count int [default: 0]
+
+  // Champs spécifiques admin
+  admin_code varchar(100)
+  super_admin boolean [default: false]
+
+  created_at datetime [not null]
+  updated_at datetime
+
+  Note: "Table utilisée pour l'héritage Doctrine en Single Table Inheritance"
+}
+
+/*
+|--------------------------------------------------------------------------
+| FORMATIONS, SEMESTRES & COURS
+|--------------------------------------------------------------------------
+*/
+
+Table formations {
+  id int [pk, increment]
+  name varchar(150) [not null]
+  description text
+  degree_level varchar(100)
+  created_at datetime [not null]
+
+  Note: "Exemple : BUT Informatique, Licence Informatique, Master MIAGE"
+}
+
+Table semesters {
+  id int [pk, increment]
+  formation_id int [not null]
+  name varchar(50) [not null]
+  number int [not null]
+
+  Note: "Exemple : S1, S2, S5"
+}
+
+Table courses {
+  id int [pk, increment]
+  semester_id int [not null]
+  title varchar(180) [not null]
+  description text
+  coefficient float
+  hours int
+  created_at datetime [not null]
+  updated_at datetime
+
+  Note: "Cours ou UE évalué par les étudiants"
+}
+
+Table teachers {
+  id int [pk, increment]
+  first_name varchar(100) [not null]
+  last_name varchar(100) [not null]
+  email varchar(180)
+  created_at datetime [not null]
+
+  Note: "Enseignant associé à un cours, mais non noté directement"
+}
+
+Table course_teachers {
+  id int [pk, increment]
+  course_id int [not null]
+  teacher_id int [not null]
+
+  indexes {
+    (course_id, teacher_id) [unique]
+  }
+
+  Note: "Relation ManyToMany entre cours et enseignants"
+}
+
+/*
+|--------------------------------------------------------------------------
+| TAGS & RESSOURCES
+|--------------------------------------------------------------------------
+*/
+
+Table tags {
+  id int [pk, increment]
+  name varchar(100) [not null, unique]
+  color varchar(30)
+
+  Note: "Exemple : difficile, projet, pratique, théorie"
+}
+
+Table course_tags {
+  id int [pk, increment]
+  course_id int [not null]
+  tag_id int [not null]
+
+  indexes {
+    (course_id, tag_id) [unique]
+  }
+
+  Note: "Relation ManyToMany entre cours et tags"
+}
+
+Table resources {
+  id int [pk, increment]
+  course_id int [not null]
+  title varchar(180) [not null]
+  url varchar(255) [not null]
+  type varchar(80) [not null]
+  created_at datetime [not null]
+
+  Note: "Ressources utiles liées à un cours : documentation, vidéo, article, support"
+}
+
+/*
+|--------------------------------------------------------------------------
+| AVIS & NOTES
+|--------------------------------------------------------------------------
+*/
+
+Table reviews {
+  id int [pk, increment]
+  user_id int [not null]
+  course_id int [not null]
+  title varchar(180) [not null]
+  content text [not null]
+  status varchar(50) [not null, default: "pending"]
+  created_at datetime [not null]
+  updated_at datetime
+
+  indexes {
+    (user_id, course_id) [unique]
+  }
+
+  Note: "Avis laissé par un étudiant sur un cours. Un étudiant ne peut publier qu'un avis par cours."
+}
+
+Table rating_criteria {
+  id int [pk, increment]
+  name varchar(100) [not null]
+  description text
+  max_score int [not null, default: 5]
+
+  Note: "Critères : difficulté, charge de travail, utilité, organisation, clarté"
+}
+
+Table review_ratings {
+  id int [pk, increment]
+  review_id int [not null]
+  rating_criteria_id int [not null]
+  score int [not null]
+
+  indexes {
+    (review_id, rating_criteria_id) [unique]
+  }
+
+  Note: "Note attribuée à un critère pour un avis donné"
+}
+
+/*
+|--------------------------------------------------------------------------
+| COMMENTAIRES, SIGNALEMENTS & MODÉRATION
+|--------------------------------------------------------------------------
+*/
+
+Table comments {
+  id int [pk, increment]
+  user_id int [not null]
+  review_id int [not null]
+  content text [not null]
+  status varchar(50) [not null, default: "visible"]
+  created_at datetime [not null]
+  updated_at datetime
+
+  Note: "Commentaire publié sous un avis"
+}
+
+Table reports {
+  id int [pk, increment]
+  user_id int [not null]
+  review_id int
+  comment_id int
+  reason varchar(150) [not null]
+  description text
+  status varchar(50) [not null, default: "open"]
+  created_at datetime [not null]
+
+  Note: "Signalement d'un avis ou d'un commentaire"
+}
+
+Table moderation_actions {
+  id int [pk, increment]
+  moderator_profile_id int [not null]
+  review_id int
+  comment_id int
+  report_id int
+  action varchar(100) [not null]
+  reason text
+  created_at datetime [not null]
+
+  Note: "Historique des actions de modération"
+}
+
+/*
+|--------------------------------------------------------------------------
+| FAVORIS, NOTIFICATIONS & EMAILS
+|--------------------------------------------------------------------------
+*/
+
+Table favorites {
+  id int [pk, increment]
+  user_id int [not null]
+  course_id int [not null]
+  created_at datetime [not null]
+
+  indexes {
+    (user_id, course_id) [unique]
+  }
+
+  Note: "Cours ajouté en favori par un étudiant"
+}
+
+Table notifications {
+  id int [pk, increment]
+  user_id int [not null]
+  title varchar(180) [not null]
+  message text [not null]
+  is_read boolean [default: false]
+  created_at datetime [not null]
+
+  Note: "Notification interne liée à un utilisateur"
+}
+
+Table email_logs {
+  id int [pk, increment]
+  user_id int
+  recipient varchar(180) [not null]
+  subject varchar(255) [not null]
+  type varchar(100) [not null]
+  status varchar(50) [not null]
+  sent_at datetime
+
+  Note: "Historique des emails envoyés par Symfony Mailer"
+}
+
+/*
+|--------------------------------------------------------------------------
+| LOGS API EXTERNE
+|--------------------------------------------------------------------------
+*/
+
+Table api_logs {
+  id int [pk, increment]
+  user_id int
+  endpoint varchar(255) [not null]
+  request_type varchar(100) [not null]
+  response_status int
+  created_at datetime [not null]
+
+  Note: "Historique des appels vers l'API externe d'analyse/modération"
+}
+
+/*
+|--------------------------------------------------------------------------
+| RELATIONS
+|--------------------------------------------------------------------------
+*/
+
+// User / Profile
+Ref: users.id - profiles.user_id
+
+// Formation / Profile étudiant
+Ref: formations.id < profiles.formation_id
+
+// Formation / Semester / Course
+Ref: formations.id < semesters.formation_id
+Ref: semesters.id < courses.semester_id
+
+// Course / Teacher ManyToMany
+Ref: courses.id < course_teachers.course_id
+Ref: teachers.id < course_teachers.teacher_id
+
+// Course / Tag ManyToMany
+Ref: courses.id < course_tags.course_id
+Ref: tags.id < course_tags.tag_id
+
+// Course / Resource
+Ref: courses.id < resources.course_id
+
+// User / Review / Course
+Ref: users.id < reviews.user_id
+Ref: courses.id < reviews.course_id
+
+// Review / Rating
+Ref: reviews.id < review_ratings.review_id
+Ref: rating_criteria.id < review_ratings.rating_criteria_id
+
+// User / Comment / Review
+Ref: users.id < comments.user_id
+Ref: reviews.id < comments.review_id
+
+// Reports
+Ref: users.id < reports.user_id
+Ref: reviews.id < reports.review_id
+Ref: comments.id < reports.comment_id
+
+// Moderation
+Ref: profiles.id < moderation_actions.moderator_profile_id
+Ref: reviews.id < moderation_actions.review_id
+Ref: comments.id < moderation_actions.comment_id
+Ref: reports.id < moderation_actions.report_id
+
+// Favorites
+Ref: users.id < favorites.user_id
+Ref: courses.id < favorites.course_id
+
+// Notifications
+Ref: users.id < notifications.user_id
+
+// Email logs
+Ref: users.id < email_logs.user_id
+
+// API logs
+Ref: users.id < api_logs.user_id

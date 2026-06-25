@@ -1,0 +1,207 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\ReviewRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: ReviewRepository::class)]
+#[ORM\Table(name: 'reviews')]
+#[ORM\UniqueConstraint(name: 'uniq_review_user_course', columns: ['user_id', 'course_id'])]
+class Review
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reviews')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'reviews')]
+    #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id', nullable: false)]
+    private ?Course $course = null;
+
+    #[ORM\Column(length: 180)]
+    private ?string $title = null;
+
+    #[ORM\Column(type: 'text')]
+    private ?string $content = null;
+
+    #[ORM\Column(length: 50, options: ['default' => 'pending'])]
+    private string $status = 'pending';
+
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
+
+    /**
+     * @var Collection<int, ReviewRating>
+     */
+    #[ORM\OneToMany(mappedBy: 'review', targetEntity: ReviewRating::class, cascade: ['persist', 'remove'])]
+    private Collection $ratings;
+
+    /**
+     * @var Collection<int, Comment>
+     */
+    #[ORM\OneToMany(mappedBy: 'review', targetEntity: Comment::class)]
+    private Collection $comments;
+
+    public function __construct()
+    {
+        $this->ratings = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getCourse(): ?Course
+    {
+        return $this->course;
+    }
+
+    public function setCourse(?Course $course): static
+    {
+        $this->course = $course;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): static
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): static
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ReviewRating>
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(ReviewRating $rating): static
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings->add($rating);
+            $rating->setReview($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRating(ReviewRating $rating): static
+    {
+        if ($this->ratings->removeElement($rating)) {
+            if ($rating->getReview() === $this) {
+                $rating->setReview(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setReview($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            if ($comment->getReview() === $this) {
+                $comment->setReview(null);
+            }
+        }
+
+        return $this;
+    }
+}
