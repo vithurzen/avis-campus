@@ -2,26 +2,23 @@
 
 namespace App\Service;
 
-use App\Entity\EmailLog;
 use App\Entity\ModerationAction;
 use App\Entity\ModeratorProfile;
-use App\Entity\Notification;
 use App\Entity\Review;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 
 /**
- * Centralizes the review moderation workflow: status transition + the side
- * effects that must happen atomically (moderation log, notification, email).
+ * Centralizes the review moderation workflow: status transition plus the side
+ * effects (audit log, notification, email), delegating the notification and
+ * email concerns to dedicated services.
  */
-class ReviewModerator
+class ReviewModerationService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private MailerInterface $mailer,
+        private NotificationService $notificationService,
+        private EmailService $emailService,
     ) {
     }
 
@@ -102,59 +99,21 @@ class ReviewModerator
             throw new \LogicException('The acting user is not a moderator.');
         }
 
-        $now = new \DateTimeImmutable();
         $author = $review->getUser();
 
+        // 1. Status transition + audit trail
         $review->setStatus($newStatus);
-
-        // 1. Audit trail
         $action = (new ModerationAction())
             ->setModerator($profile)
             ->setReview($review)
             ->setAction($actionLabel)
             ->setReason($reason)
-            ->setCreatedAt($now);
+            ->setCreatedAt(new \DateTimeImmutable());
         $this->entityManager->persist($action);
-
-        // 2. In-app notification for the review author
-        $notification = (new Notification())
-            ->setUser($author)
-            ->setTitle($notificationTitle)
-            ->setMessage($notificationMessage);
-        $this->entityManager->persist($notification);
-
-        // 3. Email (logged regardless of transport outcome)
-        $this->sendEmail($author->getEmail(), $notificationTitle, $notificationMessage, $emailType, $author, $now);
-
         $this->entityManager->flush();
-    }
 
-    private function sendEmail(
-        string $recipient,
-        string $subject,
-        string $body,
-        string $type,
-        User $user,
-        \DateTimeImmutable $now,
-    ): void {
-        $log = (new EmailLog())
-            ->setUser($user)
-            ->setRecipient($recipient)
-            ->setSubject($subject)
-            ->setType($type)
-            ->setSentAt($now);
-
-        try {
-            $email = (new Email())
-                ->to($recipient)
-                ->subject($subject)
-                ->text($body);
-            $this->mailer->send($email);
-            $log->setStatus('sent');
-        } catch (TransportExceptionInterface) {
-            $log->setStatus('failed');
-        }
-
-        $this->entityManager->persist($log);
+        // 2. Notify the author (in-app + email), delegated to dedicated services
+        $this->notificationService->notify($author, $notificationTitle, $notificationMessage);
+        $this->emailService->send($author->getEmail(), $notificationTitle, $notificationMessage, $emailType, $author);
     }
 }
