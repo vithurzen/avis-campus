@@ -8,6 +8,7 @@ use App\Repository\ReviewRepository;
 use App\Repository\UserRepository;
 use App\Security\Voter\ReviewVoter;
 use App\Service\EmailService;
+use App\Service\ExternalModerationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +29,7 @@ final class ReviewController extends AbstractController
 
     #[Route('/new', name: 'app_review_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function new(Request $request, EntityManagerInterface $entityManager, EmailService $emailService, UserRepository $userRepository): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, EmailService $emailService, UserRepository $userRepository, ExternalModerationService $moderation): Response
     {
         $review = new Review();
         $form = $this->createForm(ReviewType::class, $review);
@@ -39,17 +40,34 @@ final class ReviewController extends AbstractController
             $review->setUser($this->getUser());
             $review->setStatus(Review::STATUS_PENDING);
 
+            // Automated content moderation (external API or local fallback).
+            $result = $moderation->analyze((string) $review->getContent(), $this->getUser());
+            if ($result->isAggressive()) {
+                $review->setStatus(Review::STATUS_REJECTED);
+            }
+
             $entityManager->persist($review);
             $entityManager->flush();
 
-            // Notify moderators that a new review awaits moderation.
-            $emailService->sendTemplateToMany(
-                $userRepository->findModerators(),
-                'Nouvel avis à modérer',
-                'emails/review_submitted.html.twig',
-                ['review' => $review],
-                'review_submitted',
-            );
+            if ($result->isAggressive()) {
+                $this->addFlash('warning', sprintf(
+                    'Votre avis contient un langage inapproprié et a été rejeté automatiquement.%s',
+                    $result->suggestedRewrite ? ' Reformulation suggérée : « ' . $result->suggestedRewrite . ' »' : '',
+                ));
+            } else {
+                if ($result->needsReview()) {
+                    $this->addFlash('info', 'Votre avis a été signalé pour vérification et sera examiné par un modérateur.');
+                }
+
+                // Notify moderators that a new review awaits moderation.
+                $emailService->sendTemplateToMany(
+                    $userRepository->findModerators(),
+                    'Nouvel avis à modérer',
+                    'emails/review_submitted.html.twig',
+                    ['review' => $review],
+                    'review_submitted',
+                );
+            }
 
             return $this->redirectToRoute('app_review_index', [], Response::HTTP_SEE_OTHER);
         }
