@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\RatingCriteriaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: RatingCriteriaRepository::class)]
 #[ORM\Table(name: 'rating_criteria')]
@@ -14,15 +15,18 @@ class RatingCriteria
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['review:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['review:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(options: ['default' => 5])]
+    #[Groups(['review:read'])]
     private int $maxScore = 5;
 
     public function getId(): ?int

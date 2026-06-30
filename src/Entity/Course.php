@@ -6,6 +6,7 @@ use App\Repository\CourseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 #[ORM\Table(name: 'courses')]
@@ -14,28 +15,36 @@ class Course
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['course:list', 'course:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Semester::class, inversedBy: 'courses')]
     #[ORM\JoinColumn(name: 'semester_id', referencedColumnName: 'id', nullable: false)]
+    #[Groups(['course:list', 'course:read'])]
     private ?Semester $semester = null;
 
     #[ORM\Column(length: 180)]
+    #[Groups(['course:list', 'course:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups(['course:read'])]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['course:list', 'course:read'])]
     private ?float $coefficient = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['course:list', 'course:read'])]
     private ?int $hours = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups(['course:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[Groups(['course:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     /**
@@ -45,6 +54,7 @@ class Course
     #[ORM\JoinTable(name: 'course_teachers')]
     #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'teacher_id', referencedColumnName: 'id')]
+    #[Groups(['course:read'])]
     private Collection $teachers;
 
     /**
@@ -54,6 +64,7 @@ class Course
     #[ORM\JoinTable(name: 'course_tags')]
     #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'id')]
+    #[Groups(['course:read'])]
     private Collection $tags;
 
     /**

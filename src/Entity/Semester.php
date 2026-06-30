@@ -6,6 +6,7 @@ use App\Repository\SemesterRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: SemesterRepository::class)]
 #[ORM\Table(name: 'semesters')]
@@ -14,16 +15,20 @@ class Semester
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['course:list', 'course:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'semesters')]
     #[ORM\JoinColumn(name: 'formation_id', referencedColumnName: 'id', nullable: false)]
+    #[Groups(['course:read'])]
     private ?Formation $formation = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['course:list', 'course:read'])]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Groups(['course:list', 'course:read'])]
     private ?int $number = null;
 
     /**

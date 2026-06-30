@@ -6,6 +6,7 @@ use App\Repository\TeacherRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: TeacherRepository::class)]
 #[ORM\Table(name: 'teachers')]
@@ -14,15 +15,19 @@ class Teacher
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['course:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['course:read'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['course:read'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 180, nullable: true)]
+    #[Groups(['course:read'])]
     private ?string $email = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
