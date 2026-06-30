@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Review;
 use App\Repository\ReviewRepository;
+use App\Security\Voter\ReviewVoter;
 use App\Service\ReviewModerationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +25,7 @@ final class ModerationController extends AbstractController
     }
 
     #[Route('/review/{id}/approve', name: 'app_moderation_review_approve', methods: ['POST'])]
+    #[IsGranted(ReviewVoter::APPROVE, subject: 'review')]
     public function approve(Request $request, Review $review, ReviewModerationService $reviewModerationService): Response
     {
         if ($this->isCsrfTokenValid('moderate' . $review->getId(), $request->getPayload()->getString('_token'))) {
@@ -35,6 +37,7 @@ final class ModerationController extends AbstractController
     }
 
     #[Route('/review/{id}/reject', name: 'app_moderation_review_reject', methods: ['POST'])]
+    #[IsGranted(ReviewVoter::REJECT, subject: 'review')]
     public function reject(Request $request, Review $review, ReviewModerationService $reviewModerationService): Response
     {
         if ($this->isCsrfTokenValid('moderate' . $review->getId(), $request->getPayload()->getString('_token'))) {
@@ -47,6 +50,7 @@ final class ModerationController extends AbstractController
     }
 
     #[Route('/review/{id}/hide', name: 'app_moderation_review_hide', methods: ['POST'])]
+    #[IsGranted(ReviewVoter::HIDE, subject: 'review')]
     public function hide(Request $request, Review $review, ReviewModerationService $reviewModerationService): Response
     {
         if ($this->isCsrfTokenValid('moderate' . $review->getId(), $request->getPayload()->getString('_token'))) {

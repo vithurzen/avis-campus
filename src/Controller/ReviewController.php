@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Review;
 use App\Form\ReviewType;
 use App\Repository\ReviewRepository;
+use App\Security\Voter\ReviewVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,6 +58,7 @@ final class ReviewController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_review_edit', methods: ['GET', 'POST'])]
+    #[IsGranted(ReviewVoter::EDIT, subject: 'review')]
     public function edit(Request $request, Review $review, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ReviewType::class, $review);
@@ -75,6 +77,7 @@ final class ReviewController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_review_delete', methods: ['POST'])]
+    #[IsGranted(ReviewVoter::DELETE, subject: 'review')]
     public function delete(Request $request, Review $review, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$review->getId(), $request->getPayload()->getString('_token'))) {
