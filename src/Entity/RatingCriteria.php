@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'rating_criteria')]
 class RatingCriteria
 {
+    public const CRITERIA_DIFFICULTY = 'Difficulté';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
