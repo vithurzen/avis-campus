@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ReviewRatingRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ReviewRatingRepository::class)]
 #[ORM\Table(name: 'review_ratings')]
@@ -21,9 +22,11 @@ class ReviewRating
 
     #[ORM\ManyToOne(targetEntity: RatingCriteria::class)]
     #[ORM\JoinColumn(name: 'rating_criteria_id', referencedColumnName: 'id', nullable: false)]
+    #[Groups(['review:read'])]
     private ?RatingCriteria $ratingCriteria = null;
 
     #[ORM\Column]
+    #[Groups(['review:read'])]
     private ?int $score = null;
 
     public function getId(): ?int
