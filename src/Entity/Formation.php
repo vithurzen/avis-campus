@@ -15,21 +15,23 @@ class Formation
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['course:read'])]
+    #[Groups(['formation:read', 'semester:read', 'course:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 150)]
-    #[Groups(['course:read'])]
+    #[Groups(['formation:read', 'semester:read', 'course:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups(['formation:read'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 100, nullable: true)]
-    #[Groups(['course:read'])]
+    #[Groups(['formation:read', 'semester:read', 'course:read'])]
     private ?string $degreeLevel = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups(['formation:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     /**

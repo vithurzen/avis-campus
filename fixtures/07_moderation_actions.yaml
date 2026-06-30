@@ -1,0 +1,59 @@
+App\Entity\ModerationAction:
+    # --- Validation d'un avis ---
+    moderation_action_1:
+        moderator: '@moderator_profile_1'
+        review: '@review_1'
+        comment: null
+        report: null
+        action: 'review_approved'
+        reason: 'L''avis respecte les règles de la plateforme. Contenu pertinent et constructif.'
+        createdAt: '<dateTimeImmutableBetween("-5 months", "-3 months")>'
+
+    moderation_action_2:
+        moderator: '@moderator_profile_1'
+        review: '@review_3'
+        comment: null
+        report: null
+        action: 'review_approved'
+        reason: 'Avis détaillé et utile pour la communauté. Aucun problème détecté.'
+        createdAt: '<dateTimeImmutableBetween("-3 months", "-1 month")>'
+
+    # --- Refus d'un avis ---
+    moderation_action_3:
+        moderator: '@moderator_profile_2'
+        review: '@review_6'
+        comment: null
+        report: null
+        action: 'review_rejected'
+        reason: 'L''avis contient des propos irrespectueux envers l''enseignant. Reformulation requise.'
+        createdAt: '<dateTimeImmutableBetween("-2 months", "-1 month")>'
+
+    # --- Traitement d'un signalement sur un avis ---
+    moderation_action_4:
+        moderator: '@moderator_profile_1'
+        review: '@review_2'
+        comment: null
+        report: '@report_2'
+        action: 'report_closed'
+        reason: 'Après vérification, l''avis signalé ne contient pas d''informations fausses. Signalement rejeté.'
+        createdAt: '<dateTimeImmutableBetween("-2 months", "-1 month")>'
+
+    # --- Suppression d'un commentaire ---
+    moderation_action_5:
+        moderator: '@moderator_profile_2'
+        review: null
+        comment: '@comment_5'
+        report: '@report_6'
+        action: 'comment_deleted'
+        reason: 'Commentaire supprimé suite au signalement pour langage offensant. Avertissement envoyé à l''auteur.'
+        createdAt: '<dateTimeImmutableBetween("-2 months", "-1 month")>'
+
+    # --- Avertissement utilisateur ---
+    moderation_action_6:
+        moderator: '@moderator_profile_1'
+        review: null
+        comment: null
+        report: '@report_3'
+        action: 'user_warned'
+        reason: 'L''utilisateur a reçu un avertissement pour publication de contenu copié (spam). Récidive entraînera une suspension.'
+        createdAt: '<dateTimeImmutableBetween("-3 months", "-1 month")>'
