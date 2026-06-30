@@ -6,6 +6,7 @@ use App\Repository\ReviewRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ReviewRepository::class)]
 #[ORM\Table(name: 'reviews')]
@@ -28,10 +29,12 @@ class Review
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['review:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reviews')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    #[Groups(['review:read'])]
     private ?User $user = null;
 
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'reviews')]
@@ -39,24 +42,30 @@ class Review
     private ?Course $course = null;
 
     #[ORM\Column(length: 180)]
+    #[Groups(['review:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: 'text')]
+    #[Groups(['review:read'])]
     private ?string $content = null;
 
     #[ORM\Column(length: 50, options: ['default' => 'pending'])]
+    #[Groups(['review:read'])]
     private string $status = self::STATUS_PENDING;
 
     #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups(['review:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[Groups(['review:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     /**
      * @var Collection<int, ReviewRating>
      */
     #[ORM\OneToMany(mappedBy: 'review', targetEntity: ReviewRating::class, cascade: ['persist', 'remove'])]
+    #[Groups(['review:read'])]
     private Collection $ratings;
 
     /**
