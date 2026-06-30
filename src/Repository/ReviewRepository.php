@@ -15,4 +15,37 @@ class ReviewRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Review::class);
     }
+
+    /**
+     * @return Review[]
+     */
+    public function findByStatus(string $status, string $direction = 'DESC'): array
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.status = :status')
+            ->setParameter('status', $status)
+            ->orderBy('r.createdAt', $direction)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Reviews awaiting moderation (oldest first — FIFO queue).
+     *
+     * @return Review[]
+     */
+    public function findPending(): array
+    {
+        return $this->findByStatus(Review::STATUS_PENDING, 'ASC');
+    }
+
+    /**
+     * Publicly visible reviews (approved, newest first).
+     *
+     * @return Review[]
+     */
+    public function findPublic(): array
+    {
+        return $this->findByStatus(Review::STATUS_APPROVED, 'DESC');
+    }
 }

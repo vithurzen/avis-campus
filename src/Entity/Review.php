@@ -13,6 +13,18 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Review
 {
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_APPROVED = 'approved';
+    public const STATUS_REJECTED = 'rejected';
+    public const STATUS_HIDDEN = 'hidden';
+
+    public const STATUSES = [
+        self::STATUS_PENDING,
+        self::STATUS_APPROVED,
+        self::STATUS_REJECTED,
+        self::STATUS_HIDDEN,
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -33,7 +45,7 @@ class Review
     private ?string $content = null;
 
     #[ORM\Column(length: 50, options: ['default' => 'pending'])]
-    private string $status = 'pending';
+    private string $status = self::STATUS_PENDING;
 
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $createdAt = null;
@@ -136,6 +148,26 @@ class Review
         $this->status = $status;
 
         return $this;
+    }
+
+    public function isPending(): bool
+    {
+        return $this->status === self::STATUS_PENDING;
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->status === self::STATUS_APPROVED;
+    }
+
+    public function isRejected(): bool
+    {
+        return $this->status === self::STATUS_REJECTED;
+    }
+
+    public function isHidden(): bool
+    {
+        return $this->status === self::STATUS_HIDDEN;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable

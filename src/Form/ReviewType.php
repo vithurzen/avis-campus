@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\Course;
 use App\Entity\Review;
-use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,20 +16,9 @@ class ReviewType extends AbstractType
         $builder
             ->add('title')
             ->add('content')
-            ->add('status')
-            ->add('createdAt', null, [
-                'widget' => 'single_text'
-            ])
-            ->add('updatedAt', null, [
-                'widget' => 'single_text'
-            ])
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
             ->add('course', EntityType::class, [
                 'class' => Course::class,
-                'choice_label' => 'id',
+                'choice_label' => 'title',
             ])
         ;
     }
