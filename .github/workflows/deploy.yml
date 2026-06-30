@@ -1,0 +1,35 @@
+name: Deploy to Production
+
+on:
+    push:
+        branches: [main]
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup SSH
+              uses: webfactory/ssh-agent@v0.9.0
+              with:
+                  ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+            - name: Add server to known hosts
+              run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+            - name: Deploy
+              run: |
+                  ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+                    set -e
+                    cd /var/www/avis-campus
+                    git pull origin main
+                    composer install --no-dev --optimize-autoloader
+                    php bin/console doctrine:migrations:migrate --no-interaction --env=prod
+                    php bin/console cache:clear --env=prod
+                    php bin/console cache:warmup --env=prod
+                    sudo chown -R deploy:www-data var/
+                    sudo chmod -R 775 var/
+                  EOF
