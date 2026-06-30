@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: FavoriteRepository::class)]
 #[ORM\Table(name: 'favorites')]
 #[ORM\UniqueConstraint(name: 'uniq_favorite_user_course', columns: ['user_id', 'course_id'])]
+#[ORM\HasLifecycleCallbacks]
 class Favorite
 {
     #[ORM\Id]
@@ -25,6 +26,14 @@ class Favorite
 
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTimeImmutable();
+        }
+    }
 
     public function getId(): ?int
     {

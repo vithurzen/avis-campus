@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ReviewRepository::class)]
 #[ORM\Table(name: 'reviews')]
 #[ORM\UniqueConstraint(name: 'uniq_review_user_course', columns: ['user_id', 'course_id'])]
+#[ORM\HasLifecycleCallbacks]
 class Review
 {
     #[ORM\Id]
@@ -56,6 +57,20 @@ class Review
     {
         $this->ratings = new ArrayCollection();
         $this->comments = new ArrayCollection();
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTimeImmutable();
+        }
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
