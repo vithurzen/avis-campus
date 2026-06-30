@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 #[ORM\Table(name: 'comments')]
@@ -13,10 +14,12 @@ class Comment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['comment:read', 'review:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    #[Groups(['comment:read', 'review:read'])]
     private ?User $user = null;
 
     #[ORM\ManyToOne(targetEntity: Review::class, inversedBy: 'comments')]
@@ -24,15 +27,19 @@ class Comment
     private ?Review $review = null;
 
     #[ORM\Column(type: 'text')]
+    #[Groups(['comment:read', 'review:read'])]
     private ?string $content = null;
 
     #[ORM\Column(length: 50, options: ['default' => 'visible'])]
+    #[Groups(['comment:read', 'review:read'])]
     private string $status = 'visible';
 
     #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups(['comment:read', 'review:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[Groups(['comment:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\PrePersist]

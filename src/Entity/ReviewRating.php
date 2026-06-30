@@ -14,6 +14,7 @@ class ReviewRating
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['rating:read', 'review:list', 'review:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Review::class, inversedBy: 'ratings')]
@@ -22,11 +23,11 @@ class ReviewRating
 
     #[ORM\ManyToOne(targetEntity: RatingCriteria::class)]
     #[ORM\JoinColumn(name: 'rating_criteria_id', referencedColumnName: 'id', nullable: false)]
-    #[Groups(['review:read'])]
+    #[Groups(['rating:read', 'review:list', 'review:read'])]
     private ?RatingCriteria $ratingCriteria = null;
 
     #[ORM\Column]
-    #[Groups(['review:read'])]
+    #[Groups(['rating:read', 'review:list', 'review:read'])]
     private ?int $score = null;
 
     public function getId(): ?int

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ResourceRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
 #[ORM\Table(name: 'resources')]
@@ -12,22 +13,28 @@ class Resource
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['resource:read', 'course:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'resources')]
     #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id', nullable: false)]
+    #[Groups(['resource:read'])]
     private ?Course $course = null;
 
     #[ORM\Column(length: 180)]
+    #[Groups(['resource:read', 'course:read'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['resource:read', 'course:read'])]
     private ?string $url = null;
 
     #[ORM\Column(length: 80)]
+    #[Groups(['resource:read', 'course:read'])]
     private ?string $type = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups(['resource:read', 'course:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     public function getId(): ?int

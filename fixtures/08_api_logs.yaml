@@ -1,0 +1,97 @@
+App\Entity\ApiLog:
+    # --- Appels sur /api/v1/courses (liste) ---
+    api_log_courses_list_{1..6}:
+        user: '@user_student_<numberBetween(1, 5)>'
+        endpoint: '/api/v1/courses'
+        requestType: 'GET'
+        responseStatus: 200
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    # --- Appels sur /api/v1/courses/{id} (détail) ---
+    api_log_course_1:
+        user: '@user_student_1'
+        endpoint: '/api/v1/courses/1'
+        requestType: 'GET'
+        responseStatus: 200
+        createdAt: '<dateTimeImmutableBetween("-3 weeks", "now")>'
+
+    api_log_course_2:
+        user: '@user_student_2'
+        endpoint: '/api/v1/courses/3'
+        requestType: 'GET'
+        responseStatus: 200
+        createdAt: '<dateTimeImmutableBetween("-3 weeks", "now")>'
+
+    api_log_course_3:
+        user: '@user_student_3'
+        endpoint: '/api/v1/courses/99'
+        requestType: 'GET'
+        responseStatus: 404
+        createdAt: '<dateTimeImmutableBetween("-2 weeks", "now")>'
+
+    api_log_course_4:
+        user: '@user_student_4'
+        endpoint: '/api/v1/courses/2'
+        requestType: 'GET'
+        responseStatus: 200
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    # --- Appels sur /api/v1/courses/{id}/reviews ---
+    api_log_reviews_1:
+        user: '@user_student_1'
+        endpoint: '/api/v1/courses/1/reviews'
+        requestType: 'GET'
+        responseStatus: 200
+        createdAt: '<dateTimeImmutableBetween("-3 weeks", "now")>'
+
+    api_log_reviews_2:
+        user: '@user_student_5'
+        endpoint: '/api/v1/courses/3/reviews'
+        requestType: 'GET'
+        responseStatus: 200
+        createdAt: '<dateTimeImmutableBetween("-2 weeks", "now")>'
+
+    api_log_reviews_3:
+        user: null
+        endpoint: '/api/v1/courses/2/reviews'
+        requestType: 'GET'
+        responseStatus: 200
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    # --- Appels sur /api/v1/top-courses ---
+    api_log_top_{1..4}:
+        user: '@user_student_<numberBetween(1, 5)>'
+        endpoint: '/api/v1/top-courses'
+        requestType: 'GET'
+        responseStatus: 200
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    # --- Appels sur /api/v1/formations/{id}/stats ---
+    api_log_stats_1:
+        user: '@user_student_1'
+        endpoint: '/api/v1/formations/1/stats'
+        requestType: 'GET'
+        responseStatus: 200
+        createdAt: '<dateTimeImmutableBetween("-2 weeks", "now")>'
+
+    api_log_stats_2:
+        user: '@user_student_3'
+        endpoint: '/api/v1/formations/2/stats'
+        requestType: 'GET'
+        responseStatus: 200
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    api_log_stats_3:
+        user: null
+        endpoint: '/api/v1/formations/999/stats'
+        requestType: 'GET'
+        responseStatus: 404
+        createdAt: '<dateTimeImmutableBetween("-3 days", "now")>'
+
+    # --- Appels anonymes (sans utilisateur connecté) ---
+    api_log_anonymous_{1..3}:
+        user: null
+        endpoint: '<randomElement(["/api/v1/courses", "/api/v1/top-courses", "/api/v1/courses/1"])>'
+        requestType: 'GET'
+        responseStatus: 200
+        createdAt: '<dateTimeImmutableBetween("-2 weeks", "now")>'
