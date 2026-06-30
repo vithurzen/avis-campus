@@ -32,4 +32,20 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
+
+    /**
+     * Users who can moderate content (moderators and admins).
+     *
+     * Filtered in PHP because `roles` is stored as a JSON column, on which a
+     * SQL LIKE would fail under PostgreSQL.
+     *
+     * @return User[]
+     */
+    public function findModerators(): array
+    {
+        return array_values(array_filter(
+            $this->findAll(),
+            static fn (User $user): bool => (bool) array_intersect(['ROLE_MODERATOR', 'ROLE_ADMIN'], $user->getRoles()),
+        ));
+    }
 }

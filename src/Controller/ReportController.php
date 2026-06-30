@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Report;
 use App\Form\ReportType;
 use App\Repository\ReportRepository;
+use App\Repository\UserRepository;
+use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +25,7 @@ final class ReportController extends AbstractController
     }
 
     #[Route('/new', name: 'app_report_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, EmailService $emailService, UserRepository $userRepository): Response
     {
         $report = new Report();
         $form = $this->createForm(ReportType::class, $report);
@@ -32,6 +34,15 @@ final class ReportController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($report);
             $entityManager->flush();
+
+            // Notify moderators that a new report has been filed.
+            $emailService->sendTemplateToMany(
+                $userRepository->findModerators(),
+                'Nouveau signalement',
+                'emails/report_submitted.html.twig',
+                ['report' => $report],
+                'report_submitted',
+            );
 
             return $this->redirectToRoute('app_report_index', [], Response::HTTP_SEE_OTHER);
         }

@@ -37,6 +37,7 @@ class ReviewModerationService
             'Votre avis a été approuvé',
             sprintf('Votre avis « %s » a été approuvé et est désormais visible publiquement.', $review->getTitle()),
             'review_approved',
+            'emails/review_approved.html.twig',
         );
     }
 
@@ -59,6 +60,7 @@ class ReviewModerationService
                 $reason ? ' Motif : ' . $reason : '',
             ),
             'review_rejected',
+            'emails/review_rejected.html.twig',
         );
     }
 
@@ -81,6 +83,7 @@ class ReviewModerationService
                 $reason ? ' Motif : ' . $reason : '',
             ),
             'review_hidden',
+            'emails/review_hidden.html.twig',
         );
     }
 
@@ -93,6 +96,7 @@ class ReviewModerationService
         string $notificationTitle,
         string $notificationMessage,
         string $emailType,
+        string $emailTemplate,
     ): void {
         $profile = $moderator->getProfile();
         if (!$profile instanceof ModeratorProfile) {
@@ -114,6 +118,13 @@ class ReviewModerationService
 
         // 2. Notify the author (in-app + email), delegated to dedicated services
         $this->notificationService->notify($author, $notificationTitle, $notificationMessage);
-        $this->emailService->send($author->getEmail(), $notificationTitle, $notificationMessage, $emailType, $author);
+        $this->emailService->sendTemplate(
+            $author->getEmail(),
+            $notificationTitle,
+            $emailTemplate,
+            ['review' => $review, 'reason' => $reason],
+            $emailType,
+            $author,
+        );
     }
 }

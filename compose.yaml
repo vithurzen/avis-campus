@@ -28,6 +28,14 @@ services:
       # - ./docker/db/data:/var/lib/postgresql/data:rw
 ###< doctrine/doctrine-bundle ###
 
+  ###> symfony/mailer ###
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # web UI
+  ###< symfony/mailer ###
+
 volumes:
   ###> doctrine/doctrine-bundle ###
   database_data:

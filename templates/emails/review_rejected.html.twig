@@ -1,0 +1,15 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block subject %}Votre avis a été rejeté{% endblock %}
+
+{% block content %}
+    <h2 style="font-size: 16px; color: #dc2626;">Votre avis a été rejeté</h2>
+    <p>
+        Votre avis « <strong>{{ review.title }}</strong> »{% if review.course %} sur le cours
+        <strong>{{ review.course.title }}</strong>{% endif %} a été rejeté par la modération.
+    </p>
+    {% if reason %}
+        <p><strong>Motif :</strong> {{ reason }}</p>
+    {% endif %}
+    <p>Vous pouvez soumettre un nouvel avis en tenant compte de ces remarques.</p>
+{% endblock %}
