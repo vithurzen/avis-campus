@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Report
 {
+    public const STATUS_OPEN = 'open';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -33,8 +35,8 @@ class Report
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 50, options: ['default' => 'open'])]
-    private string $status = 'open';
+    #[ORM\Column(length: 50, options: ['default' => self::STATUS_OPEN])]
+    private string $status = self::STATUS_OPEN;
 
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $createdAt = null;

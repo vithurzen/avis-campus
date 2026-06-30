@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Course;
 use App\Entity\Review;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -47,5 +48,32 @@ class ReviewRepository extends ServiceEntityRepository
     public function findPublic(): array
     {
         return $this->findByStatus(Review::STATUS_APPROVED, 'DESC');
+    }
+
+    /**
+     * Reviews awaiting moderation (oldest first). Alias of {@see findPending()}.
+     *
+     * @return Review[]
+     */
+    public function findPendingReviews(): array
+    {
+        return $this->findByStatus(Review::STATUS_PENDING, 'ASC');
+    }
+
+    /**
+     * Approved reviews for a given course (newest first).
+     *
+     * @return Review[]
+     */
+    public function findApprovedByCourse(Course $course): array
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.course = :course')
+            ->andWhere('r.status = :status')
+            ->setParameter('course', $course)
+            ->setParameter('status', Review::STATUS_APPROVED)
+            ->orderBy('r.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 }
