@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Review;
 use App\Repository\ReviewRepository;
-use App\Service\ReviewModerator;
+use App\Service\ReviewModerationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,10 +24,10 @@ final class ModerationController extends AbstractController
     }
 
     #[Route('/review/{id}/approve', name: 'app_moderation_review_approve', methods: ['POST'])]
-    public function approve(Request $request, Review $review, ReviewModerator $reviewModerator): Response
+    public function approve(Request $request, Review $review, ReviewModerationService $reviewModerationService): Response
     {
         if ($this->isCsrfTokenValid('moderate' . $review->getId(), $request->getPayload()->getString('_token'))) {
-            $reviewModerator->approve($review, $this->getUser());
+            $reviewModerationService->approve($review, $this->getUser());
             $this->addFlash('success', 'Avis approuvé.');
         }
 
@@ -35,11 +35,11 @@ final class ModerationController extends AbstractController
     }
 
     #[Route('/review/{id}/reject', name: 'app_moderation_review_reject', methods: ['POST'])]
-    public function reject(Request $request, Review $review, ReviewModerator $reviewModerator): Response
+    public function reject(Request $request, Review $review, ReviewModerationService $reviewModerationService): Response
     {
         if ($this->isCsrfTokenValid('moderate' . $review->getId(), $request->getPayload()->getString('_token'))) {
             $reason = $request->getPayload()->getString('reason') ?: null;
-            $reviewModerator->reject($review, $this->getUser(), $reason);
+            $reviewModerationService->reject($review, $this->getUser(), $reason);
             $this->addFlash('success', 'Avis rejeté.');
         }
 
@@ -47,11 +47,11 @@ final class ModerationController extends AbstractController
     }
 
     #[Route('/review/{id}/hide', name: 'app_moderation_review_hide', methods: ['POST'])]
-    public function hide(Request $request, Review $review, ReviewModerator $reviewModerator): Response
+    public function hide(Request $request, Review $review, ReviewModerationService $reviewModerationService): Response
     {
         if ($this->isCsrfTokenValid('moderate' . $review->getId(), $request->getPayload()->getString('_token'))) {
             $reason = $request->getPayload()->getString('reason') ?: null;
-            $reviewModerator->hide($review, $this->getUser(), $reason);
+            $reviewModerationService->hide($review, $this->getUser(), $reason);
             $this->addFlash('success', 'Avis masqué.');
         }
 
