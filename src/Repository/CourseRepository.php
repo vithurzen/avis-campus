@@ -20,62 +20,63 @@ class CourseRepository extends ServiceEntityRepository
     }
 
     /**
-     * Courses ranked by their average approved-review score (highest first).
-     *
-     * @return array<int, array{course: Course, avgScore: float}>
-     */
-    public function findTopRatedCourses(int $limit = 10): array
-    {
-        return $this->createQueryBuilder('c')
-            ->select('c AS course', 'AVG(rr.score) AS avgScore')
-            ->join('c.reviews', 'r')
-            ->join('r.ratings', 'rr')
-            ->andWhere('r.status = :status')
-            ->setParameter('status', Review::STATUS_APPROVED)
-            ->groupBy('c.id')
-            ->orderBy('avgScore', 'DESC')
-            ->setMaxResults($limit)
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * Courses ranked by their average "Difficulté" score (most difficult first).
-     *
-     * @return array<int, array{course: Course, avgScore: float}>
-     */
-    public function findMostDifficultCourses(int $limit = 10): array
-    {
-        return $this->createQueryBuilder('c')
-            ->select('c AS course', 'AVG(rr.score) AS avgScore')
-            ->join('c.reviews', 'r')
-            ->join('r.ratings', 'rr')
-            ->join('rr.ratingCriteria', 'rc')
-            ->andWhere('r.status = :status')
-            ->andWhere('rc.name = :criteria')
-            ->setParameter('status', Review::STATUS_APPROVED)
-            ->setParameter('criteria', RatingCriteria::CRITERIA_DIFFICULTY)
-            ->groupBy('c.id')
-            ->orderBy('avgScore', 'DESC')
-            ->setMaxResults($limit)
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * Courses belonging to a given formation and semester number.
-     *
      * @return Course[]
      */
-    public function findByFormationAndSemester(Formation $formation, int $semesterNumber): array
+    public function findTopCourses(int $limit = 10): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = '
+            SELECT c.id, COALESCE(AVG(rr.score), 0) AS avg_score
+            FROM courses c
+            LEFT JOIN reviews r ON r.course_id = c.id AND r.status = :status
+            LEFT JOIN review_ratings rr ON rr.review_id = r.id
+            GROUP BY c.id
+            ORDER BY avg_score DESC
+            LIMIT :lim
+        ';
+        $rows = $conn->executeQuery($sql, ['status' => 'published', 'lim' => $limit])->fetchAllAssociative();
+        $ids = array_column($rows, 'id');
+
+        if (empty($ids)) {
+            return [];
+        }
+
+        // Charger les entités avec leurs relations en une seule requête
+        $courses = $this->createQueryBuilder('c')
+            ->where('c.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->leftJoin('c.semester', 's')->addSelect('s')
+            ->leftJoin('s.formation', 'f')->addSelect('f')
+            ->leftJoin('c.tags', 't')->addSelect('t')
+            ->getQuery()
+            ->getResult();
+
+        // Réordonner selon le classement par note
+        $indexed = [];
+        foreach ($courses as $course) {
+            $indexed[$course->getId()] = $course;
+        }
+
+        $ordered = [];
+        foreach ($ids as $id) {
+            if (isset($indexed[$id])) {
+                $ordered[] = $indexed[$id];
+            }
+        }
+
+        return $ordered;
+    }
+
+    /**
+     * @return Course[]
+     */
+    public function findAllWithRelations(): array
     {
         return $this->createQueryBuilder('c')
-            ->join('c.semester', 's')
-            ->andWhere('s.formation = :formation')
-            ->andWhere('s.number = :number')
-            ->setParameter('formation', $formation)
-            ->setParameter('number', $semesterNumber)
-            ->orderBy('c.title', 'ASC')
+            ->leftJoin('c.semester', 's')->addSelect('s')
+            ->leftJoin('s.formation', 'f')->addSelect('f')
+            ->leftJoin('c.tags', 't')->addSelect('t')
+            ->orderBy('c.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
     }

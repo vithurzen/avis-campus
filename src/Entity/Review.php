@@ -29,7 +29,7 @@ class Review
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['review:read'])]
+    #[Groups(['review:list', 'review:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reviews')]
@@ -42,19 +42,19 @@ class Review
     private ?Course $course = null;
 
     #[ORM\Column(length: 180)]
-    #[Groups(['review:read'])]
+    #[Groups(['review:list', 'review:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: 'text')]
-    #[Groups(['review:read'])]
+    #[Groups(['review:list', 'review:read'])]
     private ?string $content = null;
 
     #[ORM\Column(length: 50, options: ['default' => 'pending'])]
-    #[Groups(['review:read'])]
+    #[Groups(['review:list', 'review:read'])]
     private string $status = self::STATUS_PENDING;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups(['review:read'])]
+    #[Groups(['review:list', 'review:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
@@ -65,13 +65,14 @@ class Review
      * @var Collection<int, ReviewRating>
      */
     #[ORM\OneToMany(mappedBy: 'review', targetEntity: ReviewRating::class, cascade: ['persist', 'remove'])]
-    #[Groups(['review:read'])]
+    #[Groups(['review:list', 'review:read'])]
     private Collection $ratings;
 
     /**
      * @var Collection<int, Comment>
      */
     #[ORM\OneToMany(mappedBy: 'review', targetEntity: Comment::class)]
+    #[Groups(['review:read'])]
     private Collection $comments;
 
     public function __construct()

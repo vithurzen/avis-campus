@@ -15,20 +15,20 @@ class Semester
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['course:list', 'course:read'])]
+    #[Groups(['semester:read', 'course:list', 'course:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'semesters')]
     #[ORM\JoinColumn(name: 'formation_id', referencedColumnName: 'id', nullable: false)]
-    #[Groups(['course:read'])]
+    #[Groups(['semester:read', 'course:read'])]
     private ?Formation $formation = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['course:list', 'course:read'])]
+    #[Groups(['semester:read', 'course:list', 'course:read'])]
     private ?string $name = null;
 
     #[ORM\Column]
-    #[Groups(['course:list', 'course:read'])]
+    #[Groups(['semester:read', 'course:list', 'course:read'])]
     private ?int $number = null;
 
     /**
