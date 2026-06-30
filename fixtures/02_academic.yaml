@@ -1,0 +1,164 @@
+App\Entity\Formation:
+    formation_1:
+        name: 'BUT Informatique'
+        description: 'Formation universitaire de technologie en informatique, couvrant la programmation, les réseaux et les bases de données.'
+        degreeLevel: 'BUT'
+        createdAt: '<dateTimeImmutableBetween("-3 years", "-2 years")>'
+
+    formation_2:
+        name: 'Licence Professionnelle Développement Web'
+        description: 'Licence professionnelle axée sur le développement web full-stack et les technologies modernes.'
+        degreeLevel: 'Licence Pro'
+        createdAt: '<dateTimeImmutableBetween("-3 years", "-2 years")>'
+
+App\Entity\Semester:
+    semester_1:
+        formation: '@formation_1'
+        name: 'S1'
+        number: 1
+
+    semester_2:
+        formation: '@formation_1'
+        name: 'S2'
+        number: 2
+
+    semester_3:
+        formation: '@formation_1'
+        name: 'S3'
+        number: 3
+
+    semester_4:
+        formation: '@formation_2'
+        name: 'S1'
+        number: 1
+
+    semester_5:
+        formation: '@formation_2'
+        name: 'S2'
+        number: 2
+
+App\Entity\Tag:
+    tag_1:
+        name: 'Programmation'
+        color: '#3498db'
+
+    tag_2:
+        name: 'Algorithmique'
+        color: '#e74c3c'
+
+    tag_3:
+        name: 'Bases de données'
+        color: '#2ecc71'
+
+    tag_4:
+        name: 'Développement Web'
+        color: '#f39c12'
+
+    tag_5:
+        name: 'Réseau'
+        color: '#9b59b6'
+
+App\Entity\Teacher:
+    teacher_1:
+        firstName: 'Marie'
+        lastName: 'Dupont'
+        email: 'marie.dupont@univ.fr'
+        createdAt: '<dateTimeImmutableBetween("-3 years", "-2 years")>'
+
+    teacher_2:
+        firstName: 'Jean'
+        lastName: 'Martin'
+        email: 'jean.martin@univ.fr'
+        createdAt: '<dateTimeImmutableBetween("-3 years", "-2 years")>'
+
+    teacher_3:
+        firstName: 'Sophie'
+        lastName: 'Bernard'
+        email: 'sophie.bernard@univ.fr'
+        createdAt: '<dateTimeImmutableBetween("-3 years", "-2 years")>'
+
+    teacher_4:
+        firstName: 'Pierre'
+        lastName: 'Leroy'
+        email: 'pierre.leroy@univ.fr'
+        createdAt: '<dateTimeImmutableBetween("-3 years", "-2 years")>'
+
+App\Entity\RatingCriteria:
+    criteria_1:
+        name: 'Clarté du cours'
+        description: 'Le cours est-il bien expliqué et facile à comprendre ?'
+        maxScore: 5
+
+    criteria_2:
+        name: 'Difficulté'
+        description: 'Le niveau de difficulté est-il adapté au niveau demandé ?'
+        maxScore: 5
+
+    criteria_3:
+        name: 'Utilité professionnelle'
+        description: 'Ce cours est-il utile pour la vie professionnelle ?'
+        maxScore: 5
+
+App\Entity\Course:
+    course_1:
+        semester: '@semester_1'
+        title: 'Introduction à la Programmation'
+        description: 'Fondamentaux de la programmation en Python et algorithmique de base.'
+        coefficient: 2.0
+        hours: 40
+        createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+        tags:
+            - '@tag_1'
+            - '@tag_2'
+
+    course_2:
+        semester: '@semester_1'
+        title: 'Bases de Données Relationnelles'
+        description: 'Conception et manipulation de bases de données SQL avec PostgreSQL.'
+        coefficient: 2.5
+        hours: 35
+        createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+        tags:
+            - '@tag_3'
+
+    course_3:
+        semester: '@semester_2'
+        title: 'Développement Web avec Symfony'
+        description: 'Développement d''applications web modernes avec le framework Symfony 7.'
+        coefficient: 3.0
+        hours: 50
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        tags:
+            - '@tag_1'
+            - '@tag_4'
+
+    course_4:
+        semester: '@semester_2'
+        title: 'Algorithmique Avancée'
+        description: 'Structures de données avancées, tri, graphes et optimisation.'
+        coefficient: 2.5
+        hours: 45
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        tags:
+            - '@tag_2'
+
+    course_5:
+        semester: '@semester_3'
+        title: 'Réseaux Informatiques'
+        description: 'Protocoles réseau, architecture TCP/IP et sécurité des communications.'
+        coefficient: 2.0
+        hours: 30
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        tags:
+            - '@tag_5'
+
+    course_6:
+        semester: '@semester_4'
+        title: 'APIs REST avec Symfony'
+        description: 'Conception et développement d''APIs RESTful sécurisées avec Symfony et JWT.'
+        coefficient: 3.0
+        hours: 40
+        createdAt: '<dateTimeImmutableBetween("-8 months", "-3 months")>'
+        tags:
+            - '@tag_1'
+            - '@tag_4'

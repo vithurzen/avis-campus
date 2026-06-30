@@ -1523,6 +1523,26 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     },
  *     controllers_json?: scalar|Param|null, // Deprecated: The "twig_component.controllers_json" config option is deprecated, and will be removed in 3.0. // Default: null
  * }
+ * @psalm-type NelmioAliceConfig = array{
+ *     locale?: scalar|Param|null, // Default locale for the Faker Generator // Default: "en_US"
+ *     seed?: scalar|Param|null, // Value used make sure Faker generates data consistently across runs, set to null to disable. // Default: 1
+ *     functions_blacklist?: list<scalar|Param|null>,
+ *     loading_limit?: int|Param, // Alice may do some recursion to resolve certain values. This parameter defines a limit which will stop the resolution once reached. // Default: 5
+ *     max_unique_values_retry?: int|Param, // Maximum number of time Alice can try to generate a unique value before stopping and failing. // Default: 150
+ * }
+ * @psalm-type FidryAliceDataFixturesConfig = array{
+ *     default_purge_mode?: scalar|Param|null, // Default: "delete"
+ *     db_drivers?: array{ // The list of enabled drivers.
+ *         doctrine_orm?: bool|Param|null, // Default: null
+ *         doctrine_mongodb_odm?: bool|Param|null, // Default: null
+ *         doctrine_phpcr_odm?: bool|Param|null, // Default: null
+ *         eloquent_orm?: bool|Param|null, // Default: null
+ *     },
+ * }
+ * @psalm-type HautelookAliceConfig = array{
+ *     fixtures_path?: list<scalar|Param|null>,
+ *     root_dirs?: list<scalar|Param|null>,
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1554,6 +1574,9 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         monolog?: MonologConfig,
  *         maker?: MakerConfig,
  *         twig_component?: TwigComponentConfig,
+ *         nelmio_alice?: NelmioAliceConfig,
+ *         fidry_alice_data_fixtures?: FidryAliceDataFixturesConfig,
+ *         hautelook_alice?: HautelookAliceConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1585,6 +1608,9 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         security?: SecurityConfig,
  *         monolog?: MonologConfig,
  *         twig_component?: TwigComponentConfig,
+ *         nelmio_alice?: NelmioAliceConfig,
+ *         fidry_alice_data_fixtures?: FidryAliceDataFixturesConfig,
+ *         hautelook_alice?: HautelookAliceConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,
@@ -1666,7 +1692,7 @@ namespace Symfony\Component\Routing\Loader\Configurator;
  * @psalm-type AliasConfig = array{
  *     alias: string,
  *     deprecated?: array{package:string, version:string, message?:string},
- * }
+ * }
  * @psalm-type RoutesConfig = array{
  *     "when@dev"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
  *     "when@prod"?: array<string, RouteConfig|ImportConfig|AliasConfig>,

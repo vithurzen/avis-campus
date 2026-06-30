@@ -15,18 +15,19 @@ class RatingCriteria
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['review:read'])]
+    #[Groups(['criteria:read', 'rating:read', 'review:list', 'review:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['review:read'])]
+    #[Groups(['criteria:read', 'rating:read', 'review:list', 'review:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups(['criteria:read'])]
     private ?string $description = null;
 
     #[ORM\Column(options: ['default' => 5])]
-    #[Groups(['review:read'])]
+    #[Groups(['criteria:read', 'rating:read', 'review:list', 'review:read'])]
     private int $maxScore = 5;
 
     public function getId(): ?int

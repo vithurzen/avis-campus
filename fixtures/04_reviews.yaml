@@ -1,0 +1,172 @@
+App\Entity\Review:
+    # Contrainte unique : 1 avis par étudiant par cours
+    review_1:
+        user: '@user_student_1'
+        course: '@course_1'
+        title: 'Très bon cours d''introduction'
+        content: 'Ce cours m''a permis de maîtriser les bases de la programmation rapidement. Les exercices pratiques sont bien pensés et progressifs.'
+        status: 'published'
+        createdAt: '<dateTimeImmutableBetween("-6 months", "-3 months")>'
+
+    review_2:
+        user: '@user_student_2'
+        course: '@course_2'
+        title: 'Cours dense mais très utile'
+        content: 'Le contenu est riche, peut-être un peu dense pour des débutants. Le professeur explique bien mais il faudrait plus d''exercices pratiques.'
+        status: 'published'
+        createdAt: '<dateTimeImmutableBetween("-5 months", "-2 months")>'
+
+    review_3:
+        user: '@user_student_3'
+        course: '@course_3'
+        title: 'Symfony, un framework puissant !'
+        content: 'Excellent cours sur Symfony. Les projets guidés sont très formateurs. Je recommande fortement à tous ceux qui veulent développer des applications web robustes.'
+        status: 'published'
+        createdAt: '<dateTimeImmutableBetween("-4 months", "-1 month")>'
+
+    review_4:
+        user: '@user_student_4'
+        course: '@course_4'
+        title: 'Algorithmique poussée, attention !'
+        content: 'Le cours est très complet mais demande de solides bases en mathématiques. Préférable d''avoir suivi le cours d''introduction avant.'
+        status: 'published'
+        createdAt: '<dateTimeImmutableBetween("-3 months", "-2 weeks")>'
+
+    review_5:
+        user: '@user_student_5'
+        course: '@course_5'
+        title: 'Bon aperçu des réseaux'
+        content: 'Le cours couvre bien les fondamentaux des réseaux. Les TP en salle machine sont très intéressants. Quelques mises à jour sur les protocoles modernes seraient bienvenues.'
+        status: 'published'
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    review_6:
+        user: '@user_student_1'
+        course: '@course_6'
+        title: 'APIs REST, indispensable en 2024'
+        content: 'Cours très moderne et directement applicable en entreprise. La partie sécurité avec JWT est particulièrement bien traitée.'
+        status: 'pending'
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+# Notations : 6 reviews × 3 critères = 18 ReviewRating (contrainte unique review+critère)
+App\Entity\ReviewRating:
+    rating_r1_c1:
+        review: '@review_1'
+        ratingCriteria: '@criteria_1'
+        score: 5
+    rating_r1_c2:
+        review: '@review_1'
+        ratingCriteria: '@criteria_2'
+        score: 4
+    rating_r1_c3:
+        review: '@review_1'
+        ratingCriteria: '@criteria_3'
+        score: 4
+
+    rating_r2_c1:
+        review: '@review_2'
+        ratingCriteria: '@criteria_1'
+        score: 3
+    rating_r2_c2:
+        review: '@review_2'
+        ratingCriteria: '@criteria_2'
+        score: 4
+    rating_r2_c3:
+        review: '@review_2'
+        ratingCriteria: '@criteria_3'
+        score: 5
+
+    rating_r3_c1:
+        review: '@review_3'
+        ratingCriteria: '@criteria_1'
+        score: 5
+    rating_r3_c2:
+        review: '@review_3'
+        ratingCriteria: '@criteria_2'
+        score: 3
+    rating_r3_c3:
+        review: '@review_3'
+        ratingCriteria: '@criteria_3'
+        score: 5
+
+    rating_r4_c1:
+        review: '@review_4'
+        ratingCriteria: '@criteria_1'
+        score: 4
+    rating_r4_c2:
+        review: '@review_4'
+        ratingCriteria: '@criteria_2'
+        score: 2
+    rating_r4_c3:
+        review: '@review_4'
+        ratingCriteria: '@criteria_3'
+        score: 4
+
+    rating_r5_c1:
+        review: '@review_5'
+        ratingCriteria: '@criteria_1'
+        score: 4
+    rating_r5_c2:
+        review: '@review_5'
+        ratingCriteria: '@criteria_2'
+        score: 3
+    rating_r5_c3:
+        review: '@review_5'
+        ratingCriteria: '@criteria_3'
+        score: 3
+
+    rating_r6_c1:
+        review: '@review_6'
+        ratingCriteria: '@criteria_1'
+        score: 5
+    rating_r6_c2:
+        review: '@review_6'
+        ratingCriteria: '@criteria_2'
+        score: 4
+    rating_r6_c3:
+        review: '@review_6'
+        ratingCriteria: '@criteria_3'
+        score: 5
+
+App\Entity\Comment:
+    comment_1:
+        user: '@user_student_2'
+        review: '@review_1'
+        content: 'Je suis totalement d''accord, ce cours est une excellente introduction !'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-5 months", "-2 months")>'
+
+    comment_2:
+        user: '@user_student_3'
+        review: '@review_1'
+        content: 'Merci pour ce retour détaillé. Très utile pour les futurs étudiants.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-5 months", "-2 months")>'
+
+    comment_3:
+        user: '@user_student_1'
+        review: '@review_2'
+        content: 'Effectivement, le cours est dense. Je recommande de commencer tôt dans le semestre.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-4 months", "-1 month")>'
+
+    comment_4:
+        user: '@user_student_4'
+        review: '@review_3'
+        content: 'Je confirme ! Symfony est un outil fantastique une fois qu''on a pris le pli.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-3 months", "-2 weeks")>'
+
+    comment_5:
+        user: '@user_student_5'
+        review: '@review_4'
+        content: 'Les prérequis en maths sont effectivement importants. Attention aux débutants.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    comment_6:
+        user: '@user_student_2'
+        review: '@review_5'
+        content: 'Un avis partagé. Le cours manque un peu de pratique à mon goût.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'

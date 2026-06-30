@@ -16,15 +16,15 @@ class Tag
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['course:read'])]
+    #[Groups(['tag:read', 'course:list', 'course:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100, unique: true)]
-    #[Groups(['course:read'])]
+    #[Groups(['tag:read', 'course:list', 'course:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 30, nullable: true)]
-    #[Groups(['course:read'])]
+    #[Groups(['tag:read', 'course:list', 'course:read'])]
     private ?string $color = null;
 
     /**

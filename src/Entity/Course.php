@@ -28,7 +28,7 @@ class Course
     private ?string $title = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    #[Groups(['course:read'])]
+    #[Groups(['course:list', 'course:read'])]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
@@ -40,7 +40,7 @@ class Course
     private ?int $hours = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups(['course:read'])]
+    #[Groups(['course:list', 'course:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
@@ -64,13 +64,14 @@ class Course
     #[ORM\JoinTable(name: 'course_tags')]
     #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'id')]
-    #[Groups(['course:read'])]
+    #[Groups(['course:list', 'course:read'])]
     private Collection $tags;
 
     /**
      * @var Collection<int, Resource>
      */
     #[ORM\OneToMany(mappedBy: 'course', targetEntity: Resource::class)]
+    #[Groups(['course:read'])]
     private Collection $resources;
 
     /**
@@ -287,6 +288,28 @@ class Course
         }
 
         return $this;
+    }
+
+    #[Groups(['course:list', 'course:read'])]
+    public function getAverageRating(): float
+    {
+        $totalScore = 0;
+        $count = 0;
+        foreach ($this->reviews as $review) {
+            if ($review->getStatus() === 'published') {
+                foreach ($review->getRatings() as $rating) {
+                    $totalScore += $rating->getScore();
+                    $count++;
+                }
+            }
+        }
+        return $count > 0 ? round($totalScore / $count, 2) : 0.0;
+    }
+
+    #[Groups(['course:list', 'course:read'])]
+    public function getPublishedReviewCount(): int
+    {
+        return $this->reviews->filter(fn($r) => $r->getStatus() === 'published')->count();
     }
 
     /**

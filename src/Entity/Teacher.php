@@ -15,22 +15,23 @@ class Teacher
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['course:read'])]
+    #[Groups(['teacher:read', 'course:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['course:read'])]
+    #[Groups(['teacher:read', 'course:read'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['course:read'])]
+    #[Groups(['teacher:read', 'course:read'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 180, nullable: true)]
-    #[Groups(['course:read'])]
+    #[Groups(['teacher:read'])]
     private ?string $email = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups(['teacher:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     /**
