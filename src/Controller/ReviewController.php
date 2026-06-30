@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Review;
 use App\Form\ReviewType;
 use App\Repository\ReviewRepository;
+use App\Repository\UserRepository;
 use App\Security\Voter\ReviewVoter;
+use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +28,7 @@ final class ReviewController extends AbstractController
 
     #[Route('/new', name: 'app_review_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, EmailService $emailService, UserRepository $userRepository): Response
     {
         $review = new Review();
         $form = $this->createForm(ReviewType::class, $review);
@@ -39,6 +41,15 @@ final class ReviewController extends AbstractController
 
             $entityManager->persist($review);
             $entityManager->flush();
+
+            // Notify moderators that a new review awaits moderation.
+            $emailService->sendTemplateToMany(
+                $userRepository->findModerators(),
+                'Nouvel avis à modérer',
+                'emails/review_submitted.html.twig',
+                ['review' => $review],
+                'review_submitted',
+            );
 
             return $this->redirectToRoute('app_review_index', [], Response::HTTP_SEE_OTHER);
         }
