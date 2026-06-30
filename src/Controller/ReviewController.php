@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/review')]
 final class ReviewController extends AbstractController
@@ -18,11 +19,12 @@ final class ReviewController extends AbstractController
     public function index(ReviewRepository $reviewRepository): Response
     {
         return $this->render('review/index.html.twig', [
-            'reviews' => $reviewRepository->findAll(),
+            'reviews' => $reviewRepository->findPublic(),
         ]);
     }
 
     #[Route('/new', name: 'app_review_new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $review = new Review();
@@ -30,6 +32,10 @@ final class ReviewController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Author and status are enforced server-side, never taken from the form.
+            $review->setUser($this->getUser());
+            $review->setStatus(Review::STATUS_PENDING);
+
             $entityManager->persist($review);
             $entityManager->flush();
 

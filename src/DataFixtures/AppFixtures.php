@@ -168,7 +168,12 @@ class AppFixtures extends Fixture
                 ->setCourse($course)
                 ->setTitle($this->faker->sentence(4))
                 ->setContent($this->faker->paragraphs(2, true))
-                ->setStatus($this->faker->randomElement(['approved', 'approved', 'pending', 'rejected']))
+                ->setStatus($this->faker->randomElement([
+                    Review::STATUS_APPROVED,
+                    Review::STATUS_APPROVED,
+                    Review::STATUS_PENDING,
+                    Review::STATUS_REJECTED,
+                ]))
                 ->setCreatedAt($this->dt('-6 months'));
             $manager->persist($review);
             $reviews[] = $review;
