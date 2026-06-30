@@ -1,0 +1,14 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block subject %}Votre avis a été approuvé{% endblock %}
+
+{% block content %}
+    <h2 style="font-size: 16px; color: #16a34a;">Votre avis a été approuvé</h2>
+    <p>
+        Bonne nouvelle ! Votre avis
+        « <strong>{{ review.title }}</strong> »{% if review.course %} sur le cours
+        <strong>{{ review.course.title }}</strong>{% endif %}
+        a été approuvé et est désormais visible publiquement.
+    </p>
+    <p>Merci de votre contribution à Avis Campus.</p>
+{% endblock %}

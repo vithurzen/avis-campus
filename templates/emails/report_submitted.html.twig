@@ -1,0 +1,19 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block subject %}Nouveau signalement{% endblock %}
+
+{% block content %}
+    <h2 style="font-size: 16px;">Un nouveau signalement a été déposé</h2>
+    <p>Un contenu vient d'être signalé et nécessite votre attention.</p>
+    <ul>
+        <li><strong>Motif :</strong> {{ report.reason }}</li>
+        {% if report.description %}<li><strong>Description :</strong> {{ report.description }}</li>{% endif %}
+        {% if report.review %}
+            <li><strong>Avis concerné :</strong> {{ report.review.title }}</li>
+        {% elseif report.comment %}
+            <li><strong>Commentaire concerné :</strong> #{{ report.comment.id }}</li>
+        {% endif %}
+        {% if report.user %}<li><strong>Signalé par :</strong> {{ report.user.email }}</li>{% endif %}
+        <li><strong>Statut :</strong> {{ report.status }}</li>
+    </ul>
+{% endblock %}

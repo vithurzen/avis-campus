@@ -1,0 +1,15 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block subject %}Votre avis a été masqué{% endblock %}
+
+{% block content %}
+    <h2 style="font-size: 16px; color: #d97706;">Votre avis a été masqué</h2>
+    <p>
+        Votre avis « <strong>{{ review.title }}</strong> »{% if review.course %} sur le cours
+        <strong>{{ review.course.title }}</strong>{% endif %} a été masqué par la modération
+        et n'est plus visible publiquement.
+    </p>
+    {% if reason %}
+        <p><strong>Motif :</strong> {{ reason }}</p>
+    {% endif %}
+{% endblock %}

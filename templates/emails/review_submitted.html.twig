@@ -1,0 +1,15 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block subject %}Nouvel avis à modérer{% endblock %}
+
+{% block content %}
+    <h2 style="font-size: 16px;">Un nouvel avis attend votre modération</h2>
+    <p>Un étudiant vient de soumettre un avis qui nécessite une validation.</p>
+    <ul>
+        <li><strong>Titre :</strong> {{ review.title }}</li>
+        {% if review.course %}<li><strong>Cours :</strong> {{ review.course.title }}</li>{% endif %}
+        {% if review.user %}<li><strong>Auteur :</strong> {{ review.user.email }}</li>{% endif %}
+        <li><strong>Statut :</strong> {{ review.status }}</li>
+    </ul>
+    <p>Connectez-vous à l'espace de modération pour l'approuver ou le rejeter.</p>
+{% endblock %}
