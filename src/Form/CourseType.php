@@ -20,25 +20,29 @@ class CourseType extends AbstractType
             ->add('description')
             ->add('coefficient')
             ->add('hours')
-            ->add('createdAt', null, [
-                'widget' => 'single_text'
-            ])
-            ->add('updatedAt', null, [
-                'widget' => 'single_text'
-            ])
-            ->add('semester', EntityType::class, [
+        ;
+
+        if ($options['show_semester']) {
+            $builder->add('semester', EntityType::class, [
                 'class' => Semester::class,
-                'choice_label' => 'id',
-            ])
+                'choice_label' => fn(Semester $s) => $s->getFormation()->getName() . ' — ' . $s->getName(),
+            ]);
+        }
+
+        $builder
             ->add('teachers', EntityType::class, [
                 'class' => Teacher::class,
-                'choice_label' => 'id',
+                'choice_label' => fn(Teacher $t) => $t->getFirstName() . ' ' . $t->getLastName(),
                 'multiple' => true,
+                'expanded' => true,
+                'required' => false,
             ])
             ->add('tags', EntityType::class, [
                 'class' => Tag::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
                 'multiple' => true,
+                'expanded' => true,
+                'required' => false,
             ])
         ;
     }
@@ -47,6 +51,7 @@ class CourseType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Course::class,
+            'show_semester' => true,
         ]);
     }
 }

@@ -1,0 +1,110 @@
+{% extends 'layout/app.html.twig' %}
+
+{% block title %}Avis — Avis Campus{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Avis étudiants</h1>
+            <p class="text-sm text-gray-500 mt-1">{{ reviews|length }} avis publié{{ reviews|length > 1 ? 's' : '' }}</p>
+        </div>
+        {% if is_granted('ROLE_USER') %}
+            <a href="{{ path('app_review_new') }}"
+               class="bg-brand hover:bg-brandHover text-white font-semibold text-sm px-5 py-2.5 rounded-full transition">
+                <i class="fa-solid fa-plus mr-1"></i> Déposer un avis
+            </a>
+        {% endif %}
+    </div>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="mb-4 text-sm px-4 py-3 rounded-lg border
+                {{ label == 'warning' ? 'bg-amber-50 border-amber-200 text-amber-700' : '' }}
+                {{ label == 'info'    ? 'bg-blue-50 border-blue-200 text-blue-700' : '' }}
+                {{ label == 'success' ? 'bg-green-50 border-green-200 text-green-700' : '' }}
+                {{ label == 'error'   ? 'bg-red-50 border-red-200 text-red-600' : '' }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {% if is_granted('ROLE_USER') and myReviews is not empty %}
+        <div class="mb-10">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Mes avis</h2>
+            <div class="space-y-3">
+                {% for review in myReviews %}
+                    <div class="bg-white rounded-xl border border-gray-200 px-5 py-4 flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-4 min-w-0">
+                            {% if review.status == 'approved' %}
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium shrink-0 bg-green-100 text-green-700">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approuvé
+                                </span>
+                            {% elseif review.status == 'pending' %}
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium shrink-0 bg-amber-100 text-amber-700">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> En attente
+                                </span>
+                            {% elseif review.status == 'rejected' %}
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium shrink-0 bg-red-100 text-red-700">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejeté
+                                </span>
+                            {% elseif review.status == 'hidden' %}
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium shrink-0 bg-gray-100 text-gray-500">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span> Masqué
+                                </span>
+                            {% endif %}
+                            <div class="min-w-0">
+                                <p class="text-sm font-semibold text-gray-900 truncate">{{ review.title }}</p>
+                                <p class="text-xs text-gray-400">{{ review.course ? review.course.title : '—' }} · {{ review.createdAt ? review.createdAt|date('d/m/Y') : '' }}</p>
+                            </div>
+                        </div>
+                        <a href="{{ path('app_review_show', { id: review.id }) }}"
+                           class="text-sm text-brand hover:underline shrink-0">
+                            Voir
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Tous les avis</h2>
+    {% endif %}
+
+    {% if reviews is empty %}
+        <div class="text-center py-24 text-gray-400">
+            <i class="fa-solid fa-star text-5xl mb-4 opacity-20"></i>
+            <p class="text-sm">Aucun avis pour le moment.</p>
+        </div>
+    {% else %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for review in reviews %}
+                <a href="{{ path('app_review_show', { id: review.id }) }}"
+                   class="group bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-md transition flex flex-col gap-4">
+
+                    <div class="flex items-start justify-between gap-3">
+                        <h2 class="text-base font-semibold text-gray-900 group-hover:text-brand transition line-clamp-2">
+                            {{ review.title }}
+                        </h2>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium shrink-0 bg-green-100 text-green-700">
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                            Approuvé
+                        </span>
+                    </div>
+
+                    <p class="text-sm text-gray-600 line-clamp-3">{{ review.content }}</p>
+
+                    <div class="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
+                        <span>
+                            <i class="fa-solid fa-book mr-1"></i>
+                            {{ review.course ? review.course.title : '—' }}
+                        </span>
+                        <span>{{ review.createdAt ? review.createdAt|date('d/m/Y') : '' }}</span>
+                    </div>
+
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

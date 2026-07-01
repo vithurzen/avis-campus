@@ -1,0 +1,74 @@
+{% extends 'layout/app.html.twig' %}
+
+{% block title %}Modifier — {{ semester.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 py-10">
+
+    <div class="mb-8">
+        <a href="{{ path('app_formation_show', { id: semester.formation.id }) }}" class="text-sm text-gray-500 hover:text-brand transition">
+            <i class="fa-solid fa-arrow-left mr-1"></i> Retour à {{ semester.formation.name }}
+        </a>
+        <h1 class="text-2xl font-bold text-gray-900 mt-4">Modifier le semestre</h1>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 p-8">
+        {{ form_start(form, { attr: { class: 'space-y-6' } }) }}
+
+            <div>
+                {{ form_label(form.formation, 'Formation', {
+                    label_attr: { class: 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' }
+                }) }}
+                {{ form_widget(form.formation, {
+                    attr: { class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white' }
+                }) }}
+                <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.formation) }}</div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    {{ form_label(form.number, 'Numéro', {
+                        label_attr: { class: 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' }
+                    }) }}
+                    {{ form_widget(form.number, {
+                        attr: { class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white' }
+                    }) }}
+                    <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.number) }}</div>
+                </div>
+                <div>
+                    {{ form_label(form.name, 'Nom', {
+                        label_attr: { class: 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' }
+                    }) }}
+                    {{ form_widget(form.name, {
+                        attr: { class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white' }
+                    }) }}
+                    <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.name) }}</div>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 pt-2">
+                <a href="{{ path('app_formation_show', { id: semester.formation.id }) }}"
+                   class="text-sm text-gray-500 hover:text-gray-700 transition px-4 py-2">
+                    Annuler
+                </a>
+                <button type="submit"
+                        class="bg-brand hover:bg-brandHover text-white font-semibold text-sm px-6 py-2.5 rounded-full transition">
+                    Enregistrer
+                </button>
+            </div>
+
+        {{ form_end(form) }}
+    </div>
+
+    <div class="mt-4 flex justify-start">
+        <form method="post" action="{{ path('app_semester_delete', { id: semester.id }) }}"
+              onsubmit="return confirm('Supprimer ce semestre ?')">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ semester.id) }}">
+            <button type="submit" class="text-sm text-red-500 hover:text-red-700 transition font-medium">
+                <i class="fa-solid fa-trash mr-1"></i> Supprimer le semestre
+            </button>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

@@ -15,9 +15,6 @@ class FormationType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('degreeLevel')
-            ->add('createdAt', null, [
-                'widget' => 'single_text'
-            ])
         ;
     }
 
