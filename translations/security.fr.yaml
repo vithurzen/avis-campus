@@ -1,0 +1,3 @@
+'Invalid credentials.': 'Email ou mot de passe incorrect.'
+'Too many failed login attempts, please try again in %minutes% minute.': 'Trop de tentatives, réessayez dans %minutes% minute.'
+'Too many failed login attempts, please try again in %minutes% minutes.': 'Trop de tentatives, réessayez dans %minutes% minutes.'

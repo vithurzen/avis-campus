@@ -28,6 +28,13 @@ services:
       # - ./docker/db/data:/var/lib/postgresql/data:rw
 ###< doctrine/doctrine-bundle ###
 
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+
   ###> symfony/mailer ###
   mailpit:
     image: axllent/mailpit

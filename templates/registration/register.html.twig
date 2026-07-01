@@ -1,0 +1,87 @@
+{% extends 'layout/app.html.twig' %}
+
+{% block title %}Inscription — Avis Campus{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center bg-gray-50 py-16 px-4 min-h-[calc(100vh-8rem)]">
+    <div class="w-full max-w-md">
+
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-bold text-gray-900">Créer un compte</h1>
+            <p class="text-sm text-gray-500 mt-1">Rejoignez la communauté Avis Campus</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+
+            {{ form_start(registrationForm, { attr: { class: 'space-y-5' } }) }}
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        {{ form_label(registrationForm.firstName, 'Prénom', {
+                            label_attr: { class: 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' }
+                        }) }}
+                        {{ form_widget(registrationForm.firstName, {
+                            attr: { class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white' }
+                        }) }}
+                        <div class="mt-1.5 text-xs text-red-600 space-y-0.5">{{ form_errors(registrationForm.firstName) }}</div>
+                    </div>
+                    <div>
+                        {{ form_label(registrationForm.lastName, 'Nom', {
+                            label_attr: { class: 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' }
+                        }) }}
+                        {{ form_widget(registrationForm.lastName, {
+                            attr: { class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white' }
+                        }) }}
+                        <div class="mt-1.5 text-xs text-red-600 space-y-0.5">{{ form_errors(registrationForm.lastName) }}</div>
+                    </div>
+                </div>
+
+                <div>
+                    {{ form_label(registrationForm.email, 'Email', {
+                        label_attr: { class: 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' }
+                    }) }}
+                    {{ form_widget(registrationForm.email, {
+                        attr: { class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white' }
+                    }) }}
+                    <div class="mt-1.5 text-xs text-red-600 space-y-0.5">{{ form_errors(registrationForm.email) }}</div>
+                </div>
+
+                <div>
+                    {{ form_label(registrationForm.plainPassword, 'Mot de passe', {
+                        label_attr: { class: 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' }
+                    }) }}
+                    {{ form_widget(registrationForm.plainPassword, {
+                        attr: { class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white' }
+                    }) }}
+                    <div class="mt-1.5 text-xs text-red-600 space-y-0.5">{{ form_errors(registrationForm.plainPassword) }}</div>
+                </div>
+
+                <div class="flex items-start gap-3">
+                    {{ form_widget(registrationForm.agreeTerms, {
+                        attr: { class: 'mt-0.5 w-4 h-4 rounded border-gray-300 text-brand focus:ring-brand' }
+                    }) }}
+                    <div>
+                        {{ form_label(registrationForm.agreeTerms, "J'accepte les conditions d'utilisation", {
+                            label_attr: { class: 'text-sm text-gray-600 cursor-pointer' }
+                        }) }}
+                        <div class="mt-1 text-xs text-red-600 space-y-0.5">{{ form_errors(registrationForm.agreeTerms) }}</div>
+                    </div>
+                </div>
+
+                <button type="submit"
+                        class="w-full bg-brand hover:bg-brandHover text-white font-semibold text-sm py-2.5 rounded-full transition">
+                    Créer mon compte
+                </button>
+
+            {{ form_end(registrationForm) }}
+
+        </div>
+
+        <p class="text-center text-sm text-gray-500 mt-6">
+            Déjà un compte ?
+            <a href="{{ path('app_login') }}" class="text-brand font-semibold hover:underline">Se connecter</a>
+        </p>
+
+    </div>
+</div>
+{% endblock %}
