@@ -1,0 +1,7 @@
+<div class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 flex-shrink-0">
+    <h1 class="text-lg font-semibold text-gray-900">{% block page_title %}Administration{% endblock %}</h1>
+    <div class="flex items-center gap-2 text-sm text-gray-500">
+        <i class="fa-solid fa-user-shield text-brand"></i>
+        <span>{{ app.user ? app.user.email : '' }}</span>
+    </div>
+</div>

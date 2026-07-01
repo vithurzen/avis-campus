@@ -24,6 +24,7 @@ final class ReviewController extends AbstractController
     {
         return $this->render('review/index.html.twig', [
             'reviews' => $reviewRepository->findPublic(),
+            'myReviews' => $this->getUser() ? $reviewRepository->findBy(['user' => $this->getUser()], ['createdAt' => 'DESC']) : [],
         ]);
     }
 

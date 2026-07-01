@@ -16,17 +16,21 @@ class SemesterType extends AbstractType
         $builder
             ->add('name')
             ->add('number')
-            ->add('formation', EntityType::class, [
-                'class' => Formation::class,
-                'choice_label' => 'id',
-            ])
         ;
+
+        if ($options['show_formation']) {
+            $builder->add('formation', EntityType::class, [
+                'class' => Formation::class,
+                'choice_label' => 'name',
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Semester::class,
+            'show_formation' => true,
         ]);
     }
 }

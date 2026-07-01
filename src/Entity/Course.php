@@ -10,6 +10,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 #[ORM\Table(name: 'courses')]
+#[ORM\HasLifecycleCallbacks]
 class Course
 {
     #[ORM\Id]
@@ -70,20 +71,20 @@ class Course
     /**
      * @var Collection<int, Resource>
      */
-    #[ORM\OneToMany(mappedBy: 'course', targetEntity: Resource::class)]
+    #[ORM\OneToMany(mappedBy: 'course', targetEntity: Resource::class, cascade: ['remove'])]
     #[Groups(['course:read'])]
     private Collection $resources;
 
     /**
      * @var Collection<int, Review>
      */
-    #[ORM\OneToMany(mappedBy: 'course', targetEntity: Review::class)]
+    #[ORM\OneToMany(mappedBy: 'course', targetEntity: Review::class, cascade: ['remove'])]
     private Collection $reviews;
 
     /**
      * @var Collection<int, Favorite>
      */
-    #[ORM\OneToMany(mappedBy: 'course', targetEntity: Favorite::class)]
+    #[ORM\OneToMany(mappedBy: 'course', targetEntity: Favorite::class, cascade: ['remove'])]
     private Collection $favorites;
 
     public function __construct()
@@ -93,6 +94,20 @@ class Course
         $this->resources = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->favorites = new ArrayCollection();
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTimeImmutable();
+        }
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

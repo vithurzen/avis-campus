@@ -1,0 +1,57 @@
+<header class="sticky top-0 z-50 bg-white border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+
+            <a href="{{ path('app_home') }}" class="flex items-center gap-2 font-bold text-xl text-brand">
+                <i class="fa-solid fa-graduation-cap"></i>
+                Avis Campus
+            </a>
+
+            <nav class="hidden md:flex items-center gap-6">
+                <a href="{{ path('app_formation_index') }}"
+                   class="text-sm text-gray-600 hover:text-brand transition {{ app.request.attributes.get('_route') starts with 'app_formation' ? 'text-brand font-semibold' : '' }}">
+                    Formations
+                </a>
+                <a href="{{ path('app_course_index') }}"
+                   class="text-sm text-gray-600 hover:text-brand transition {{ app.request.attributes.get('_route') starts with 'app_course' ? 'text-brand font-semibold' : '' }}">
+                    Cours
+                </a>
+                <a href="{{ path('app_review_index') }}"
+                   class="text-sm text-gray-600 hover:text-brand transition {{ app.request.attributes.get('_route') starts with 'app_review' ? 'text-brand font-semibold' : '' }}">
+                    Avis
+                </a>
+                {% if is_granted('ROLE_MODERATOR') %}
+                    <a href="{{ path('app_moderation_index') }}"
+                       class="text-sm text-gray-600 hover:text-brand transition {{ app.request.attributes.get('_route') starts with 'app_moderation' ? 'text-brand font-semibold' : '' }}">
+                        Modération
+                    </a>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_admin_users') }}"
+                       class="text-sm text-gray-600 hover:text-brand transition {{ app.request.attributes.get('_route') starts with 'app_admin' ? 'text-brand font-semibold' : '' }}">
+                        Admin
+                    </a>
+                {% endif %}
+            </nav>
+
+            <div class="flex items-center gap-3">
+                {% if app.user %}
+                    <span class="text-sm text-gray-500 hidden sm:block">{{ app.user.email }}</span>
+                    <a href="{{ path('app_logout') }}"
+                       class="text-sm text-gray-600 hover:text-brand transition"
+                       title="Déconnexion">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="text-sm text-gray-700 hover:text-brand transition font-medium">
+                        Connexion
+                    </a>
+                    <a href="{{ path('app_register') }}" class="text-sm bg-brand hover:bg-brandHover text-white px-4 py-2 rounded-full transition font-medium">
+                        S'inscrire
+                    </a>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</header>

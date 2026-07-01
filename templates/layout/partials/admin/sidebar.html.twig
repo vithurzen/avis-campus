@@ -1,0 +1,55 @@
+<aside class="w-64 bg-slate-900 text-white flex flex-col flex-shrink-0">
+
+    <div class="h-16 flex items-center px-6 border-b border-slate-700">
+        <a href="{{ path('app_home') }}" class="flex items-center gap-2 font-bold text-lg text-brand">
+            <i class="fa-solid fa-graduation-cap"></i>
+            Avis Campus
+        </a>
+    </div>
+
+    <nav class="flex-1 px-4 py-6 space-y-1">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">Administration</p>
+
+        <a href="{{ path('app_admin_users') }}"
+           class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition
+                  {{ app.request.attributes.get('_route') == 'app_admin_users' ? 'bg-brand text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+            <i class="fa-solid fa-users w-4 text-center"></i>
+            Utilisateurs
+        </a>
+
+        {% if is_granted('ROLE_MODERATOR') %}
+        <a href="{{ path('app_moderation_index') }}"
+           class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition
+                  {{ app.request.attributes.get('_route') starts with 'app_moderation' ? 'bg-brand text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+            <i class="fa-solid fa-shield-halved w-4 text-center"></i>
+            Modération
+        </a>
+        {% endif %}
+
+        <a href="{{ path('app_course_index') }}"
+           class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition
+                  {{ app.request.attributes.get('_route') starts with 'app_course' ? 'bg-brand text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+            <i class="fa-solid fa-book w-4 text-center"></i>
+            Cours
+        </a>
+
+        <a href="{{ path('app_review_index') }}"
+           class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition
+                  {{ app.request.attributes.get('_route') starts with 'app_review' ? 'bg-brand text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+            <i class="fa-solid fa-star w-4 text-center"></i>
+            Avis
+        </a>
+    </nav>
+
+    <div class="px-4 py-4 border-t border-slate-700 space-y-1">
+        <a href="{{ path('app_home') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:text-white transition">
+            <i class="fa-solid fa-arrow-left w-4 text-center"></i>
+            Retour au site
+        </a>
+        <a href="{{ path('app_logout') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:text-white transition">
+            <i class="fa-solid fa-right-from-bracket w-4 text-center"></i>
+            Déconnexion
+        </a>
+    </div>
+
+</aside>

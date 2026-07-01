@@ -1,0 +1,132 @@
+{% extends 'layout/app.html.twig' %}
+
+{% block title %}Nouveau cours — Avis Campus{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 py-10">
+
+    <div class="mb-8">
+        {% if semester %}
+            <a href="{{ path('app_formation_show', { id: semester.formation.id }) }}" class="text-sm text-gray-500 hover:text-brand transition">
+                <i class="fa-solid fa-arrow-left mr-1"></i> Retour à {{ semester.formation.name }}
+            </a>
+        {% else %}
+            <a href="{{ path('app_course_index') }}" class="text-sm text-gray-500 hover:text-brand transition">
+                <i class="fa-solid fa-arrow-left mr-1"></i> Retour aux cours
+            </a>
+        {% endif %}
+        <h1 class="text-2xl font-bold text-gray-900 mt-4">Nouveau cours</h1>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 p-8">
+        {{ form_start(form, { attr: { class: 'space-y-6' } }) }}
+
+            {% if semester %}
+                <div>
+                    <p class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">Semestre</p>
+                    <p class="text-sm text-gray-900 px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg">
+                        {{ semester.formation.name }} — {{ semester.name }}
+                    </p>
+                </div>
+            {% else %}
+                <div>
+                    {{ form_label(form.semester, 'Semestre', {
+                        label_attr: { class: 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' }
+                    }) }}
+                    {{ form_widget(form.semester, {
+                        attr: { class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white' }
+                    }) }}
+                    <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.semester) }}</div>
+                </div>
+            {% endif %}
+
+            <div>
+                {{ form_label(form.title, 'Titre', {
+                    label_attr: { class: 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' }
+                }) }}
+                {{ form_widget(form.title, {
+                    attr: { class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white' }
+                }) }}
+                <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.title) }}</div>
+            </div>
+
+            <div>
+                {{ form_label(form.description, 'Description', {
+                    label_attr: { class: 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' }
+                }) }}
+                {{ form_widget(form.description, {
+                    attr: { class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white min-h-[100px]' }
+                }) }}
+                <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.description) }}</div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    {{ form_label(form.hours, 'Heures', {
+                        label_attr: { class: 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' }
+                    }) }}
+                    {{ form_widget(form.hours, {
+                        attr: { class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white' }
+                    }) }}
+                    <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.hours) }}</div>
+                </div>
+                <div>
+                    {{ form_label(form.coefficient, 'Coefficient', {
+                        label_attr: { class: 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' }
+                    }) }}
+                    {{ form_widget(form.coefficient, {
+                        attr: { class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white' }
+                    }) }}
+                    <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.coefficient) }}</div>
+                </div>
+            </div>
+
+            <div>
+                <p class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Enseignants</p>
+                <div class="flex flex-wrap gap-3">
+                    {% for child in form.teachers %}
+                        <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                            {{ form_widget(child, { attr: { class: 'w-4 h-4 rounded border-gray-300 text-brand focus:ring-brand' } }) }}
+                            {{ form_label(child) }}
+                        </label>
+                    {% endfor %}
+                </div>
+                <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.teachers) }}</div>
+            </div>
+
+            <div>
+                <p class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Tags</p>
+                <div class="flex flex-wrap gap-3">
+                    {% for child in form.tags %}
+                        <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                            {{ form_widget(child, { attr: { class: 'w-4 h-4 rounded border-gray-300 text-brand focus:ring-brand' } }) }}
+                            {{ form_label(child) }}
+                        </label>
+                    {% endfor %}
+                </div>
+                <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.tags) }}</div>
+            </div>
+
+            <div class="flex items-center justify-between pt-2">
+                {% if semester %}
+                    <a href="{{ path('app_formation_show', { id: semester.formation.id }) }}"
+                       class="text-sm font-medium text-gray-500 hover:text-gray-700 transition px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-50">
+                        <i class="fa-solid fa-check mr-1"></i> Terminer
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_course_index') }}"
+                       class="text-sm text-gray-500 hover:text-gray-700 transition px-4 py-2">
+                        Annuler
+                    </a>
+                {% endif %}
+                <button type="submit"
+                        class="bg-brand hover:bg-brandHover text-white font-semibold text-sm px-6 py-2.5 rounded-full transition">
+                    <i class="fa-solid fa-plus mr-1.5"></i> Ajouter ce cours
+                </button>
+            </div>
+
+        {{ form_end(form) }}
+    </div>
+
+</div>
+{% endblock %}

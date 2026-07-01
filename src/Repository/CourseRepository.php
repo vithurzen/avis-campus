@@ -6,7 +6,9 @@ use App\Entity\Course;
 use App\Entity\Formation;
 use App\Entity\RatingCriteria;
 use App\Entity\Review;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -20,8 +22,26 @@ class CourseRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Course[]
+     * Cours non encore reviewés par l'utilisateur (pour le formulaire de dépôt d'avis).
+     * Si $excludedCourse est fourni (cas édition), ce cours est réintégré dans les résultats.
      */
+    public function findCoursesNotReviewedBy(User $user, ?Course $excludedCourse = null): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('c')->orderBy('c.title', 'ASC');
+
+        // Sous-requête DQL : IDs des cours déjà reviewés par l'utilisateur
+        $dql = 'SELECT IDENTITY(r.course) FROM App\Entity\Review r WHERE r.user = :user';
+        $qb->setParameter('user', $user);
+
+        // En mode édition, on exclut le cours courant de la sous-requête pour qu'il reste disponible
+        if ($excludedCourse !== null) {
+            $dql .= ' AND r.course != :excludedCourse';
+            $qb->setParameter('excludedCourse', $excludedCourse);
+        }
+
+        return $qb->where("c.id NOT IN ($dql)");
+    }
+
     public function findTopCourses(int $limit = 10): array
     {
         $conn = $this->getEntityManager()->getConnection();
