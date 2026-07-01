@@ -1,0 +1,63 @@
+{% extends 'layout/app.html.twig' %}
+
+{% block title %}Nouvelle formation — Avis Campus{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 py-10">
+
+    <div class="mb-8">
+        <a href="{{ path('app_formation_index') }}" class="text-sm text-gray-500 hover:text-brand transition">
+            <i class="fa-solid fa-arrow-left mr-1"></i> Retour aux formations
+        </a>
+        <h1 class="text-2xl font-bold text-gray-900 mt-4">Nouvelle formation</h1>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 p-8">
+        {{ form_start(form, { attr: { class: 'space-y-6' } }) }}
+
+            <div>
+                {{ form_label(form.name, 'Nom', {
+                    label_attr: { class: 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' }
+                }) }}
+                {{ form_widget(form.name, {
+                    attr: { class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white' }
+                }) }}
+                <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.name) }}</div>
+            </div>
+
+            <div>
+                {{ form_label(form.degreeLevel, 'Niveau de diplôme', {
+                    label_attr: { class: 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' }
+                }) }}
+                {{ form_widget(form.degreeLevel, {
+                    attr: { class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white', placeholder: 'Ex: Licence, Master, BTS...' }
+                }) }}
+                <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.degreeLevel) }}</div>
+            </div>
+
+            <div>
+                {{ form_label(form.description, 'Description', {
+                    label_attr: { class: 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' }
+                }) }}
+                {{ form_widget(form.description, {
+                    attr: { class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white min-h-[100px]' }
+                }) }}
+                <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.description) }}</div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 pt-2">
+                <a href="{{ path('app_formation_index') }}"
+                   class="text-sm text-gray-500 hover:text-gray-700 transition px-4 py-2">
+                    Annuler
+                </a>
+                <button type="submit"
+                        class="bg-brand hover:bg-brandHover text-white font-semibold text-sm px-6 py-2.5 rounded-full transition">
+                    Créer la formation
+                </button>
+            </div>
+
+        {{ form_end(form) }}
+    </div>
+
+</div>
+{% endblock %}

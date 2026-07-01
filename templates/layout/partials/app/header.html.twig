@@ -8,6 +8,10 @@
             </a>
 
             <nav class="hidden md:flex items-center gap-6">
+                <a href="{{ path('app_formation_index') }}"
+                   class="text-sm text-gray-600 hover:text-brand transition {{ app.request.attributes.get('_route') starts with 'app_formation' ? 'text-brand font-semibold' : '' }}">
+                    Formations
+                </a>
                 <a href="{{ path('app_course_index') }}"
                    class="text-sm text-gray-600 hover:text-brand transition {{ app.request.attributes.get('_route') starts with 'app_course' ? 'text-brand font-semibold' : '' }}">
                     Cours

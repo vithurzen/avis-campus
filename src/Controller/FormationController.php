@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/formation')]
 final class FormationController extends AbstractController
@@ -18,11 +19,12 @@ final class FormationController extends AbstractController
     public function index(FormationRepository $formationRepository): Response
     {
         return $this->render('formation/index.html.twig', [
-            'formations' => $formationRepository->findAll(),
+            'formations' => $formationRepository->findBy([], ['name' => 'ASC']),
         ]);
     }
 
     #[Route('/new', name: 'app_formation_new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $formation = new Formation();
@@ -51,6 +53,7 @@ final class FormationController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_formation_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function edit(Request $request, Formation $formation, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(FormationType::class, $formation);
@@ -69,6 +72,7 @@ final class FormationController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_formation_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, Formation $formation, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$formation->getId(), $request->getPayload()->getString('_token'))) {
