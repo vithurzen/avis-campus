@@ -36,6 +36,19 @@
 
     </div>
 
+    <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-semibold text-gray-900">
+            Semestres
+            <span class="text-sm font-normal text-gray-400 ml-1">({{ formation.semesters|length }})</span>
+        </h2>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('app_semester_new', { formation: formation.id }) }}"
+               class="text-sm bg-brand hover:bg-brandHover text-white font-semibold px-4 py-2 rounded-full transition">
+                <i class="fa-solid fa-plus mr-1"></i> Nouveau semestre
+            </a>
+        {% endif %}
+    </div>
+
     {% if formation.semesters is empty %}
         <div class="text-center py-12 text-gray-400 bg-white rounded-2xl border border-gray-200">
             <i class="fa-solid fa-layer-group text-3xl mb-3 opacity-20"></i>
@@ -47,8 +60,20 @@
                 <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
 
                     <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50">
-                        <h2 class="font-semibold text-gray-900">{{ semester.name }}</h2>
-                        <span class="text-xs text-gray-400">{{ semester.courses|length }} cours</span>
+                        <span class="font-semibold text-gray-900">{{ semester.name }}</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs text-gray-400">{{ semester.courses|length }} cours</span>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('app_course_new', { semester: semester.id }) }}"
+                                   class="text-xs text-brand hover:text-brandHover font-medium transition">
+                                    <i class="fa-solid fa-plus mr-0.5"></i> Ajouter un cours
+                                </a>
+                                <a href="{{ path('app_semester_edit', { id: semester.id }) }}"
+                                   class="text-xs text-gray-400 hover:text-gray-600 transition">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+                            {% endif %}
+                        </div>
                     </div>
 
                     {% if semester.courses is empty %}

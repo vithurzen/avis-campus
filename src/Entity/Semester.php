@@ -34,7 +34,7 @@ class Semester
     /**
      * @var Collection<int, Course>
      */
-    #[ORM\OneToMany(mappedBy: 'semester', targetEntity: Course::class)]
+    #[ORM\OneToMany(mappedBy: 'semester', targetEntity: Course::class, cascade: ['remove'])]
     private Collection $courses;
 
     public function __construct()
