@@ -1,0 +1,115 @@
+{% extends 'layout/app.html.twig' %}
+
+{% block title %}{{ course.title }} — Avis Campus{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+
+    <div class="mb-6">
+        <a href="{{ path('app_course_index') }}" class="text-sm text-gray-500 hover:text-brand transition">
+            <i class="fa-solid fa-arrow-left mr-1"></i> Retour aux cours
+        </a>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 p-8 mb-8">
+
+        <div class="flex items-start justify-between gap-4 mb-4">
+            <h1 class="text-2xl font-bold text-gray-900">{{ course.title }}</h1>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_course_edit', { id: course.id }) }}"
+                   class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-4 py-2 rounded-full transition shrink-0">
+                    <i class="fa-solid fa-pen mr-1"></i> Modifier
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="flex flex-wrap gap-2 mb-6">
+            {% for tag in course.tags %}
+                <span class="inline-block px-2.5 py-1 rounded-full text-xs font-medium"
+                      style="background-color: {{ tag.color }}22; color: {{ tag.color }}">
+                    {{ tag.name }}
+                </span>
+            {% endfor %}
+        </div>
+
+        <div class="grid grid-cols-3 gap-4 mb-6">
+            <div class="bg-gray-50 rounded-xl p-4 text-center">
+                <div class="text-xl font-bold text-gray-900">{{ course.hours ?? '—' }}</div>
+                <div class="text-xs text-gray-500 mt-1">Heures</div>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-4 text-center">
+                <div class="text-xl font-bold text-gray-900">{{ course.coefficient ?? '—' }}</div>
+                <div class="text-xs text-gray-500 mt-1">Coefficient</div>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-4 text-center">
+                <div class="text-xl font-bold text-gray-900">
+                    {{ course.reviews|filter(r => r.status == 'approved')|length }}
+                </div>
+                <div class="text-xs text-gray-500 mt-1">Avis</div>
+            </div>
+        </div>
+
+        {% if course.description %}
+            <p class="text-sm text-gray-700 leading-relaxed mb-6">{{ course.description }}</p>
+        {% endif %}
+
+        <div class="flex flex-wrap gap-6 text-sm text-gray-500 pt-4 border-t border-gray-100">
+            <span>
+                <i class="fa-solid fa-graduation-cap mr-1"></i>
+                {{ course.semester ? (course.semester.formation.name ~ ' — ' ~ course.semester.name) : '—' }}
+            </span>
+            {% if course.teachers is not empty %}
+                <span>
+                    <i class="fa-solid fa-chalkboard-user mr-1"></i>
+                    {% for teacher in course.teachers %}
+                        {{ teacher.firstName }} {{ teacher.lastName }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </span>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-semibold text-gray-900">
+            Avis
+            <span class="text-sm font-normal text-gray-400 ml-1">
+                ({{ course.reviews|filter(r => r.status == 'approved')|length }})
+            </span>
+        </h2>
+        {% if is_granted('ROLE_USER') %}
+            <a href="{{ path('app_review_new') }}"
+               class="text-sm bg-brand hover:bg-brandHover text-white font-semibold px-4 py-2 rounded-full transition">
+                <i class="fa-solid fa-plus mr-1"></i> Donner mon avis
+            </a>
+        {% endif %}
+    </div>
+
+    {% set approvedReviews = course.reviews|filter(r => r.status == 'approved') %}
+
+    {% if approvedReviews is empty %}
+        <div class="text-center py-12 text-gray-400 bg-white rounded-2xl border border-gray-200">
+            <i class="fa-solid fa-star text-3xl mb-3 opacity-20"></i>
+            <p class="text-sm">Aucun avis pour ce cours.</p>
+        </div>
+    {% else %}
+        <div class="space-y-4">
+            {% for review in approvedReviews %}
+                <a href="{{ path('app_review_show', { id: review.id }) }}"
+                   class="group block bg-white rounded-xl border border-gray-200 p-5 hover:shadow-sm transition">
+                    <div class="flex items-start justify-between gap-3 mb-2">
+                        <h3 class="text-sm font-semibold text-gray-900 group-hover:text-brand transition">
+                            {{ review.title }}
+                        </h3>
+                        <span class="text-xs text-gray-400 shrink-0">
+                            {{ review.createdAt ? review.createdAt|date('d/m/Y') : '' }}
+                        </span>
+                    </div>
+                    <p class="text-sm text-gray-500 line-clamp-2">{{ review.content }}</p>
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}
