@@ -38,7 +38,8 @@ class Formation
     /**
      * @var Collection<int, Semester>
      */
-    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: Semester::class)]
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: Semester::class, cascade: ['remove'])]
+    #[ORM\OrderBy(['number' => 'ASC'])]
     private Collection $semesters;
 
     public function __construct()

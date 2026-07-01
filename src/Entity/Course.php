@@ -71,20 +71,20 @@ class Course
     /**
      * @var Collection<int, Resource>
      */
-    #[ORM\OneToMany(mappedBy: 'course', targetEntity: Resource::class)]
+    #[ORM\OneToMany(mappedBy: 'course', targetEntity: Resource::class, cascade: ['remove'])]
     #[Groups(['course:read'])]
     private Collection $resources;
 
     /**
      * @var Collection<int, Review>
      */
-    #[ORM\OneToMany(mappedBy: 'course', targetEntity: Review::class)]
+    #[ORM\OneToMany(mappedBy: 'course', targetEntity: Review::class, cascade: ['remove'])]
     private Collection $reviews;
 
     /**
      * @var Collection<int, Favorite>
      */
-    #[ORM\OneToMany(mappedBy: 'course', targetEntity: Favorite::class)]
+    #[ORM\OneToMany(mappedBy: 'course', targetEntity: Favorite::class, cascade: ['remove'])]
     private Collection $favorites;
 
     public function __construct()

@@ -35,7 +35,9 @@ final class FormationController extends AbstractController
             $entityManager->persist($formation);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_formation_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('info', 'Formation créée ! Ajoutez maintenant les semestres.');
+
+            return $this->redirectToRoute('app_semester_new', ['formation' => $formation->getId()]);
         }
 
         return $this->render('formation/new.html.twig', [
@@ -62,7 +64,7 @@ final class FormationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_formation_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_formation_show', ['id' => $formation->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('formation/edit.html.twig', [

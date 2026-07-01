@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Course;
 use App\Form\CourseType;
 use App\Repository\CourseRepository;
+use App\Repository\SemesterRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,22 +26,39 @@ final class CourseController extends AbstractController
 
     #[Route('/new', name: 'app_course_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SemesterRepository $semesterRepository): Response
     {
         $course = new Course();
-        $form = $this->createForm(CourseType::class, $course);
+
+        $semester = null;
+        if ($semesterId = $request->query->get('semester')) {
+            $semester = $semesterRepository->find($semesterId);
+            if ($semester) {
+                $course->setSemester($semester);
+            }
+        }
+
+        $form = $this->createForm(CourseType::class, $course, [
+            'show_semester' => $semester === null,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($course);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_course_index', [], Response::HTTP_SEE_OTHER);
+            if ($semester !== null) {
+                $this->addFlash('success', 'Cours ajouté. Ajoutez-en un autre ou terminez.');
+                return $this->redirectToRoute('app_course_new', ['semester' => $semester->getId()]);
+            }
+
+            return $this->redirectToRoute('app_course_show', ['id' => $course->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('course/new.html.twig', [
             'course' => $course,
             'form' => $form,
+            'semester' => $semester,
         ]);
     }
 
@@ -63,7 +81,7 @@ final class CourseController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_course_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_course_show', ['id' => $course->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('course/edit.html.twig', [
