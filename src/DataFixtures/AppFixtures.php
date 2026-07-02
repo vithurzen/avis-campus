@@ -171,9 +171,10 @@ class AppFixtures extends Fixture
                 ->setStatus($this->faker->randomElement([
                     Review::STATUS_APPROVED,
                     Review::STATUS_APPROVED,
-                    Review::STATUS_PENDING,
-                    Review::STATUS_REJECTED,
+                    Review::STATUS_APPROVED,
+                    Review::STATUS_HIDDEN,
                 ]))
+                ->setRating($this->faker->optional(0.85)->numberBetween(1, 5))
                 ->setCreatedAt($this->dt('-6 months'));
             $manager->persist($review);
             $reviews[] = $review;

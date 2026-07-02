@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Course;
 use App\Form\CourseType;
 use App\Repository\CourseRepository;
+use App\Repository\FormationRepository;
 use App\Repository\SemesterRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,10 +18,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class CourseController extends AbstractController
 {
     #[Route(name: 'app_course_index', methods: ['GET'])]
-    public function index(CourseRepository $courseRepository): Response
+    public function index(CourseRepository $courseRepository, FormationRepository $formationRepository): Response
     {
         return $this->render('course/index.html.twig', [
-            'courses' => $courseRepository->findBy([], ['title' => 'ASC']),
+            'courses'    => $courseRepository->findAllWithRelations(),
+            'formations' => $formationRepository->findBy([], ['name' => 'ASC']),
         ]);
     }
 

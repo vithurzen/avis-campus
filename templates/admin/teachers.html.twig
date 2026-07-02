@@ -1,0 +1,234 @@
+{% extends 'layout/admin.html.twig' %}
+
+{% block title %}Professeurs — Administration{% endblock %}
+
+{% block content %}
+
+<div class="flex items-start gap-6">
+
+    {# ── Formulaire d'ajout ── #}
+    <div class="w-80 shrink-0">
+        <div class="bg-white rounded-2xl border border-gray-200 p-6 sticky top-6">
+            <h2 class="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-user-plus text-brand"></i>
+                Ajouter un professeur
+            </h2>
+
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="mb-4 text-sm px-3 py-2.5 rounded-lg border
+                        {{ label == 'success' ? 'bg-green-50 border-green-200 text-green-700' : '' }}
+                        {{ label == 'error'   ? 'bg-red-50 border-red-200 text-red-600' : '' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            <form method="post" action="{{ path('app_admin_teacher_new') }}" class="space-y-4">
+                <input type="hidden" name="_token" value="{{ csrf_token('new_teacher') }}">
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5">
+                        Prénom <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="firstName" required
+                           class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5">
+                        Nom <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="lastName" required
+                           class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5">
+                        Email <span class="text-xs font-normal text-gray-400">(optionnel)</span>
+                    </label>
+                    <input type="email" name="email"
+                           class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand">
+                </div>
+
+                <button type="submit"
+                        class="w-full bg-brand hover:bg-brandHover text-white font-semibold text-sm py-2.5 rounded-lg transition">
+                    Ajouter
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {# ── Liste des professeurs ── #}
+    <div class="flex-1 min-w-0">
+
+        <div class="flex items-center justify-between gap-4 mb-4 flex-wrap">
+            <div>
+                <h1 class="text-xl font-bold text-gray-900">Professeurs</h1>
+                <p class="text-sm text-gray-500 mt-0.5" id="teacher-count">
+                    {{ teachers|length }} professeur{{ teachers|length > 1 ? 's' : '' }}
+                </p>
+            </div>
+            <div class="relative w-64">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
+                <input type="search" id="teacher-search" placeholder="Rechercher…"
+                       class="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white">
+            </div>
+        </div>
+
+        {% if teachers is empty %}
+            <div class="text-center py-20 text-gray-400 bg-white rounded-2xl border border-gray-200">
+                <i class="fa-solid fa-chalkboard-user text-4xl mb-3 opacity-20"></i>
+                <p class="text-sm">Aucun professeur pour le moment.</p>
+            </div>
+        {% else %}
+            <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+                <table class="w-full border-collapse">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Professeur</th>
+                            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Email</th>
+                            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Cours assignés</th>
+                            <th class="px-5 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        {% for teacher in teachers %}
+                            <tr class="teacher-row hover:bg-gray-50 transition"
+                                data-search="{{ teacher.firstName|lower }} {{ teacher.lastName|lower }} {{ teacher.email|lower }}">
+
+                                <td class="px-5 py-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xs font-bold shrink-0">
+                                            {{ teacher.firstName|first|upper }}{{ teacher.lastName|first|upper }}
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-900">
+                                            {{ teacher.firstName }} {{ teacher.lastName }}
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td class="px-5 py-3 text-sm text-gray-500">
+                                    {{ teacher.email ?? '—' }}
+                                </td>
+
+                                <td class="px-5 py-3">
+                                    {% if teacher.courses is empty %}
+                                        <span class="text-xs text-gray-300">Aucun cours</span>
+                                    {% else %}
+                                        <div class="flex flex-wrap gap-1">
+                                            {% for course in teacher.courses|slice(0, 3) %}
+                                                <span class="inline-block px-2 py-0.5 rounded-full text-xs bg-gray-100 text-gray-600">
+                                                    {{ course.title }}
+                                                </span>
+                                            {% endfor %}
+                                            {% if teacher.courses|length > 3 %}
+                                                <span class="inline-block px-2 py-0.5 rounded-full text-xs bg-gray-100 text-gray-400">
+                                                    +{{ teacher.courses|length - 3 }}
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </td>
+
+                                <td class="px-5 py-3 text-right">
+                                    {# Formulaire caché soumis par la modale #}
+                                    <form id="form-delete-teacher-{{ teacher.id }}" method="post"
+                                          action="{{ path('app_admin_teacher_delete', { id: teacher.id }) }}" class="hidden">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete_teacher_' ~ teacher.id) }}">
+                                    </form>
+                                    <button type="button"
+                                            data-form="form-delete-teacher-{{ teacher.id }}"
+                                            data-name="{{ teacher.firstName }} {{ teacher.lastName }}"
+                                            class="delete-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-red-50 text-red-600 hover:bg-red-100 transition">
+                                        <i class="fa-solid fa-trash"></i> Supprimer
+                                    </button>
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <p class="text-center text-sm text-gray-400 py-8 hidden" id="no-results">Aucun professeur trouvé.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{# ── Modale suppression ── #}
+<div id="modal-delete" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="modal-backdrop"></div>
+    <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-trash text-red-500"></i>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-900">Supprimer ce professeur</h3>
+                <p class="text-xs text-gray-400">Cette action est irréversible.</p>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 bg-gray-50 rounded-xl px-4 py-3 mb-6">
+            Supprimer <span id="modal-teacher-name" class="font-semibold text-gray-900"></span> ?
+        </p>
+        <div class="flex items-center justify-end gap-3">
+            <button type="button" id="modal-cancel"
+                    class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition">
+                Annuler
+            </button>
+            <button type="button" id="modal-confirm"
+                    class="px-5 py-2 text-sm font-semibold bg-red-500 hover:bg-red-600 text-white rounded-full transition">
+                Oui, supprimer
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    /* ── Recherche ── */
+    const input   = document.getElementById('teacher-search');
+    const rows    = document.querySelectorAll('.teacher-row');
+    const counter = document.getElementById('teacher-count');
+    const noRes   = document.getElementById('no-results');
+
+    if (input) {
+        input.addEventListener('input', () => {
+            const q = input.value.trim().toLowerCase();
+            let n = 0;
+            rows.forEach(row => {
+                const match = !q || row.dataset.search.includes(q);
+                row.style.display = match ? '' : 'none';
+                if (match) n++;
+            });
+            if (noRes) noRes.classList.toggle('hidden', n > 0);
+            if (counter) counter.textContent = n + ' professeur' + (n > 1 ? 's' : '');
+        });
+    }
+
+    /* ── Modale suppression ── */
+    let pendingForm = null;
+
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            pendingForm = document.getElementById(btn.dataset.form);
+            document.getElementById('modal-teacher-name').textContent = btn.dataset.name;
+            document.getElementById('modal-delete').classList.remove('hidden');
+        });
+    });
+
+    document.getElementById('modal-cancel').addEventListener('click', close);
+    document.getElementById('modal-backdrop').addEventListener('click', close);
+    document.getElementById('modal-confirm').addEventListener('click', () => {
+        if (pendingForm) pendingForm.submit();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+    function close() {
+        document.getElementById('modal-delete').classList.add('hidden');
+        pendingForm = null;
+    }
+})();
+</script>
+
+{% endblock %}

@@ -96,7 +96,8 @@ class CourseRepository extends ServiceEntityRepository
             ->leftJoin('c.semester', 's')->addSelect('s')
             ->leftJoin('s.formation', 'f')->addSelect('f')
             ->leftJoin('c.tags', 't')->addSelect('t')
-            ->orderBy('c.createdAt', 'DESC')
+            ->leftJoin('c.reviews', 'r')->addSelect('r')
+            ->orderBy('c.title', 'ASC')
             ->getQuery()
             ->getResult();
     }
