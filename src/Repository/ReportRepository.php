@@ -16,11 +16,7 @@ class ReportRepository extends ServiceEntityRepository
         parent::__construct($registry, Report::class);
     }
 
-    /**
-     * Reports still open / unresolved (newest first).
-     *
-     * @return Report[]
-     */
+    /** @return Report[] */
     public function findOpenReports(): array
     {
         return $this->createQueryBuilder('rp')
@@ -29,5 +25,24 @@ class ReportRepository extends ServiceEntityRepository
             ->orderBy('rp.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
+    }
+
+    /** @return Report[] */
+    public function findAllOrdered(): array
+    {
+        return $this->createQueryBuilder('rp')
+            ->orderBy('rp.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function countOpen(): int
+    {
+        return (int) $this->createQueryBuilder('rp')
+            ->select('COUNT(rp.id)')
+            ->andWhere('rp.status = :status')
+            ->setParameter('status', Report::STATUS_OPEN)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Report;
 use App\Entity\Review;
 use App\Entity\Teacher;
+use App\Repository\ReportRepository;
 use App\Repository\ReviewRepository;
 use App\Repository\TeacherRepository;
 use App\Repository\UserRepository;
@@ -107,5 +109,45 @@ final class AdminController extends AbstractController
         }
 
         return $this->redirectToRoute('app_admin_teachers', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/reports', name: 'app_admin_reports', methods: ['GET'])]
+    public function reports(ReportRepository $reportRepository): Response
+    {
+        return $this->render('admin/reports.html.twig', [
+            'reports'   => $reportRepository->findAllOrdered(),
+            'openCount' => $reportRepository->countOpen(),
+        ]);
+    }
+
+    #[Route('/reports/{id}/resolve', name: 'app_admin_report_resolve', methods: ['POST'])]
+    public function resolveReport(Request $request, Report $report, EntityManagerInterface $em): Response
+    {
+        if ($this->isCsrfTokenValid('admin_report_' . $report->getId(), $request->getPayload()->getString('_token'))) {
+            $report->setStatus(Report::STATUS_RESOLVED);
+
+            if ($request->getPayload()->getBoolean('hide_content')) {
+                if ($report->getReview()) {
+                    $report->getReview()->setStatus(Review::STATUS_HIDDEN);
+                }
+            }
+
+            $em->flush();
+            $this->addFlash('success', 'Signalement traité.');
+        }
+
+        return $this->redirectToRoute('app_admin_reports', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/reports/{id}/dismiss', name: 'app_admin_report_dismiss', methods: ['POST'])]
+    public function dismissReport(Request $request, Report $report, EntityManagerInterface $em): Response
+    {
+        if ($this->isCsrfTokenValid('admin_report_' . $report->getId(), $request->getPayload()->getString('_token'))) {
+            $report->setStatus(Report::STATUS_DISMISSED);
+            $em->flush();
+            $this->addFlash('success', 'Signalement ignoré.');
+        }
+
+        return $this->redirectToRoute('app_admin_reports', [], Response::HTTP_SEE_OTHER);
     }
 }
