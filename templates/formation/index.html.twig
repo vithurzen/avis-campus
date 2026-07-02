@@ -5,10 +5,10 @@
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-    <div class="flex items-center justify-between mb-8">
+    <div class="flex items-center justify-between mb-6">
         <div>
             <h1 class="text-2xl font-bold text-gray-900">Formations</h1>
-            <p class="text-sm text-gray-500 mt-1">{{ formations|length }} formation{{ formations|length > 1 ? 's' : '' }}</p>
+            <p class="text-sm text-gray-500 mt-1" id="formation-count">{{ formations|length }} formation{{ formations|length > 1 ? 's' : '' }}</p>
         </div>
         {% if is_granted('ROLE_ADMIN') %}
             <a href="{{ path('app_formation_new') }}"
@@ -18,16 +18,26 @@
         {% endif %}
     </div>
 
+    {# ── Barre de recherche ── #}
+    <div class="relative mb-8 max-w-md">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
+        <input type="search"
+               id="formation-search"
+               placeholder="Rechercher une formation…"
+               class="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-200 rounded-full focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white">
+    </div>
+
     {% if formations is empty %}
         <div class="text-center py-24 text-gray-400">
             <i class="fa-solid fa-graduation-cap text-5xl mb-4 opacity-20"></i>
             <p class="text-sm">Aucune formation disponible.</p>
         </div>
     {% else %}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="formations-grid">
             {% for formation in formations %}
                 <a href="{{ path('app_formation_show', { id: formation.id }) }}"
-                   class="group bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-md transition flex flex-col gap-4">
+                   data-name="{{ formation.name|lower }} {{ formation.degreeLevel|lower }}"
+                   class="formation-card group bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-md transition flex flex-col gap-4">
 
                     <div>
                         {% if formation.degreeLevel %}
@@ -62,7 +72,32 @@
                 </a>
             {% endfor %}
         </div>
+
+        <p class="text-center text-sm text-gray-400 mt-10 hidden" id="no-results">Aucune formation ne correspond à votre recherche.</p>
     {% endif %}
 
 </div>
+
+<script>
+(function () {
+    const input   = document.getElementById('formation-search');
+    const cards   = document.querySelectorAll('.formation-card');
+    const noRes   = document.getElementById('no-results');
+    const counter = document.getElementById('formation-count');
+
+    if (!input) return;
+
+    input.addEventListener('input', () => {
+        const q = input.value.trim().toLowerCase();
+        let visible = 0;
+        cards.forEach(card => {
+            const match = !q || card.dataset.name.includes(q);
+            card.style.display = match ? '' : 'none';
+            if (match) visible++;
+        });
+        noRes.classList.toggle('hidden', visible > 0);
+        counter.textContent = visible + ' formation' + (visible > 1 ? 's' : '');
+    });
+})();
+</script>
 {% endblock %}
