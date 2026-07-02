@@ -10,8 +10,13 @@
     {% set totalAdmins     = users|filter(u => 'ROLE_ADMIN' in u.roles)|length %}
     {% set totalModerators = users|filter(u => 'ROLE_MODERATOR' in u.roles)|length %}
 
-    <div class="mb-6">
-        <p class="text-sm text-gray-500">{{ users|length }} utilisateur{{ users|length > 1 ? 's' : '' }} au total</p>
+    <div class="flex items-center justify-between gap-4 mb-6 flex-wrap">
+        <p class="text-sm text-gray-500" id="user-count">{{ users|length }} utilisateur{{ users|length > 1 ? 's' : '' }} au total</p>
+        <div class="relative w-full max-w-xs">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
+            <input type="search" id="user-search" placeholder="Rechercher un utilisateur…"
+                   class="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white">
+        </div>
     </div>
 
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
@@ -55,8 +60,10 @@
                     {% for user in users %}
                         {% set profile = user.profile %}
                         {% set initials = profile ? (profile.firstName|first ~ profile.lastName|first) : user.email|first %}
+                        {% set fullName = profile ? (profile.firstName ~ ' ' ~ profile.lastName) : '' %}
 
-                        <tr class="hover:bg-gray-50 transition">
+                        <tr class="user-row hover:bg-gray-50 transition"
+                            data-search="{{ fullName|lower }} {{ user.email|lower }}">
                             <td class="px-5 py-4 text-sm text-gray-400">{{ user.id }}</td>
 
                             <td class="px-5 py-4">
@@ -108,4 +115,23 @@
             </table>
         {% endif %}
     </div>
+
+<script>
+(function () {
+    const input   = document.getElementById('user-search');
+    const rows    = document.querySelectorAll('.user-row');
+    const counter = document.getElementById('user-count');
+    if (!input) return;
+    input.addEventListener('input', () => {
+        const q = input.value.trim().toLowerCase();
+        let n = 0;
+        rows.forEach(row => {
+            const match = !q || row.dataset.search.includes(q);
+            row.style.display = match ? '' : 'none';
+            if (match) n++;
+        });
+        counter.textContent = n + ' utilisateur' + (n > 1 ? 's' : '') + ' au total';
+    });
+})();
+</script>
 {% endblock %}
