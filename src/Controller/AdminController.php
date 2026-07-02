@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Review;
+use App\Entity\Teacher;
 use App\Repository\ReviewRepository;
+use App\Repository\TeacherRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -54,5 +56,56 @@ final class AdminController extends AbstractController
         }
 
         return $this->redirectToRoute('app_admin_reviews', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/teachers', name: 'app_admin_teachers', methods: ['GET'])]
+    public function teachers(TeacherRepository $teacherRepository): Response
+    {
+        return $this->render('admin/teachers.html.twig', [
+            'teachers' => $teacherRepository->findBy([], ['lastName' => 'ASC']),
+        ]);
+    }
+
+    #[Route('/teachers/new', name: 'app_admin_teacher_new', methods: ['POST'])]
+    public function newTeacher(Request $request, EntityManagerInterface $em): Response
+    {
+        if (!$this->isCsrfTokenValid('new_teacher', $request->getPayload()->getString('_token'))) {
+            $this->addFlash('error', 'Token invalide.');
+            return $this->redirectToRoute('app_admin_teachers', [], Response::HTTP_SEE_OTHER);
+        }
+
+        $firstName = trim($request->getPayload()->getString('firstName'));
+        $lastName  = trim($request->getPayload()->getString('lastName'));
+        $email     = trim($request->getPayload()->getString('email')) ?: null;
+
+        if (!$firstName || !$lastName) {
+            $this->addFlash('error', 'Le prénom et le nom sont obligatoires.');
+            return $this->redirectToRoute('app_admin_teachers', [], Response::HTTP_SEE_OTHER);
+        }
+
+        $teacher = (new Teacher())
+            ->setFirstName($firstName)
+            ->setLastName($lastName)
+            ->setEmail($email)
+            ->setCreatedAt(new \DateTimeImmutable());
+
+        $em->persist($teacher);
+        $em->flush();
+
+        $this->addFlash('success', $firstName . ' ' . $lastName . ' a été ajouté(e).');
+
+        return $this->redirectToRoute('app_admin_teachers', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/teachers/{id}/delete', name: 'app_admin_teacher_delete', methods: ['POST'])]
+    public function deleteTeacher(Request $request, Teacher $teacher, EntityManagerInterface $em): Response
+    {
+        if ($this->isCsrfTokenValid('delete_teacher_' . $teacher->getId(), $request->getPayload()->getString('_token'))) {
+            $em->remove($teacher);
+            $em->flush();
+            $this->addFlash('success', 'Professeur supprimé.');
+        }
+
+        return $this->redirectToRoute('app_admin_teachers', [], Response::HTTP_SEE_OTHER);
     }
 }

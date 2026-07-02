@@ -18,13 +18,42 @@
         {% endif %}
     </div>
 
-    {# ── Barre de recherche ── #}
-    <div class="relative mb-8 max-w-md">
-        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
-        <input type="search"
-               id="course-search"
-               placeholder="Rechercher un cours, une formation, un tag…"
-               class="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-200 rounded-full focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white">
+    {# ── Barre de filtres ── #}
+    <div class="bg-white border border-gray-200 rounded-2xl p-4 mb-6 flex flex-wrap gap-3 items-end">
+
+        {# Recherche #}
+        <div class="relative flex-1 min-w-[180px]">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
+            <input type="search" id="course-search" placeholder="Rechercher…"
+                   class="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white">
+        </div>
+
+        {# Filtre formation #}
+        <div class="min-w-[180px]">
+            <select id="filter-formation"
+                    class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-brand bg-white text-gray-700">
+                <option value="">Toutes les formations</option>
+                {% for formation in formations %}
+                    <option value="{{ formation.id }}">{{ formation.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {# Tri #}
+        <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-xs text-gray-400 font-medium">Trier :</span>
+            <button data-sort="alpha"     class="sort-btn active-sort px-3 py-1.5 rounded-full text-xs font-medium border transition">A → Z</button>
+            <button data-sort="top"       class="sort-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 transition">
+                <i class="fa-solid fa-star text-amber-400 mr-0.5"></i> Mieux notés
+            </button>
+            <button data-sort="flop"      class="sort-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 transition">
+                <i class="fa-solid fa-star text-gray-300 mr-0.5"></i> Moins aimés
+            </button>
+            <button data-sort="reviews"   class="sort-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 transition">
+                <i class="fa-solid fa-comment mr-0.5"></i> Plus d'avis
+            </button>
+        </div>
+
     </div>
 
     {% if courses is empty %}
@@ -35,13 +64,33 @@
     {% else %}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="courses-grid">
             {% for course in courses %}
+                {# Calcul stats pour data-attributes #}
+                {% set approvedReviews = course.reviews|filter(r => r.status == 'approved') %}
+                {% set ratedReviews    = approvedReviews|filter(r => r.rating is not null) %}
+                {% set avgRating = 0 %}
+                {% if ratedReviews|length > 0 %}
+                    {% set total = 0 %}
+                    {% for r in ratedReviews %}{% set total = total + r.rating %}{% endfor %}
+                    {% set avgRating = (total / ratedReviews|length)|round(2) %}
+                {% endif %}
+
                 <a href="{{ path('app_course_show', { id: course.id }) }}"
                    data-name="{{ course.title|lower }} {{ course.semester ? course.semester.formation.name|lower : '' }} {% for tag in course.tags %}{{ tag.name|lower }} {% endfor %}"
+                   data-formation="{{ course.semester ? course.semester.formation.id : '' }}"
+                   data-avg="{{ avgRating }}"
+                   data-reviews="{{ approvedReviews|length }}"
                    class="course-card group bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-md transition flex flex-col gap-4">
 
-                    <h2 class="text-base font-semibold text-gray-900 group-hover:text-brand transition line-clamp-2">
-                        {{ course.title }}
-                    </h2>
+                    <div class="flex items-start justify-between gap-2">
+                        <h2 class="text-base font-semibold text-gray-900 group-hover:text-brand transition line-clamp-2">
+                            {{ course.title }}
+                        </h2>
+                        {% if avgRating > 0 %}
+                            <span class="shrink-0 flex items-center gap-1 text-xs font-semibold text-amber-500 bg-amber-50 px-2 py-0.5 rounded-full">
+                                <span class="text-amber-400">★</span> {{ avgRating|number_format(1) }}
+                            </span>
+                        {% endif %}
+                    </div>
 
                     {% if course.tags is not empty %}
                         <div class="flex flex-wrap gap-1">
@@ -64,11 +113,9 @@
                             {{ course.semester ? course.semester.formation.name : '—' }}
                         </span>
                         <div class="flex items-center gap-3">
+                            <span><i class="fa-solid fa-comment mr-1"></i>{{ approvedReviews|length }} avis</span>
                             {% if course.hours %}
                                 <span><i class="fa-regular fa-clock mr-1"></i>{{ course.hours }}h</span>
-                            {% endif %}
-                            {% if course.coefficient %}
-                                <span>Coef. {{ course.coefficient }}</span>
                             {% endif %}
                         </div>
                     </div>
@@ -84,24 +131,73 @@
 
 <script>
 (function () {
-    const input   = document.getElementById('course-search');
-    const cards   = document.querySelectorAll('.course-card');
+    const cards   = Array.from(document.querySelectorAll('.course-card'));
+    const grid    = document.getElementById('courses-grid');
     const noRes   = document.getElementById('no-results');
     const counter = document.getElementById('course-count');
+    const search  = document.getElementById('course-search');
+    const selForm = document.getElementById('filter-formation');
+    const sortBtns = document.querySelectorAll('.sort-btn');
 
-    if (!input) return;
+    const on  = ['bg-brand', 'text-white', 'border-brand'];
+    const off = ['border-gray-200', 'text-gray-600'];
 
-    input.addEventListener('input', () => {
-        const q = input.value.trim().toLowerCase();
-        let visible = 0;
-        cards.forEach(card => {
-            const match = !q || card.dataset.name.includes(q);
-            card.style.display = match ? '' : 'none';
-            if (match) visible++;
+    let currentSort = 'alpha';
+    let currentSearch = '';
+    let currentFormation = '';
+
+    /* ── Tri ── */
+    sortBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            sortBtns.forEach(b => { b.classList.remove(...on); b.classList.add(...off); });
+            btn.classList.remove(...off); btn.classList.add(...on);
+            currentSort = btn.dataset.sort;
+            render();
         });
-        noRes.classList.toggle('hidden', visible > 0);
-        counter.textContent = visible + ' cours disponible' + (visible > 1 ? 's' : '');
     });
+    document.querySelector('[data-sort="alpha"]').classList.add(...on);
+
+    /* ── Recherche ── */
+    search.addEventListener('input', () => { currentSearch = search.value.trim().toLowerCase(); render(); });
+
+    /* ── Filtre formation ── */
+    selForm.addEventListener('change', () => { currentFormation = selForm.value; render();});
+
+    function render() {
+        /* 1. Filtrer */
+        const visible = cards.filter(card => {
+            const matchSearch = !currentSearch || card.dataset.name.includes(currentSearch);
+            const matchForm   = !currentFormation || card.dataset.formation === currentFormation;
+            return matchSearch && matchForm;
+        });
+
+        /* 2. Trier */
+        const sorted = [...visible].sort((a, b) => {
+            if (currentSort === 'alpha')   return a.dataset.name.localeCompare(b.dataset.name);
+            if (currentSort === 'top')     return parseFloat(b.dataset.avg)     - parseFloat(a.dataset.avg);
+            if (currentSort === 'flop') {
+                const aAvg = parseFloat(a.dataset.avg);
+                const bAvg = parseFloat(b.dataset.avg);
+                // Les non notés passent en dernier
+                if (aAvg === 0 && bAvg === 0) return 0;
+                if (aAvg === 0) return 1;
+                if (bAvg === 0) return -1;
+                return aAvg - bAvg;
+            }
+            if (currentSort === 'reviews') return parseInt(b.dataset.reviews) - parseInt(a.dataset.reviews);
+            return 0;
+        });
+
+        /* 3. Masquer tous puis réinsérer dans l'ordre */
+        cards.forEach(c => c.style.display = 'none');
+        sorted.forEach(c => { c.style.display = ''; grid.appendChild(c); });
+
+        const count = sorted.length;
+        noRes.classList.toggle('hidden', count > 0);
+        counter.textContent = count + ' cours disponible' + (count > 1 ? 's' : '');
+    }
+
+    render();
 })();
 </script>
 {% endblock %}
