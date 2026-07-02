@@ -10,7 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Report
 {
-    public const STATUS_OPEN = 'open';
+    public const STATUS_OPEN      = 'open';
+    public const STATUS_RESOLVED  = 'resolved';
+    public const STATUS_DISMISSED = 'dismissed';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

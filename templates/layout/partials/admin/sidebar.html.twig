@@ -17,22 +17,6 @@
             Utilisateurs
         </a>
 
-        {% if is_granted('ROLE_MODERATOR') %}
-        <a href="{{ path('app_moderation_index') }}"
-           class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition
-                  {{ app.request.attributes.get('_route') starts with 'app_moderation' ? 'bg-brand text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-            <i class="fa-solid fa-shield-halved w-4 text-center"></i>
-            Modération
-        </a>
-        {% endif %}
-
-        <a href="{{ path('app_course_index') }}"
-           class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition
-                  {{ app.request.attributes.get('_route') starts with 'app_course' ? 'bg-brand text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-            <i class="fa-solid fa-book w-4 text-center"></i>
-            Cours
-        </a>
-
         <a href="{{ path('app_admin_reviews') }}"
            class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition
                   {{ app.request.attributes.get('_route') starts with 'app_admin_review' ? 'bg-brand text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
@@ -40,11 +24,28 @@
             Avis
         </a>
 
+        <a href="{{ path('app_admin_reports') }}"
+           class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition
+                  {{ app.request.attributes.get('_route') starts with 'app_admin_report' ? 'bg-brand text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+            <i class="fa-solid fa-flag w-4 text-center"></i>
+            Signalements
+            {% if openCount is defined and openCount > 0 %}
+                <span class="ml-auto bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">{{ openCount }}</span>
+            {% endif %}
+        </a>
+
         <a href="{{ path('app_admin_teachers') }}"
            class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition
                   {{ app.request.attributes.get('_route') starts with 'app_admin_teacher' ? 'bg-brand text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
             <i class="fa-solid fa-chalkboard-user w-4 text-center"></i>
             Professeurs
+        </a>
+
+        <a href="{{ path('app_course_index') }}"
+           class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition
+                  {{ app.request.attributes.get('_route') starts with 'app_course' ? 'bg-brand text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+            <i class="fa-solid fa-book w-4 text-center"></i>
+            Cours
         </a>
     </nav>
 
