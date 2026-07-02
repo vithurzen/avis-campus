@@ -38,7 +38,17 @@
             {% endfor %}
         </div>
 
-        <div class="grid grid-cols-3 gap-4 mb-6">
+        {# ── Calcul de la moyenne ── #}
+        {% set approvedReviews = course.reviews|filter(r => r.status == 'approved') %}
+        {% set ratedReviews = approvedReviews|filter(r => r.rating is not null) %}
+        {% set avgRating = null %}
+        {% if ratedReviews|length > 0 %}
+            {% set total = 0 %}
+            {% for r in ratedReviews %}{% set total = total + r.rating %}{% endfor %}
+            {% set avgRating = (total / ratedReviews|length)|round(1) %}
+        {% endif %}
+
+        <div class="grid grid-cols-4 gap-4 mb-6">
             <div class="bg-gray-50 rounded-xl p-4 text-center">
                 <div class="text-xl font-bold text-gray-900">{{ course.hours ?? '—' }}</div>
                 <div class="text-xs text-gray-500 mt-1">Heures</div>
@@ -48,10 +58,22 @@
                 <div class="text-xs text-gray-500 mt-1">Coefficient</div>
             </div>
             <div class="bg-gray-50 rounded-xl p-4 text-center">
-                <div class="text-xl font-bold text-gray-900">
-                    {{ course.reviews|filter(r => r.status == 'approved')|length }}
-                </div>
+                <div class="text-xl font-bold text-gray-900">{{ approvedReviews|length }}</div>
                 <div class="text-xs text-gray-500 mt-1">Avis</div>
+            </div>
+            <div class="bg-amber-50 rounded-xl p-4 text-center">
+                {% if avgRating %}
+                    <div class="text-xl font-bold text-amber-500">{{ avgRating }}<span class="text-sm font-normal text-amber-400">/5</span></div>
+                    <div class="text-amber-400 text-sm leading-none mt-1">
+                        {% for i in 1..5 %}
+                            <span class="{{ i <= avgRating|round(0, 'floor') ? 'text-amber-400' : (i - 0.5 <= avgRating ? 'text-amber-300' : 'text-amber-100') }}">★</span>
+                        {% endfor %}
+                    </div>
+                    <div class="text-xs text-amber-500 mt-1">Note moyenne</div>
+                {% else %}
+                    <div class="text-xl font-bold text-gray-300">—</div>
+                    <div class="text-xs text-gray-400 mt-1">Note moyenne</div>
+                {% endif %}
             </div>
         </div>
 
@@ -79,9 +101,7 @@
     <div class="flex items-center justify-between mb-4">
         <h2 class="text-lg font-semibold text-gray-900">
             Avis
-            <span class="text-sm font-normal text-gray-400 ml-1">
-                ({{ course.reviews|filter(r => r.status == 'approved')|length }})
-            </span>
+            <span class="text-sm font-normal text-gray-400 ml-1">({{ approvedReviews|length }})</span>
         </h2>
         {% if is_granted('ROLE_USER') %}
             <a href="{{ path('app_review_new') }}"
@@ -90,8 +110,6 @@
             </a>
         {% endif %}
     </div>
-
-    {% set approvedReviews = course.reviews|filter(r => r.status == 'approved') %}
 
     {% if approvedReviews is empty %}
         <div class="text-center py-12 text-gray-400 bg-white rounded-2xl border border-gray-200">
@@ -107,9 +125,17 @@
                         <h3 class="text-sm font-semibold text-gray-900 group-hover:text-brand transition">
                             {{ review.title }}
                         </h3>
-                        <span class="text-xs text-gray-400 shrink-0">
-                            {{ review.createdAt ? review.createdAt|date('d/m/Y') : '' }}
-                        </span>
+                        <div class="flex items-center gap-3 shrink-0">
+                            {% if review.rating %}
+                                <span class="text-sm leading-none tracking-tight">
+                                    {% for i in 1..5 %}
+                                        <span class="{{ i <= review.rating ? 'text-amber-400' : 'text-gray-200' }}">★</span>
+                                    {% endfor %}
+                                </span>
+                                <span class="text-xs font-semibold text-gray-500">{{ review.rating }}/5</span>
+                            {% endif %}
+                            <span class="text-xs text-gray-400">{{ review.createdAt ? review.createdAt|date('d/m/Y') : '' }}</span>
+                        </div>
                     </div>
                     <p class="text-sm text-gray-500 line-clamp-2">{{ review.content }}</p>
                 </a>
