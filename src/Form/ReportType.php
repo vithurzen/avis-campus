@@ -2,39 +2,42 @@
 
 namespace App\Form;
 
-use App\Entity\Comment;
 use App\Entity\Report;
-use App\Entity\Review;
-use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ReportType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('reason')
-            ->add('description')
-            ->add('status')
-            ->add('createdAt', null, [
-                'widget' => 'single_text'
+            ->add('reviewId', HiddenType::class, [
+                'mapped' => false,
             ])
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
+            ->add('reason', ChoiceType::class, [
+                'choices' => [
+                    'Contenu inapproprié'  => 'Contenu inapproprié',
+                    'Spam'                 => 'Spam',
+                    'Propos offensants'    => 'Propos offensants',
+                    'Hors sujet'           => 'Hors sujet',
+                    'Fausse information'   => 'Fausse information',
+                    'Autre'                => 'Autre',
+                ],
+                'placeholder'  => 'Choisir un motif…',
+                'constraints'  => [new NotBlank(message: 'Veuillez choisir un motif.')],
             ])
-            ->add('review', EntityType::class, [
-                'class' => Review::class,
-                'choice_label' => 'id',
-            ])
-            ->add('comment', EntityType::class, [
-                'class' => Comment::class,
-                'choice_label' => 'id',
-            ])
-        ;
+            ->add('description', TextareaType::class, [
+                'required' => false,
+                'attr'     => [
+                    'rows'        => 3,
+                    'placeholder' => 'Précisions optionnelles…',
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
