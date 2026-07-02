@@ -10,14 +10,14 @@
             <i class="fa-solid fa-arrow-left mr-1"></i> Retour aux avis
         </a>
         <h1 class="text-2xl font-bold text-gray-900 mt-4">Déposer un avis</h1>
-        <p class="text-sm text-gray-500 mt-1">Votre avis sera examiné avant publication.</p>
+        <p class="text-sm text-gray-500 mt-1">Votre avis sera publié immédiatement.</p>
     </div>
 
     {% for label, messages in app.flashes %}
         {% for message in messages %}
             <div class="mb-6 text-sm px-4 py-3 rounded-lg border
                 {{ label == 'warning' ? 'bg-amber-50 border-amber-200 text-amber-700' : '' }}
-                {{ label == 'info'    ? 'bg-blue-50 border-blue-200 text-blue-700' : '' }}
+                {{ label == 'success' ? 'bg-green-50 border-green-200 text-green-700' : '' }}
                 {{ label == 'error'   ? 'bg-red-50 border-red-200 text-red-600' : '' }}">
                 {{ message }}
             </div>
@@ -57,6 +57,24 @@
                 <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.content) }}</div>
             </div>
 
+            {# Champ caché alimenté par le widget étoiles #}
+            {{ form_widget(form.rating, { attr: { style: 'display:none' } }) }}
+
+            {# Widget étoiles interactif #}
+            <div>
+                <span class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-3">Note</span>
+                <div class="flex items-center gap-2" id="star-widget">
+                    {% for i in 1..5 %}
+                        <button type="button"
+                                data-value="{{ i }}"
+                                aria-label="{{ i }} étoile{{ i > 1 ? 's' : '' }}"
+                                class="star-btn text-4xl leading-none focus:outline-none text-gray-300 hover:scale-110 transition-transform"
+                        >★</button>
+                    {% endfor %}
+                </div>
+                <p class="mt-2 text-xs text-gray-400" id="star-label">Cliquez pour noter</p>
+            </div>
+
             <div class="flex items-center justify-end gap-3 pt-2">
                 <a href="{{ path('app_review_index') }}"
                    class="text-sm text-gray-500 hover:text-gray-700 transition px-4 py-2">
@@ -72,4 +90,35 @@
     </div>
 
 </div>
+
+<script>
+(function () {
+    const input   = document.getElementById('{{ form.rating.vars.id }}');
+    const buttons = document.querySelectorAll('#star-widget .star-btn');
+    const label   = document.getElementById('star-label');
+    const labels  = ['', 'Mauvais', 'Passable', 'Correct', 'Bien', 'Excellent'];
+
+    let current = 0;
+
+    function paint(n) {
+        buttons.forEach((btn, idx) => {
+            btn.classList.toggle('text-amber-400', idx < n);
+            btn.classList.toggle('text-gray-300',  idx >= n);
+        });
+    }
+
+    buttons.forEach((btn, idx) => {
+        btn.addEventListener('mouseenter', () => paint(idx + 1));
+        btn.addEventListener('mouseleave', () => paint(current));
+        btn.addEventListener('click', () => {
+            current     = idx + 1;
+            input.value = current;
+            label.textContent = labels[current] + ' — ' + current + '/5';
+            label.classList.remove('text-gray-400');
+            label.classList.add('text-amber-500', 'font-medium');
+            paint(current);
+        });
+    });
+})();
+</script>
 {% endblock %}

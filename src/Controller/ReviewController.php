@@ -37,9 +37,8 @@ final class ReviewController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Author and status are enforced server-side, never taken from the form.
             $review->setUser($this->getUser());
-            $review->setStatus(Review::STATUS_PENDING);
+            $review->setStatus(Review::STATUS_APPROVED);
 
             // Automated content moderation (external API or local fallback).
             $result = $moderation->analyze((string) $review->getContent(), $this->getUser());
@@ -56,18 +55,7 @@ final class ReviewController extends AbstractController
                     $result->suggestedRewrite ? ' Reformulation suggérée : « ' . $result->suggestedRewrite . ' »' : '',
                 ));
             } else {
-                if ($result->needsReview()) {
-                    $this->addFlash('info', 'Votre avis a été signalé pour vérification et sera examiné par un modérateur.');
-                }
-
-                // Notify moderators that a new review awaits moderation.
-                $emailService->sendTemplateToMany(
-                    $userRepository->findModerators(),
-                    'Nouvel avis à modérer',
-                    'emails/review_submitted.html.twig',
-                    ['review' => $review],
-                    'review_submitted',
-                );
+                $this->addFlash('success', 'Votre avis a été publié avec succès.');
             }
 
             return $this->redirectToRoute('app_review_index', [], Response::HTTP_SEE_OTHER);
