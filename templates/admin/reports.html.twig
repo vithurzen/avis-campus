@@ -1,0 +1,320 @@
+{% extends 'layout/admin.html.twig' %}
+
+{% block title %}Signalements — Administration{% endblock %}
+
+{% block content %}
+
+{# ── Stats ── #}
+{% set totalOpen      = reports|filter(r => r.status == 'open')|length %}
+{% set totalResolved  = reports|filter(r => r.status == 'resolved')|length %}
+{% set totalDismissed = reports|filter(r => r.status == 'dismissed')|length %}
+
+<div class="mb-6 flex items-start justify-between flex-wrap gap-4">
+    <div>
+        <h1 class="text-xl font-bold text-gray-900">Signalements</h1>
+        <p class="text-sm text-gray-500 mt-0.5">{{ reports|length }} signalement{{ reports|length > 1 ? 's' : '' }} au total</p>
+    </div>
+    <div class="flex items-center gap-2 flex-wrap">
+        <button data-filter="all"       class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium border transition">Tous ({{ reports|length }})</button>
+        <button data-filter="open"      class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 hover:border-red-400 hover:text-red-600 transition">
+            Ouverts ({{ totalOpen }})
+        </button>
+        <button data-filter="resolved"  class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 hover:border-green-400 hover:text-green-700 transition">Traités ({{ totalResolved }})</button>
+        <button data-filter="dismissed" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 hover:border-gray-400 hover:text-gray-700 transition">Ignorés ({{ totalDismissed }})</button>
+    </div>
+</div>
+
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="mb-4 text-sm px-4 py-3 rounded-lg border
+            {{ label == 'success' ? 'bg-green-50 border-green-200 text-green-700' : '' }}
+            {{ label == 'error'   ? 'bg-red-50 border-red-200 text-red-600' : '' }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+{% if reports is empty %}
+    <div class="text-center py-24 text-gray-400 bg-white rounded-2xl border border-gray-200">
+        <i class="fa-solid fa-flag text-4xl mb-3 opacity-20"></i>
+        <p class="text-sm">Aucun signalement.</p>
+    </div>
+{% else %}
+    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+        <table class="w-full border-collapse">
+            <thead class="bg-gray-50 border-b border-gray-200">
+                <tr>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Signalé par</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Contenu ciblé</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Motif</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Statut</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Date</th>
+                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                {% for report in reports %}
+                    <tr class="report-row hover:bg-gray-50 transition" data-status="{{ report.status }}">
+
+                        {# Reporter #}
+                        <td class="px-4 py-3">
+                            {% set profile = report.user.profile %}
+                            <div class="text-sm font-medium text-gray-800">
+                                {{ profile ? (profile.firstName ~ ' ' ~ profile.lastName) : report.user.email }}
+                            </div>
+                            {% if profile %}
+                                <div class="text-xs text-gray-400">{{ report.user.email }}</div>
+                            {% endif %}
+                        </td>
+
+                        {# Contenu ciblé #}
+                        <td class="px-4 py-3 max-w-xs">
+                            {% if report.review %}
+                                <span class="inline-block px-1.5 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-700 mb-1">Avis</span>
+                                <a href="{{ path('app_review_show', { id: report.review.id }) }}"
+                                   class="block text-sm text-gray-700 hover:text-brand transition line-clamp-1">
+                                    {{ report.review.title }}
+                                </a>
+                                {% if report.review.status == 'hidden' %}
+                                    <span class="text-xs text-red-400">Déjà masqué</span>
+                                {% endif %}
+                            {% elseif report.comment %}
+                                <span class="inline-block px-1.5 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-700 mb-1">Commentaire</span>
+                                <p class="text-sm text-gray-600 line-clamp-1">{{ report.comment.content }}</p>
+                            {% else %}
+                                <span class="text-xs text-gray-300">—</span>
+                            {% endif %}
+                        </td>
+
+                        {# Motif #}
+                        <td class="px-4 py-3 max-w-xs">
+                            <div class="text-sm font-medium text-gray-700">{{ report.reason }}</div>
+                            {% if report.description %}
+                                <p class="text-xs text-gray-400 mt-0.5 line-clamp-2">{{ report.description }}</p>
+                            {% endif %}
+                        </td>
+
+                        {# Statut #}
+                        <td class="px-4 py-3">
+                            {% if report.status == 'open' %}
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-600">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Ouvert
+                                </span>
+                            {% elseif report.status == 'resolved' %}
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Traité
+                                </span>
+                            {% elseif report.status == 'dismissed' %}
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span> Ignoré
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        {# Date #}
+                        <td class="px-4 py-3 text-xs text-gray-400 whitespace-nowrap">
+                            {{ report.createdAt ? report.createdAt|date('d/m/Y') : '—' }}
+                        </td>
+
+                        {# Actions #}
+                        <td class="px-4 py-3 text-right">
+                            {% if report.status == 'open' %}
+                                {# Formulaires cachés #}
+                                <form id="form-resolve-{{ report.id }}" method="post"
+                                      action="{{ path('app_admin_report_resolve', { id: report.id }) }}" class="hidden">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('admin_report_' ~ report.id) }}">
+                                    <input type="hidden" name="hide_content" id="hide-content-{{ report.id }}" value="0">
+                                </form>
+                                <form id="form-dismiss-{{ report.id }}" method="post"
+                                      action="{{ path('app_admin_report_dismiss', { id: report.id }) }}" class="hidden">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('admin_report_' ~ report.id) }}">
+                                </form>
+
+                                <div class="flex items-center justify-end gap-2">
+                                    <button type="button"
+                                            class="resolve-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-green-50 text-green-700 hover:bg-green-100 transition"
+                                            data-report-id="{{ report.id }}"
+                                            data-reason="{{ report.reason|e('html_attr') }}"
+                                            data-has-review="{{ report.review ? '1' : '0' }}"
+                                            data-review-hidden="{{ (report.review and report.review.status == 'hidden') ? '1' : '0' }}">
+                                        <i class="fa-solid fa-check"></i> Traiter
+                                    </button>
+                                    <button type="button"
+                                            class="dismiss-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition"
+                                            data-form="form-dismiss-{{ report.id }}"
+                                            data-reason="{{ report.reason|e('html_attr') }}">
+                                        <i class="fa-solid fa-xmark"></i> Ignorer
+                                    </button>
+                                </div>
+                            {% else %}
+                                <span class="text-xs text-gray-300">—</span>
+                            {% endif %}
+                        </td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p class="text-center text-sm text-gray-400 py-10 hidden" id="no-results">Aucun signalement pour ce filtre.</p>
+    </div>
+{% endif %}
+
+{# ── Modale Traiter ── #}
+<div id="modal-resolve" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="modal-resolve-backdrop"></div>
+    <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-check text-green-600"></i>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-900">Traiter ce signalement</h3>
+                <p class="text-xs text-gray-400">Le signalement sera marqué comme résolu.</p>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 bg-gray-50 rounded-xl px-4 py-3 mb-4">
+            Motif : <span id="modal-resolve-reason" class="font-semibold text-gray-900"></span>
+        </p>
+        <div id="modal-resolve-hide-option" class="hidden mb-4 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+            <label class="flex items-start gap-3 cursor-pointer">
+                <input type="checkbox" id="modal-resolve-hide-check" class="mt-0.5 accent-red-500">
+                <div>
+                    <span class="text-sm font-medium text-gray-800">Masquer également l'avis signalé</span>
+                    <p class="text-xs text-gray-500 mt-0.5">L'avis ne sera plus visible publiquement.</p>
+                </div>
+            </label>
+        </div>
+        <div class="flex items-center justify-end gap-3">
+            <button type="button" id="modal-resolve-cancel"
+                    class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition">
+                Annuler
+            </button>
+            <button type="button" id="modal-resolve-confirm"
+                    class="px-5 py-2 text-sm font-semibold bg-green-600 hover:bg-green-700 text-white rounded-full transition">
+                Confirmer
+            </button>
+        </div>
+    </div>
+</div>
+
+{# ── Modale Ignorer ── #}
+<div id="modal-dismiss" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="modal-dismiss-backdrop"></div>
+    <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-xmark text-gray-500"></i>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-900">Ignorer ce signalement</h3>
+                <p class="text-xs text-gray-400">Le contenu restera visible, le signalement sera clôturé.</p>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 bg-gray-50 rounded-xl px-4 py-3 mb-6">
+            Motif : <span id="modal-dismiss-reason" class="font-semibold text-gray-900"></span>
+        </p>
+        <div class="flex items-center justify-end gap-3">
+            <button type="button" id="modal-dismiss-cancel"
+                    class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition">
+                Annuler
+            </button>
+            <button type="button" id="modal-dismiss-confirm"
+                    class="px-5 py-2 text-sm font-semibold bg-gray-700 hover:bg-gray-800 text-white rounded-full transition">
+                Oui, ignorer
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    /* ── Filtres ── */
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const rows       = document.querySelectorAll('.report-row');
+    const noRes      = document.getElementById('no-results');
+    const on  = ['bg-brand', 'text-white', 'border-brand'];
+    const off = ['border-gray-200', 'text-gray-600'];
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => { b.classList.remove(...on); b.classList.add(...off); });
+            btn.classList.remove(...off); btn.classList.add(...on);
+            let visible = 0;
+            rows.forEach(row => {
+                const show = btn.dataset.filter === 'all' || row.dataset.status === btn.dataset.filter;
+                row.style.display = show ? '' : 'none';
+                if (show) visible++;
+            });
+            if (noRes) noRes.classList.toggle('hidden', visible > 0);
+        });
+    });
+    document.querySelector('[data-filter="all"]').classList.add(...on);
+
+    /* ── Modale Traiter ── */
+    let pendingResolveForm = null;
+
+    document.querySelectorAll('.resolve-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id         = btn.dataset.reportId;
+            const hasReview  = btn.dataset.hasReview === '1';
+            const alreadyHid = btn.dataset.reviewHidden === '1';
+
+            pendingResolveForm = document.getElementById('form-resolve-' + id);
+
+            document.getElementById('modal-resolve-reason').textContent = btn.dataset.reason;
+
+            const hideOpt = document.getElementById('modal-resolve-hide-option');
+            const hideChk = document.getElementById('modal-resolve-hide-check');
+            if (hasReview && !alreadyHid) {
+                hideOpt.classList.remove('hidden');
+                hideChk.checked = false;
+            } else {
+                hideOpt.classList.add('hidden');
+                hideChk.checked = false;
+            }
+
+            document.getElementById('modal-resolve').classList.remove('hidden');
+        });
+    });
+
+    document.getElementById('modal-resolve-confirm').addEventListener('click', () => {
+        if (!pendingResolveForm) return;
+        const id  = pendingResolveForm.id.replace('form-resolve-', '');
+        const chk = document.getElementById('modal-resolve-hide-check');
+        document.getElementById('hide-content-' + id).value = chk && chk.checked ? '1' : '0';
+        pendingResolveForm.submit();
+    });
+    document.getElementById('modal-resolve-cancel').addEventListener('click', () => closeModal('resolve'));
+    document.getElementById('modal-resolve-backdrop').addEventListener('click', () => closeModal('resolve'));
+
+    /* ── Modale Ignorer ── */
+    let pendingDismissForm = null;
+
+    document.querySelectorAll('.dismiss-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            pendingDismissForm = document.getElementById(btn.dataset.form);
+            document.getElementById('modal-dismiss-reason').textContent = btn.dataset.reason;
+            document.getElementById('modal-dismiss').classList.remove('hidden');
+        });
+    });
+
+    document.getElementById('modal-dismiss-confirm').addEventListener('click', () => {
+        if (pendingDismissForm) pendingDismissForm.submit();
+    });
+    document.getElementById('modal-dismiss-cancel').addEventListener('click', () => closeModal('dismiss'));
+    document.getElementById('modal-dismiss-backdrop').addEventListener('click', () => closeModal('dismiss'));
+
+    /* ── Escape ── */
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') { closeModal('resolve'); closeModal('dismiss'); }
+    });
+
+    function closeModal(id) {
+        document.getElementById('modal-' + id).classList.add('hidden');
+        if (id === 'resolve') pendingResolveForm = null;
+        if (id === 'dismiss') pendingDismissForm = null;
+    }
+})();
+</script>
+
+{% endblock %}
