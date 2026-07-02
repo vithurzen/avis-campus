@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReviewRepository::class)]
 #[ORM\Table(name: 'reviews')]
@@ -52,6 +53,11 @@ class Review
     #[ORM\Column(length: 50, options: ['default' => 'pending'])]
     #[Groups(['review:list', 'review:read'])]
     private string $status = self::STATUS_PENDING;
+
+    #[ORM\Column(nullable: true)]
+    #[Assert\Range(min: 1, max: 5)]
+    #[Groups(['review:list', 'review:read'])]
+    private ?int $rating = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
     #[Groups(['review:list', 'review:read'])]
@@ -178,6 +184,18 @@ class Review
     public function isHidden(): bool
     {
         return $this->status === self::STATUS_HIDDEN;
+    }
+
+    public function getRating(): ?int
+    {
+        return $this->rating;
+    }
+
+    public function setRating(?int $rating): static
+    {
+        $this->rating = $rating;
+
+        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
