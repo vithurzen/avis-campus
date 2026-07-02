@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Report;
 use App\Entity\Review;
+use App\Form\ReportType;
 use App\Form\ReviewType;
 use App\Repository\ReviewRepository;
 use App\Repository\UserRepository;
@@ -70,8 +72,11 @@ final class ReviewController extends AbstractController
     #[Route('/{id}', name: 'app_review_show', methods: ['GET'])]
     public function show(Review $review): Response
     {
+        $reportForm = $this->createForm(ReportType::class, new Report());
+
         return $this->render('review/show.html.twig', [
-            'review' => $review,
+            'review'     => $review,
+            'reportForm' => $reportForm,
         ]);
     }
 

@@ -4,89 +4,48 @@ namespace App\Controller;
 
 use App\Entity\Report;
 use App\Form\ReportType;
-use App\Repository\ReportRepository;
-use App\Repository\UserRepository;
-use App\Service\EmailService;
+use App\Repository\ReviewRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/report')]
 final class ReportController extends AbstractController
 {
-    #[Route(name: 'app_report_index', methods: ['GET'])]
-    public function index(ReportRepository $reportRepository): Response
-    {
-        return $this->render('report/index.html.twig', [
-            'reports' => $reportRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/new', name: 'app_report_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, EmailService $emailService, UserRepository $userRepository): Response
-    {
+    #[Route('/new', name: 'app_report_new', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function new(
+        Request $request,
+        EntityManagerInterface $em,
+        ReviewRepository $reviewRepository,
+    ): Response {
         $report = new Report();
-        $form = $this->createForm(ReportType::class, $report);
+        $form   = $this->createForm(ReportType::class, $report);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($report);
-            $entityManager->flush();
+            $reviewId = (int) $form->get('reviewId')->getData();
+            $review   = $reviewId ? $reviewRepository->find($reviewId) : null;
 
-            // Notify moderators that a new report has been filed.
-            $emailService->sendTemplateToMany(
-                $userRepository->findModerators(),
-                'Nouveau signalement',
-                'emails/report_submitted.html.twig',
-                ['report' => $report],
-                'report_submitted',
-            );
+            $report
+                ->setUser($this->getUser())
+                ->setReview($review)
+                ->setStatus(Report::STATUS_OPEN)
+                ->setCreatedAt(new \DateTimeImmutable());
 
-            return $this->redirectToRoute('app_report_index', [], Response::HTTP_SEE_OTHER);
+            $em->persist($report);
+            $em->flush();
+
+            $this->addFlash('success', 'Votre signalement a bien été envoyé. Merci !');
+
+            if ($review) {
+                return $this->redirectToRoute('app_review_show', ['id' => $review->getId()], Response::HTTP_SEE_OTHER);
+            }
         }
 
-        return $this->render('report/new.html.twig', [
-            'report' => $report,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_report_show', methods: ['GET'])]
-    public function show(Report $report): Response
-    {
-        return $this->render('report/show.html.twig', [
-            'report' => $report,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_report_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Report $report, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(ReportType::class, $report);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_report_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('report/edit.html.twig', [
-            'report' => $report,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_report_delete', methods: ['POST'])]
-    public function delete(Request $request, Report $report, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$report->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($report);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_report_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_review_index', [], Response::HTTP_SEE_OTHER);
     }
 }
