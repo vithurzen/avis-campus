@@ -27,15 +27,7 @@
     <div class="bg-white rounded-2xl border border-gray-200 p-8">
         {{ form_start(form, { attr: { class: 'space-y-6' } }) }}
 
-            <div>
-                {{ form_label(form.course, 'Cours', {
-                    label_attr: { class: 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' }
-                }) }}
-                {{ form_widget(form.course, {
-                    attr: { class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white' }
-                }) }}
-                <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.course) }}</div>
-            </div>
+            {{ include('review/_cascade.html.twig') }}
 
             <div>
                 {{ form_label(form.title, 'Titre', {

@@ -1,0 +1,84 @@
+{# Sélecteur en cascade Formation → Semestre → Cours (piloté par ReviewType + Form Events).
+   Inclus par review/new.html.twig et review/edit.html.twig. #}
+{% set select_class = 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white' %}
+{% set label_class = 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' %}
+
+<div id="review-cascade"
+     data-semesters-url="{{ path('api_cascade_semesters', { id: '0' }) }}"
+     data-courses-url="{{ path('api_cascade_courses', { id: '0' }) }}">
+
+    <div class="mb-6">
+        {{ form_label(form.formation, 'Formation', { label_attr: { class: label_class } }) }}
+        {{ form_widget(form.formation, { attr: { class: select_class } }) }}
+        <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.formation) }}</div>
+    </div>
+
+    <div class="mb-6">
+        {{ form_label(form.semester, 'Semestre', { label_attr: { class: label_class } }) }}
+        {{ form_widget(form.semester, { attr: { class: select_class } }) }}
+        <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.semester) }}</div>
+    </div>
+
+    <div class="mb-6">
+        {{ form_label(form.course, 'Cours', { label_attr: { class: label_class } }) }}
+        {{ form_widget(form.course, { attr: { class: select_class } }) }}
+        <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.course) }}</div>
+    </div>
+</div>
+
+<script>
+(function () {
+    const root      = document.getElementById('review-cascade');
+    const formation = document.getElementById('{{ form.formation.vars.id }}');
+    const semester  = document.getElementById('{{ form.semester.vars.id }}');
+    const course    = document.getElementById('{{ form.course.vars.id }}');
+    if (!root || !formation || !semester || !course) {
+        return;
+    }
+
+    // Les URLs sont générées avec un id fictif « 0 » que l'on remplace à la volée.
+    const semestersUrl = root.dataset.semestersUrl;
+    const coursesUrl    = root.dataset.coursesUrl;
+    const buildUrl = (template, id) => template.replace('/0/', '/' + id + '/');
+
+    function fill(select, items, placeholder, labelKey) {
+        select.innerHTML = '';
+        const empty = document.createElement('option');
+        empty.value = '';
+        empty.textContent = placeholder;
+        select.appendChild(empty);
+        items.forEach((item) => {
+            const opt = document.createElement('option');
+            opt.value = item.id;
+            opt.textContent = item[labelKey];
+            select.appendChild(opt);
+        });
+    }
+
+    async function loadSemesters(formationId) {
+        fill(semester, [], 'Choisir un semestre', 'name');
+        fill(course, [], 'Choisir un cours', 'title');
+        if (!formationId) {
+            return;
+        }
+        const res = await fetch(buildUrl(semestersUrl, formationId), { headers: { 'Accept': 'application/json' } });
+        if (res.ok) {
+            fill(semester, await res.json(), 'Choisir un semestre', 'name');
+        }
+    }
+
+    async function loadCourses(semesterId) {
+        fill(course, [], 'Choisir un cours', 'title');
+        if (!semesterId) {
+            return;
+        }
+        const res = await fetch(buildUrl(coursesUrl, semesterId), { headers: { 'Accept': 'application/json' } });
+        if (res.ok) {
+            fill(course, await res.json(), 'Choisir un cours', 'title');
+        }
+    }
+
+    formation.addEventListener('change', () => loadSemesters(formation.value));
+    semester.addEventListener('change', () => loadCourses(semester.value));
+})();
+</script>
