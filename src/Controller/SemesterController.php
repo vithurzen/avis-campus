@@ -39,7 +39,7 @@ final class SemesterController extends AbstractController
             $entityManager->flush();
 
             if ($formation !== null) {
-                $this->addFlash('success', 'Semestre ajouté. Ajoutez-en un autre ou terminez.');
+                $this->addFlash('success', sprintf('%s ajouté. Ajoutez-en un autre ou terminez.', $formation->getPeriodType()->label()));
                 return $this->redirectToRoute('app_semester_new', ['formation' => $formation->getId()]);
             }
 

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\PeriodType;
 use App\Repository\FormationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -30,6 +31,10 @@ class Formation
     #[ORM\Column(length: 100, nullable: true)]
     #[Groups(['formation:read', 'semester:read', 'course:read'])]
     private ?string $degreeLevel = null;
+
+    #[ORM\Column(length: 20, enumType: PeriodType::class)]
+    #[Groups(['formation:read', 'semester:read', 'course:read'])]
+    private PeriodType $periodType = PeriodType::Semester;
 
     #[ORM\Column(type: 'datetime_immutable')]
     #[Groups(['formation:read'])]
@@ -94,6 +99,27 @@ class Formation
         $this->degreeLevel = $degreeLevel;
 
         return $this;
+    }
+
+    public function getPeriodType(): PeriodType
+    {
+        return $this->periodType;
+    }
+
+    public function setPeriodType(PeriodType $periodType): static
+    {
+        $this->periodType = $periodType;
+
+        return $this;
+    }
+
+    /**
+     * Libellé du type de période (« Semestre » / « Trimestre »), pratique pour Twig et l'API.
+     */
+    #[Groups(['formation:read'])]
+    public function getPeriodTypeLabel(): string
+    {
+        return $this->periodType->label();
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable

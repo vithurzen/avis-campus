@@ -24,7 +24,7 @@ jobs:
                   extensions: pgsql, pdo_pgsql, xml, mbstring, curl, zip, intl, gd
 
             - name: Install dependencies
-              run: composer install --no-dev --optimize-autoloader --no-scripts
+              run: composer install --optimize-autoloader --no-scripts
 
             - name: Lint YAML
               run: php bin/console lint:yaml config/
@@ -35,6 +35,12 @@ jobs:
             - name: Lint container
               run: php bin/console lint:container
               env:
+                  DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/test_db"
+
+            - name: Run unit tests
+              run: php vendor/bin/phpunit
+              env:
+                  APP_ENV: test
                   DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/test_db"
 
     deploy:

@@ -3,12 +3,21 @@ App\Entity\Formation:
         name: 'BUT Informatique'
         description: 'Formation universitaire de technologie en informatique, couvrant la programmation, les réseaux et les bases de données.'
         degreeLevel: 'BUT'
+        periodType: !php/enum App\Enum\PeriodType::Semester
         createdAt: '<dateTimeImmutableBetween("-3 years", "-2 years")>'
 
     formation_2:
         name: 'Licence Professionnelle Développement Web'
         description: 'Licence professionnelle axée sur le développement web full-stack et les technologies modernes.'
         degreeLevel: 'Licence Pro'
+        periodType: !php/enum App\Enum\PeriodType::Semester
+        createdAt: '<dateTimeImmutableBetween("-3 years", "-2 years")>'
+
+    formation_3:
+        name: 'Master Management de Projet'
+        description: 'Master en gestion de projet organisé en trimestres, alternant théorie et mises en situation professionnelles.'
+        degreeLevel: 'Master'
+        periodType: !php/enum App\Enum\PeriodType::Trimester
         createdAt: '<dateTimeImmutableBetween("-3 years", "-2 years")>'
 
 App\Entity\Semester:
@@ -36,6 +45,21 @@ App\Entity\Semester:
         formation: '@formation_2'
         name: 'S2'
         number: 2
+
+    trimester_1:
+        formation: '@formation_3'
+        name: 'T1'
+        number: 1
+
+    trimester_2:
+        formation: '@formation_3'
+        name: 'T2'
+        number: 2
+
+    trimester_3:
+        formation: '@formation_3'
+        name: 'T3'
+        number: 3
 
 App\Entity\Tag:
     tag_1:

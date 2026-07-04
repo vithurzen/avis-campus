@@ -1576,9 +1576,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         nelmio_alice?: NelmioAliceConfig,
  *         fidry_alice_data_fixtures?: FidryAliceDataFixturesConfig,
  *         hautelook_alice?: HautelookAliceConfig,
- *         nelmio_alice?: NelmioAliceConfig,
- *         fidry_alice_data_fixtures?: FidryAliceDataFixturesConfig,
- *         hautelook_alice?: HautelookAliceConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1610,9 +1607,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         security?: SecurityConfig,
  *         monolog?: MonologConfig,
  *         twig_component?: TwigComponentConfig,
- *         nelmio_alice?: NelmioAliceConfig,
- *         fidry_alice_data_fixtures?: FidryAliceDataFixturesConfig,
- *         hautelook_alice?: HautelookAliceConfig,
  *         nelmio_alice?: NelmioAliceConfig,
  *         fidry_alice_data_fixtures?: FidryAliceDataFixturesConfig,
  *         hautelook_alice?: HautelookAliceConfig,
@@ -1698,6 +1692,7 @@ namespace Symfony\Component\Routing\Loader\Configurator;
  *     alias: string,
  *     deprecated?: array{package:string, version:string, message?:string},
  * }
+
  * @psalm-type RoutesConfig = array{
  *     "when@dev"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
  *     "when@prod"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
