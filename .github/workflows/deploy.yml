@@ -37,6 +37,9 @@ jobs:
               env:
                   DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/test_db"
 
+            - name: Static analysis (PHPStan)
+              run: php vendor/bin/phpstan analyse --memory-limit=1G
+
             - name: Run unit tests
               run: php vendor/bin/phpunit
               env:
@@ -66,7 +69,8 @@ jobs:
                   ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
                     set -e
                     cd /var/www/avis-campus
-                    git pull origin main
+                    git fetch origin
+                    git reset --hard origin/main
                     export APP_ENV=prod
                     composer install --no-dev --optimize-autoloader
                     php bin/console doctrine:migrations:migrate --no-interaction --env=prod
