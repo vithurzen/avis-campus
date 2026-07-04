@@ -35,7 +35,8 @@ final class FormationController extends AbstractController
             $entityManager->persist($formation);
             $entityManager->flush();
 
-            $this->addFlash('info', 'Formation créée ! Ajoutez maintenant les semestres.');
+            $period = $formation->getPeriodType()->label();
+            $this->addFlash('info', sprintf('Formation créée ! Ajoutez maintenant les %ss.', strtolower($period)));
 
             return $this->redirectToRoute('app_semester_new', ['formation' => $formation->getId()]);
         }

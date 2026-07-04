@@ -17,6 +17,7 @@ use App\Entity\StudentProfile;
 use App\Entity\Tag;
 use App\Entity\Teacher;
 use App\Entity\User;
+use App\Enum\PeriodType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -75,33 +76,33 @@ class AppFixtures extends Fixture
 
         // --- 5. Formations (×3) ---------------------------------------------
         $formationData = [
-            ['Master Informatique', 'Master'],
-            ['Licence Mathématiques', 'Licence'],
-            ['Master Cybersécurité', 'Master'],
+            ['Master Informatique', 'Master', PeriodType::Semester],
+            ['Licence Mathématiques', 'Licence', PeriodType::Semester],
+            ['Master Cybersécurité', 'Master', PeriodType::Trimester],
         ];
         $formations = [];
-        foreach ($formationData as [$name, $level]) {
+        foreach ($formationData as [$name, $level, $periodType]) {
             $formation = (new Formation())
                 ->setName($name)
                 ->setDegreeLevel($level)
+                ->setPeriodType($periodType)
                 ->setDescription($this->faker->paragraph())
                 ->setCreatedAt($this->dt('-2 years'));
             $manager->persist($formation);
             $formations[] = $formation;
         }
 
-        // --- 6. Semesters (×6: 2 per formation) -----------------------------
+        // --- 6. Periods (×6: 2 per formation, nommées selon le type) --------
         $semesters = [];
-        $semesterNumber = 1;
         foreach ($formations as $formation) {
-            for ($s = 1; $s <= 2; $s++) {
+            $abbr = $formation->getPeriodType()->abbreviation();
+            for ($n = 1; $n <= 2; $n++) {
                 $semester = (new Semester())
                     ->setFormation($formation)
-                    ->setName('Semestre ' . $semesterNumber)
-                    ->setNumber($semesterNumber);
+                    ->setName($abbr . $n)
+                    ->setNumber($n);
                 $manager->persist($semester);
                 $semesters[] = $semester;
-                $semesterNumber++;
             }
         }
 

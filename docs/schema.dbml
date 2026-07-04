@@ -61,9 +61,10 @@ Table formations {
   name varchar(150) [not null]
   description text
   degree_level varchar(100)
+  period_type varchar(20) [not null, default: 'semester'] // semester | trimester
   created_at datetime [not null]
 
-  Note: "Exemple : BUT Informatique, Licence Informatique, Master MIAGE"
+  Note: "Exemple : BUT Informatique, Licence Informatique, Master MIAGE. period_type définit le rythme (semestriel ou trimestriel) hérité par ses périodes."
 }
 
 Table semesters {
