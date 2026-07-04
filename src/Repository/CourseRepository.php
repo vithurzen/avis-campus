@@ -6,6 +6,7 @@ use App\Entity\Course;
 use App\Entity\Formation;
 use App\Entity\RatingCriteria;
 use App\Entity\Review;
+use App\Entity\Semester;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -24,8 +25,9 @@ class CourseRepository extends ServiceEntityRepository
     /**
      * Cours non encore reviewés par l'utilisateur (pour le formulaire de dépôt d'avis).
      * Si $excludedCourse est fourni (cas édition), ce cours est réintégré dans les résultats.
+     * Si $semester est fourni, seuls les cours de ce semestre sont retournés (cascade du formulaire).
      */
-    public function findCoursesNotReviewedBy(User $user, ?Course $excludedCourse = null): QueryBuilder
+    public function findCoursesNotReviewedBy(User $user, ?Course $excludedCourse = null, ?Semester $semester = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('c')->orderBy('c.title', 'ASC');
 
@@ -39,7 +41,14 @@ class CourseRepository extends ServiceEntityRepository
             $qb->setParameter('excludedCourse', $excludedCourse);
         }
 
-        return $qb->where("c.id NOT IN ($dql)");
+        $qb->where("c.id NOT IN ($dql)");
+
+        // Cascade Formation → Semestre → Cours : on limite au semestre choisi
+        if ($semester !== null) {
+            $qb->andWhere('c.semester = :semester')->setParameter('semester', $semester);
+        }
+
+        return $qb;
     }
 
     public function findTopCourses(int $limit = 10): array
