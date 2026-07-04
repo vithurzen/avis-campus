@@ -88,14 +88,21 @@ class ReviewControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/review/new');
         self::assertResponseIsSuccessful();
 
-        $form = $crawler->selectButton("Soumettre l'avis")->form([
-            'review[course]' => (string) $course->getId(),
-            'review[title]' => 'Un cours vraiment intéressant',
-            'review[content]' => 'Le professeur explique bien et les exercices sont utiles.',
-            'review[rating]' => '5',
-        ]);
+        // La cascade formation/semestre/cours est peuplée en JS (fetch AJAX) :
+        // les <select> sont vides dans le HTML rendu par le serveur, donc on ne
+        // peut pas passer par selectButton()->form() (validation des options DOM).
+        // On soumet donc directement les identifiants, comme le fait la requête AJAX.
+        $token = $crawler->filter('input[name="review[_token]"]')->attr('value');
 
-        $client->submit($form);
+        $client->request('POST', '/review/new', ['review' => [
+            'formation' => (string) $this->formationId,
+            'semester'  => (string) $this->semesterId,
+            'course'    => (string) $course->getId(),
+            'title'     => 'Un cours vraiment intéressant',
+            'content'   => 'Le professeur explique bien et les exercices sont utiles.',
+            'rating'    => '5',
+            '_token'    => $token,
+        ]]);
 
         self::assertResponseRedirects('/review');
         $client->followRedirect();

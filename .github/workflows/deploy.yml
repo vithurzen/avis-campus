@@ -46,6 +46,9 @@ jobs:
             - name: Create test database (SQLite)
               run: php bin/console doctrine:schema:create --env=test
 
+            - name: Load fixtures (test DB)
+              run: php bin/console doctrine:fixtures:load --no-interaction --env=test
+
             - name: Run unit tests
               run: php vendor/bin/phpunit
               env:
