@@ -37,6 +37,9 @@ jobs:
               env:
                   DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/test_db"
 
+            - name: Static analysis (PHPStan)
+              run: php vendor/bin/phpstan analyse --memory-limit=1G
+
             - name: Run unit tests
               run: php vendor/bin/phpunit
               env:
