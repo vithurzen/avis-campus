@@ -21,10 +21,13 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: "8.4"
-                  extensions: pgsql, pdo_pgsql, xml, mbstring, curl, zip, intl, gd
+                  extensions: pgsql, pdo_pgsql, pdo_sqlite, xml, mbstring, curl, zip, intl, gd
 
             - name: Install dependencies
-              run: composer install --no-dev --optimize-autoloader --no-scripts
+              run: composer install --optimize-autoloader --no-scripts
+
+            - name: Install importmap vendor assets
+              run: php bin/console importmap:install
 
             - name: Lint YAML
               run: php bin/console lint:yaml config/
@@ -36,6 +39,17 @@ jobs:
               run: php bin/console lint:container
               env:
                   DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/test_db"
+
+            - name: Static analysis (PHPStan)
+              run: php vendor/bin/phpstan analyse --memory-limit=1G
+
+            - name: Create test database (SQLite)
+              run: php bin/console doctrine:schema:create --env=test
+
+            - name: Run unit tests
+              run: php vendor/bin/phpunit
+              env:
+                  APP_ENV: test
 
     deploy:
         name: Deploy
@@ -60,7 +74,8 @@ jobs:
                   ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
                     set -e
                     cd /var/www/avis-campus
-                    git pull origin main
+                    git fetch origin
+                    git reset --hard origin/main
                     export APP_ENV=prod
                     composer install --no-dev --optimize-autoloader
                     php bin/console doctrine:migrations:migrate --no-interaction --env=prod
