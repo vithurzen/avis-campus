@@ -1,0 +1,217 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to an undefined method App\\Repository\\CourseRepository\:\:findTopRatedCourses\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Controller/Api/CourseApiController.php
+
+		-
+			message: '#^Method App\\Controller\\Api\\CourseController\:\:context\(\) has parameter \$groups with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Controller/Api/CourseController.php
+
+		-
+			message: '#^Method App\\Controller\\Api\\CourseController\:\:context\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Controller/Api/CourseController.php
+
+		-
+			message: '#^Parameter \#3 \$user of method App\\Service\\ApiLoggerService\:\:log\(\) expects App\\Entity\\User\|null, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
+			identifier: argument.type
+			count: 4
+			path: src/Controller/Api/CourseController.php
+
+		-
+			message: '#^Method App\\Controller\\Api\\FormationController\:\:context\(\) has parameter \$groups with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Controller/Api/FormationController.php
+
+		-
+			message: '#^Method App\\Controller\\Api\\FormationController\:\:context\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Controller/Api/FormationController.php
+
+		-
+			message: '#^Parameter \#3 \$user of method App\\Service\\ApiLoggerService\:\:log\(\) expects App\\Entity\\User\|null, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/Api/FormationController.php
+
+		-
+			message: '#^Parameter \#2 \$moderator of method App\\Service\\ReviewModerationService\:\:approve\(\) expects App\\Entity\\User, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/ModerationController.php
+
+		-
+			message: '#^Parameter \#2 \$moderator of method App\\Service\\ReviewModerationService\:\:hide\(\) expects App\\Entity\\User, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/ModerationController.php
+
+		-
+			message: '#^Parameter \#2 \$moderator of method App\\Service\\ReviewModerationService\:\:reject\(\) expects App\\Entity\\User, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/ModerationController.php
+
+		-
+			message: '#^Parameter \#1 \$user of method App\\Entity\\Report\:\:setUser\(\) expects App\\Entity\\User\|null, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/ReportController.php
+
+		-
+			message: '#^Parameter \#1 \$user of method App\\Entity\\Review\:\:setUser\(\) expects App\\Entity\\User\|null, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/ReviewController.php
+
+		-
+			message: '#^Parameter \#2 \$user of method App\\Service\\ExternalModerationService\:\:analyze\(\) expects App\\Entity\\User\|null, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/ReviewController.php
+
+		-
+			message: '#^Method App\\DataFixtures\\AppFixtures\:\:makeUser\(\) has parameter \$roles with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/DataFixtures/AppFixtures.php
+
+		-
+			message: '#^Property App\\Entity\\ApiLog\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/ApiLog.php
+
+		-
+			message: '#^Property App\\Entity\\Comment\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/Comment.php
+
+		-
+			message: '#^Property App\\Entity\\Course\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/Course.php
+
+		-
+			message: '#^Property App\\Entity\\EmailLog\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/EmailLog.php
+
+		-
+			message: '#^Property App\\Entity\\Favorite\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/Favorite.php
+
+		-
+			message: '#^Property App\\Entity\\Formation\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/Formation.php
+
+		-
+			message: '#^Property App\\Entity\\ModerationAction\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/ModerationAction.php
+
+		-
+			message: '#^Property App\\Entity\\Notification\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/Notification.php
+
+		-
+			message: '#^Property App\\Entity\\Profile\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/Profile.php
+
+		-
+			message: '#^Property App\\Entity\\RatingCriteria\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/RatingCriteria.php
+
+		-
+			message: '#^Property App\\Entity\\Report\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/Report.php
+
+		-
+			message: '#^Property App\\Entity\\Resource\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/Resource.php
+
+		-
+			message: '#^Property App\\Entity\\Review\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/Review.php
+
+		-
+			message: '#^Property App\\Entity\\ReviewRating\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/ReviewRating.php
+
+		-
+			message: '#^Property App\\Entity\\Semester\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/Semester.php
+
+		-
+			message: '#^Property App\\Entity\\Tag\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/Tag.php
+
+		-
+			message: '#^Property App\\Entity\\Teacher\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/Teacher.php
+
+		-
+			message: '#^Property App\\Entity\\User\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/User.php
+
+		-
+			message: '#^Parameter \#1 \$user of method App\\Repository\\CourseRepository\:\:findCoursesNotReviewedBy\(\) expects App\\Entity\\User, Symfony\\Component\\Security\\Core\\User\\UserInterface given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Form/ReviewType.php
+
+		-
+			message: '#^Method App\\Repository\\CourseRepository\:\:findTopCourses\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/CourseRepository.php
+
+		-
+			message: '#^Class App\\Security\\Voter\\ReviewVoter extends generic class Symfony\\Component\\Security\\Core\\Authorization\\Voter\\Voter but does not specify its types\: TAttribute, TSubject$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Security/Voter/ReviewVoter.php
+
+		-
+			message: '#^Call to function method_exists\(\) with ''Symfony\\\\Component\\\\Dotenv\\\\Dotenv'' and ''bootEnv'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: tests/bootstrap.php
