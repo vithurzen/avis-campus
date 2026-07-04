@@ -92,11 +92,12 @@ class AppFixtures extends Fixture
             $formations[] = $formation;
         }
 
-        // --- 6. Periods (×6: 2 per formation, nommées selon le type) --------
+        // --- 6. Periods (2 par formation semestrielle, 3 par trimestrielle) --
         $semesters = [];
         foreach ($formations as $formation) {
             $abbr = $formation->getPeriodType()->abbreviation();
-            for ($n = 1; $n <= 2; $n++) {
+            $periodCount = $formation->getPeriodType() === PeriodType::Trimester ? 3 : 2;
+            for ($n = 1; $n <= $periodCount; $n++) {
                 $semester = (new Semester())
                     ->setFormation($formation)
                     ->setName($abbr . $n)
@@ -142,14 +143,15 @@ class AppFixtures extends Fixture
             $this->makeUser($manager, ['ROLE_MODERATOR'], $modProfile);
         }
 
-        // 20 students
+        // 20 students (le premier a un e-mail déterministe, utilisé par les tests)
         $students = [];
         for ($i = 0; $i < 20; $i++) {
             $studentProfile = (new StudentProfile())
                 ->setFormation($this->faker->randomElement($formations))
                 ->setLevel($this->faker->randomElement(['L1', 'L2', 'L3', 'M1', 'M2']))
                 ->setCurrentYear($this->faker->numberBetween(1, 5));
-            $students[] = $this->makeUser($manager, ['ROLE_STUDENT'], $studentProfile);
+            $email = 0 === $i ? 'etudiant1@campus.fr' : null;
+            $students[] = $this->makeUser($manager, ['ROLE_STUDENT'], $studentProfile, $email);
         }
 
         // --- 9. Reviews (×50, unique student×course pairs) ------------------
@@ -227,10 +229,10 @@ class AppFixtures extends Fixture
     /**
      * Create a User with a hashed password and link it to its profile.
      */
-    private function makeUser(ObjectManager $manager, array $roles, Profile $profile): User
+    private function makeUser(ObjectManager $manager, array $roles, Profile $profile, ?string $email = null): User
     {
         $user = new User();
-        $user->setEmail($this->faker->unique()->safeEmail())
+        $user->setEmail($email ?? $this->faker->unique()->safeEmail())
             ->setRoles($roles)
             ->setPassword($this->hasher->hashPassword($user, 'password'))
             ->setIsVerified(true)
