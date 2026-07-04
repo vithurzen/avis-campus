@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\PeriodType;
 use App\Repository\SemesterRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -50,6 +51,15 @@ class Semester
     public function getFormation(): ?Formation
     {
         return $this->formation;
+    }
+
+    /**
+     * Type de période hérité de la formation (semestre / trimestre).
+     */
+    #[Groups(['semester:read', 'course:read'])]
+    public function getPeriodType(): ?PeriodType
+    {
+        return $this->formation?->getPeriodType();
     }
 
     public function setFormation(?Formation $formation): static
