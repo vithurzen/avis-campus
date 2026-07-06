@@ -17,6 +17,17 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 final class FavoriteController extends AbstractController
 {
+    #[Route('', name: 'app_favorite_index', methods: ['GET'])]
+    public function index(FavoriteRepository $favorites): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        return $this->render('favorite/index.html.twig', [
+            'favorites' => $favorites->findByUser($user),
+        ]);
+    }
+
     /**
      * Adds the course to the current user's favorites, or removes it if already
      * present (single endpoint covers both ajout and retrait).
@@ -45,6 +56,11 @@ final class FavoriteController extends AbstractController
             $this->addFlash('success', 'Cours ajouté à vos favoris.');
         }
 
+        $redirect = $request->request->get('redirect', '');
+        if ($redirect && str_starts_with($redirect, '/') && !str_starts_with($redirect, '//')) {
+            return $this->redirect($redirect, Response::HTTP_SEE_OTHER);
+        }
+
         return $this->redirectToRoute('app_course_show', ['id' => $course->getId()], Response::HTTP_SEE_OTHER);
     }
 
@@ -64,6 +80,6 @@ final class FavoriteController extends AbstractController
             $this->addFlash('success', 'Favori supprimé.');
         }
 
-        return $this->redirectToRoute('app_course_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_favorite_index', [], Response::HTTP_SEE_OTHER);
     }
 }
