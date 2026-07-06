@@ -43,6 +43,10 @@
 
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
+                <div class="text-right -mt-2">
+                    <a href="{{ path('app_forgot_password_request') }}" class="text-xs text-brand font-semibold hover:underline">Mot de passe oublié ?</a>
+                </div>
+
                 <button type="submit"
                         class="w-full bg-brand hover:bg-brandHover text-white font-semibold text-sm py-2.5 rounded-full transition">
                     Se connecter
