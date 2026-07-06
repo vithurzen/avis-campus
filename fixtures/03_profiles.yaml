@@ -1,39 +1,39 @@
 App\Entity\StudentProfile:
     student_profile_{1..5}:
-        user: '@user_student_<current()>'
-        firstName: '<firstName()>'
-        lastName: '<lastName()>'
-        bio: '<sentence(12)>'
-        level: '<randomElement(["BUT1", "BUT2", "BUT3", "Licence Pro", "M1", "M2"])>'
-        currentYear: '<numberBetween(1, 3)>'
-        formation: '@formation_<numberBetween(1, 5)>'
+        user: "@user_student_<current()>"
+        firstName: "<firstName()>"
+        lastName: "<lastName()>"
+        bio: '<randomElement(["Étudiant passionné de développement web, toujours curieux d''apprendre de nouvelles technologies.", "Passionné de cybersécurité, je participe régulièrement à des CTF en dehors des cours.", "Amateur de programmation, je code des petits projets perso sur mon temps libre.", "Intéressé par l''intelligence artificielle et la data science depuis le lycée.", "Féru de cloud computing, je vise une carrière dans les infrastructures DevOps.", "Toujours partant pour un hackathon ou un projet open source le week-end.", "Curieux de tout ce qui touche à l''architecture logicielle et aux bonnes pratiques de code.", "Ancien passionné de jeux vidéo, reconverti dans le développement par goût du code."])>'
+        level: '<randomElement(["Bachelor 1", "Bachelor 2", "Bachelor 3", "Mastère 1", "Mastère 2"])>'
+        currentYear: "<numberBetween(1, 3)>"
+        formation: "@formation_<numberBetween(1, 5)>"
         createdAt: '<dateTimeImmutableBetween("-1 year", "now")>'
 
 App\Entity\ModeratorProfile:
     moderator_profile_1:
-        user: '@user_moderator_1'
-        firstName: 'Lucas'
-        lastName: 'Moreau'
-        bio: 'Modérateur en charge des avis et signalements sur la plateforme.'
-        moderationArea: 'Avis et commentaires'
+        user: "@user_moderator_1"
+        firstName: "Lucas"
+        lastName: "Moreau"
+        bio: "Modérateur en charge des avis et signalements sur la plateforme."
+        moderationArea: "Avis et commentaires"
         handledReportsCount: 42
         createdAt: '<dateTimeImmutableBetween("-2 years", "-6 months")>'
 
     moderator_profile_2:
-        user: '@user_moderator_2'
-        firstName: 'Emma'
-        lastName: 'Petit'
-        bio: 'Modératrice spécialisée dans la gestion des signalements.'
-        moderationArea: 'Signalements'
+        user: "@user_moderator_2"
+        firstName: "Emma"
+        lastName: "Petit"
+        bio: "Modératrice spécialisée dans la gestion des signalements."
+        moderationArea: "Signalements"
         handledReportsCount: 27
         createdAt: '<dateTimeImmutableBetween("-2 years", "-6 months")>'
 
 App\Entity\AdminProfile:
     admin_profile_1:
-        user: '@user_admin_1'
-        firstName: 'Marie'
-        lastName: 'Curie'
-        bio: 'Administratrice principale de la plateforme Avis Campus.'
-        adminCode: 'ADMIN001'
+        user: "@user_admin_1"
+        firstName: "Marie"
+        lastName: "Curie"
+        bio: "Administratrice principale de la plateforme Avis Campus."
+        adminCode: "ADMIN001"
         superAdmin: true
         createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
