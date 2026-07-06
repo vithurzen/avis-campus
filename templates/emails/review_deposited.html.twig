@@ -1,0 +1,19 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block subject %}Votre avis a bien été déposé{% endblock %}
+
+{% block content %}
+    <h2 style="font-size: 16px;">Votre avis a bien été déposé</h2>
+    <p>
+        Nous avons bien reçu votre avis
+        « <strong>{{ review.title }}</strong> »{% if review.course %} sur le cours
+        <strong>{{ review.course.title }}</strong>{% endif %}.
+    </p>
+    {% if review.status == 'approved' %}
+        <p>Il est désormais visible publiquement. Merci de votre contribution à Avis Campus.</p>
+    {% elseif review.status == 'rejected' %}
+        <p>Il a toutefois été rejeté automatiquement en raison d'un langage jugé inapproprié.</p>
+    {% else %}
+        <p>Il est en attente de modération et sera bientôt examiné par notre équipe.</p>
+    {% endif %}
+{% endblock %}

@@ -121,16 +121,21 @@ class ReviewModerationServiceTest extends TestCase
         $this->service->approve($review, $moderator);
     }
 
-    public function testApproveThrowsWhenActingUserIsNotAModerator(): void
+    public function testApproveByActorWithoutModeratorProfileSkipsAuditTrail(): void
     {
+        // Admins may also approve (per ReviewVoter), but ModerationAction requires a
+        // ModeratorProfile in schema: acting users without one (e.g. admins) still
+        // get the status transition + notification + email, just no audit row.
         $review = $this->createReview(Review::STATUS_PENDING);
         $notModerator = new User();
-        $notModerator->setEmail('notmod@example.com');
+        $notModerator->setEmail('admin@example.com');
 
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('The acting user is not a moderator.');
+        $this->entityManager->expects($this->never())->method('persist');
+        $this->entityManager->expects($this->once())->method('flush');
 
         $this->service->approve($review, $notModerator);
+
+        $this->assertTrue($review->isApproved());
     }
 
     public function testRejectTransitionsPendingReviewToRejected(): void
@@ -238,15 +243,17 @@ class ReviewModerationServiceTest extends TestCase
         $this->service->hide($review, $moderator);
     }
 
-    public function testHideThrowsWhenActingUserIsNotAModerator(): void
+    public function testHideByActorWithoutModeratorProfileSkipsAuditTrail(): void
     {
         $review = $this->createReview(Review::STATUS_APPROVED);
         $notModerator = new User();
-        $notModerator->setEmail('notmod@example.com');
+        $notModerator->setEmail('admin@example.com');
 
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('The acting user is not a moderator.');
+        $this->entityManager->expects($this->never())->method('persist');
+        $this->entityManager->expects($this->once())->method('flush');
 
         $this->service->hide($review, $notModerator);
+
+        $this->assertTrue($review->isHidden());
     }
 }

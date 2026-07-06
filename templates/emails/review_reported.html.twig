@@ -1,0 +1,12 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block subject %}Votre avis a été signalé{% endblock %}
+
+{% block content %}
+    <h2 style="font-size: 16px; color: #dc2626;">Votre avis a été signalé</h2>
+    <p>
+        Votre avis « <strong>{{ review.title }}</strong> »{% if review.course %} sur le cours
+        <strong>{{ review.course.title }}</strong>{% endif %} a fait l'objet d'un signalement.
+    </p>
+    <p>Notre équipe de modération va l'examiner. Aucune action n'est requise de votre part pour le moment.</p>
+{% endblock %}

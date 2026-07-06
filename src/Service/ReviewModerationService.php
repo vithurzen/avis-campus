@@ -98,22 +98,26 @@ class ReviewModerationService
         string $emailType,
         string $emailTemplate,
     ): void {
-        $profile = $moderator->getProfile();
-        if (!$profile instanceof ModeratorProfile) {
-            throw new \LogicException('The acting user is not a moderator.');
-        }
-
         $author = $review->getUser();
 
-        // 1. Status transition + audit trail
+        // 1. Status transition
         $review->setStatus($newStatus);
-        $action = (new ModerationAction())
-            ->setModerator($profile)
-            ->setReview($review)
-            ->setAction($actionLabel)
-            ->setReason($reason)
-            ->setCreatedAt(new \DateTimeImmutable());
-        $this->entityManager->persist($action);
+
+        // Audit trail only when the actor has a moderator profile: the
+        // ModerationAction→ModeratorProfile relation is required in schema, and
+        // admins (who may also moderate, per ReviewVoter) have an AdminProfile
+        // instead — their actions still apply, just without this audit row.
+        $profile = $moderator->getProfile();
+        if ($profile instanceof ModeratorProfile) {
+            $action = (new ModerationAction())
+                ->setModerator($profile)
+                ->setReview($review)
+                ->setAction($actionLabel)
+                ->setReason($reason)
+                ->setCreatedAt(new \DateTimeImmutable());
+            $this->entityManager->persist($action);
+        }
+
         $this->entityManager->flush();
 
         // 2. Notify the author (in-app + email), delegated to dedicated services

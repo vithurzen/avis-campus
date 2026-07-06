@@ -9,6 +9,7 @@ use App\Repository\ReportRepository;
 use App\Repository\ReviewRepository;
 use App\Repository\TeacherRepository;
 use App\Repository\UserRepository;
+use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,11 +38,24 @@ final class AdminController extends AbstractController
     }
 
     #[Route('/reviews/{id}/hide', name: 'app_admin_review_hide', methods: ['POST'])]
-    public function hideReview(Request $request, Review $review, EntityManagerInterface $em): Response
+    public function hideReview(Request $request, Review $review, EntityManagerInterface $em, EmailService $emailService): Response
     {
         if ($this->isCsrfTokenValid('admin_review_' . $review->getId(), $request->getPayload()->getString('_token'))) {
             $review->setStatus(Review::STATUS_HIDDEN);
             $em->flush();
+
+            $author = $review->getUser();
+            if ($author !== null) {
+                $emailService->sendTemplate(
+                    $author->getEmail(),
+                    'Votre avis a été masqué',
+                    'emails/review_hidden.html.twig',
+                    ['review' => $review, 'reason' => null],
+                    'review_hidden',
+                    $author,
+                );
+            }
+
             $this->addFlash('success', 'Avis masqué.');
         }
 
