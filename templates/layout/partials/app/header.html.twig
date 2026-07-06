@@ -41,7 +41,11 @@
                             </span>
                         {% endif %}
                     </a>
-                    <span class="text-sm text-gray-500 hidden sm:block">{{ app.user.email }}</span>
+                    <a href="{{ path('app_profile_edit') }}"
+                       class="text-sm text-gray-500 hover:text-brand transition hidden sm:block truncate max-w-[160px]"
+                       title="Mon profil">
+                        {{ app.user.email }}
+                    </a>
                     <a href="{{ path('app_logout') }}"
                        class="text-sm text-gray-600 hover:text-brand transition"
                        title="Déconnexion">

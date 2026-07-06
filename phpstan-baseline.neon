@@ -43,6 +43,24 @@ parameters:
 			path: src/Controller/Api/FormationController.php
 
 		-
+			message: '#^Parameter \#1 \$user of method App\\Entity\\Comment\:\:setUser\(\) expects App\\Entity\\User\|null, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/CommentController.php
+
+		-
+			message: '#^Parameter \#1 \$user of method App\\Repository\\FavoriteRepository\:\:findByUser\(\) expects App\\Entity\\User, Symfony\\Component\\Security\\Core\\User\\UserInterface given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/CourseController.php
+
+		-
+			message: '#^Parameter \#1 \$user of method App\\Repository\\FavoriteRepository\:\:findOneByUserAndCourse\(\) expects App\\Entity\\User, Symfony\\Component\\Security\\Core\\User\\UserInterface given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/CourseController.php
+
+		-
 			message: '#^Parameter \#2 \$moderator of method App\\Service\\ReviewModerationService\:\:approve\(\) expects App\\Entity\\User, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
 			identifier: argument.type
 			count: 1
@@ -59,6 +77,42 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Controller/ModerationController.php
+
+		-
+			message: '#^Call to an undefined method Symfony\\Component\\Security\\Core\\User\\UserInterface\:\:getEmail\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: src/Controller/ProfileController.php
+
+		-
+			message: '#^Call to an undefined method Symfony\\Component\\Security\\Core\\User\\UserInterface\:\:getProfile\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Controller/ProfileController.php
+
+		-
+			message: '#^Call to an undefined method Symfony\\Component\\Security\\Core\\User\\UserInterface\:\:setEmail\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Controller/ProfileController.php
+
+		-
+			message: '#^Call to an undefined method Symfony\\Component\\Security\\Core\\User\\UserInterface\:\:setPassword\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Controller/ProfileController.php
+
+		-
+			message: '#^Parameter \#1 \$user of method Symfony\\Component\\PasswordHasher\\Hasher\\UserPasswordHasherInterface\:\:hashPassword\(\) expects Symfony\\Component\\Security\\Core\\User\\PasswordAuthenticatedUserInterface, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/ProfileController.php
+
+		-
+			message: '#^Parameter \#1 \$user of method Symfony\\Component\\PasswordHasher\\Hasher\\UserPasswordHasherInterface\:\:isPasswordValid\(\) expects Symfony\\Component\\Security\\Core\\User\\PasswordAuthenticatedUserInterface, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Controller/ProfileController.php
 
 		-
 			message: '#^Parameter \#1 \$user of method App\\Entity\\Report\:\:setUser\(\) expects App\\Entity\\User\|null, Symfony\\Component\\Security\\Core\\User\\UserInterface\|null given\.$#'
@@ -197,6 +251,12 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Repository/CourseRepository.php
+
+		-
+			message: '#^Class App\\Security\\Voter\\CommentVoter extends generic class Symfony\\Component\\Security\\Core\\Authorization\\Voter\\Voter but does not specify its types\: TAttribute, TSubject$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Security/Voter/CommentVoter.php
 
 		-
 			message: '#^Class App\\Security\\Voter\\ReviewVoter extends generic class Symfony\\Component\\Security\\Core\\Authorization\\Voter\\Voter but does not specify its types\: TAttribute, TSubject$#'
