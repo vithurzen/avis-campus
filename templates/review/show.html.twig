@@ -119,12 +119,72 @@
                                 </div>
                                 <span class="text-xs text-gray-400">
                                     {{ comment.createdAt ? comment.createdAt|date('d/m/Y') : '' }}
+                                    {% if comment.updatedAt %}
+                                        <span class="italic ml-1">(modifié)</span>
+                                    {% endif %}
                                 </span>
                             </div>
                             <p class="text-sm text-gray-700">{{ comment.content }}</p>
+                            {% if is_granted('COMMENT_EDIT', comment) or is_granted('COMMENT_DELETE', comment) %}
+                                <div class="flex items-center gap-3 mt-3 pt-3 border-t border-gray-100">
+                                    {% if is_granted('COMMENT_EDIT', comment) %}
+                                        <a href="{{ path('app_comment_edit', { id: comment.id }) }}"
+                                           class="text-xs text-gray-400 hover:text-gray-700 transition flex items-center gap-1">
+                                            <i class="fa-solid fa-pen text-[10px]"></i> Modifier
+                                        </a>
+                                    {% endif %}
+                                    {% if is_granted('COMMENT_DELETE', comment) %}
+                                        <form method="post"
+                                              action="{{ path('app_comment_delete', { id: comment.id }) }}"
+                                              onsubmit="return confirm('Supprimer ce commentaire ?')">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+                                            <button type="submit"
+                                                    class="text-xs text-red-400 hover:text-red-600 transition flex items-center gap-1">
+                                                <i class="fa-solid fa-trash text-[10px]"></i> Supprimer
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
                         </div>
                     {% endif %}
                 {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    {# — Formulaire d'ajout de commentaire — #}
+    <div class="mt-6">
+        {% if is_granted('ROLE_USER') %}
+            <h3 class="text-base font-semibold text-gray-900 mb-3">Laisser un commentaire</h3>
+            {{ form_start(commentForm, {
+                action: path('app_comment_new'),
+                attr: { class: 'space-y-3' }
+            }) }}
+                <input type="hidden" name="reviewId" value="{{ review.id }}">
+                <div>
+                    {{ form_widget(commentForm.content, {
+                        attr: {
+                            class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white resize-none',
+                            rows: 3,
+                            placeholder: 'Rédigez votre commentaire…'
+                        }
+                    }) }}
+                    {{ form_errors(commentForm.content) }}
+                </div>
+                <div class="flex justify-end">
+                    <button type="submit"
+                            class="bg-brand hover:bg-brandHover text-white text-sm font-semibold px-5 py-2.5 rounded-full transition">
+                        <i class="fa-solid fa-paper-plane mr-1.5"></i> Publier
+                    </button>
+                </div>
+            {{ form_end(commentForm) }}
+        {% else %}
+            <div class="text-center py-6 bg-gray-50 rounded-xl border border-gray-200">
+                <p class="text-sm text-gray-500">
+                    <a href="{{ path('app_login') }}" class="text-brand hover:underline font-medium">Connectez-vous</a>
+                    pour laisser un commentaire.
+                </p>
             </div>
         {% endif %}
     </div>

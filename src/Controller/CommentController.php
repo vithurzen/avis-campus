@@ -5,11 +5,14 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Form\CommentType;
 use App\Repository\CommentRepository;
+use App\Repository\ReviewRepository;
+use App\Security\Voter\CommentVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/comment')]
 final class CommentController extends AbstractController
@@ -22,35 +25,42 @@ final class CommentController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_comment_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/new', name: 'app_comment_new', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function new(Request $request, EntityManagerInterface $entityManager, ReviewRepository $reviewRepository): Response
     {
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
+        $reviewId = $request->request->getInt('reviewId');
+        $review = $reviewRepository->find($reviewId);
+
+        if (!$review) {
+            throw $this->createNotFoundException('Avis introuvable.');
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setUser($this->getUser());
+            $comment->setReview($review);
+
             $entityManager->persist($comment);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_comment_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Votre commentaire a été publié.');
+
+            return $this->redirectToRoute('app_review_show', ['id' => $review->getId()], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('comment/new.html.twig', [
-            'comment' => $comment,
-            'form' => $form,
-        ]);
-    }
+        foreach ($form->getErrors(true) as $error) {
+            $this->addFlash('error', $error->getMessage());
+        }
 
-    #[Route('/{id}', name: 'app_comment_show', methods: ['GET'])]
-    public function show(Comment $comment): Response
-    {
-        return $this->render('comment/show.html.twig', [
-            'comment' => $comment,
-        ]);
+        return $this->redirectToRoute('app_review_show', ['id' => $review->getId()], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}/edit', name: 'app_comment_edit', methods: ['GET', 'POST'])]
+    #[IsGranted(CommentVoter::EDIT, subject: 'comment')]
     public function edit(Request $request, Comment $comment, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(CommentType::class, $comment);
@@ -59,23 +69,30 @@ final class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_comment_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Commentaire modifié.');
+
+            return $this->redirectToRoute('app_review_show', ['id' => $comment->getReview()->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('comment/edit.html.twig', [
             'comment' => $comment,
-            'form' => $form,
+            'form'    => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_comment_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_comment_delete', methods: ['POST'])]
+    #[IsGranted(CommentVoter::DELETE, subject: 'comment')]
     public function delete(Request $request, Comment $comment, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->getPayload()->getString('_token'))) {
+        $reviewId = $comment->getReview()?->getId();
+
+        if ($this->isCsrfTokenValid('delete' . $comment->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($comment);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Commentaire supprimé.');
         }
 
-        return $this->redirectToRoute('app_comment_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_review_show', ['id' => $reviewId], Response::HTTP_SEE_OTHER);
     }
 }

@@ -25,13 +25,13 @@
         <div class="relative flex-1 min-w-[180px]">
             <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
             <input type="search" id="course-search" placeholder="Rechercher…"
-                   class="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white">
+                   class="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white">
         </div>
 
         {# Filtre formation #}
         <div class="min-w-[180px]">
             <select id="filter-formation"
-                    class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-brand bg-white text-gray-700">
+                    class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white text-gray-700">
                 <option value="">Toutes les formations</option>
                 {% for formation in formations %}
                     <option value="{{ formation.id }}">{{ formation.name }}</option>
