@@ -1,6 +1,6 @@
 App\Entity\User:
     # --- Étudiants ---
-    user_student_{1..5}:
+    user_student_{1..20}:
         email: 'etudiant<current()>\@campus.fr'
         password: '\$2y\$13\$p//xsA0RCw4/XwOyuP3xPuV1q4NK4pg2uj2gvBI8qPreJJABh2yjG'
         roles: [ROLE_USER]

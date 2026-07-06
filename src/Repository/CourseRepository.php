@@ -63,7 +63,7 @@ class CourseRepository extends ServiceEntityRepository
             ORDER BY avg_score DESC
             LIMIT :lim
         ';
-        $rows = $conn->executeQuery($sql, ['status' => 'published', 'lim' => $limit])->fetchAllAssociative();
+        $rows = $conn->executeQuery($sql, ['status' => Review::STATUS_APPROVED, 'lim' => $limit])->fetchAllAssociative();
         $ids = array_column($rows, 'id');
 
         if (empty($ids)) {

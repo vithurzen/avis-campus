@@ -311,7 +311,7 @@ class Course
         $totalScore = 0;
         $count = 0;
         foreach ($this->reviews as $review) {
-            if ($review->getStatus() === 'published') {
+            if ($review->getStatus() === Review::STATUS_APPROVED) {
                 foreach ($review->getRatings() as $rating) {
                     $totalScore += $rating->getScore();
                     $count++;
@@ -324,7 +324,7 @@ class Course
     #[Groups(['course:list', 'course:read'])]
     public function getPublishedReviewCount(): int
     {
-        return $this->reviews->filter(fn($r) => $r->getStatus() === 'published')->count();
+        return $this->reviews->filter(fn($r) => $r->getStatus() === Review::STATUS_APPROVED)->count();
     }
 
     /**

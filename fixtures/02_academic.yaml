@@ -20,6 +20,20 @@ App\Entity\Formation:
         periodType: !php/enum App\Enum\PeriodType::Trimester
         createdAt: '<dateTimeImmutableBetween("-3 years", "-2 years")>'
 
+    formation_4:
+        name: 'BTS Services Informatiques aux Organisations'
+        description: 'BTS SIO, spécialisation SISR/SLAM, formant aux métiers de l''administration système/réseau et du développement.'
+        degreeLevel: 'BTS'
+        periodType: !php/enum App\Enum\PeriodType::Semester
+        createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+
+    formation_5:
+        name: 'Master Intelligence Artificielle'
+        description: 'Master spécialisé en intelligence artificielle : machine learning, deep learning et traitement des données.'
+        degreeLevel: 'Master'
+        periodType: !php/enum App\Enum\PeriodType::Trimester
+        createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+
 App\Entity\Semester:
     semester_1:
         formation: '@formation_1'
@@ -61,6 +75,31 @@ App\Entity\Semester:
         name: 'T3'
         number: 3
 
+    semester_6:
+        formation: '@formation_4'
+        name: 'S1'
+        number: 1
+
+    semester_7:
+        formation: '@formation_4'
+        name: 'S2'
+        number: 2
+
+    trimester_4:
+        formation: '@formation_5'
+        name: 'T1'
+        number: 1
+
+    trimester_5:
+        formation: '@formation_5'
+        name: 'T2'
+        number: 2
+
+    trimester_6:
+        formation: '@formation_5'
+        name: 'T3'
+        number: 3
+
 App\Entity\Tag:
     tag_1:
         name: 'Programmation'
@@ -81,6 +120,43 @@ App\Entity\Tag:
     tag_5:
         name: 'Réseau'
         color: '#9b59b6'
+
+    tag_6:
+        name: 'Intelligence Artificielle'
+        color: '#1abc9c'
+
+    tag_7:
+        name: 'Gestion de projet'
+        color: '#e67e22'
+
+    tag_8:
+        name: 'Cloud & DevOps'
+        color: '#34495e'
+
+    tag_9:
+        name: 'Sécurité'
+        color: '#c0392b'
+
+App\Entity\RatingCriteria:
+    criteria_1:
+        name: 'Clarté du cours'
+        description: 'Le cours est-il bien expliqué et facile à comprendre ?'
+        maxScore: 5
+
+    criteria_2:
+        name: 'Difficulté'
+        description: 'Le niveau de difficulté est-il adapté au niveau demandé ?'
+        maxScore: 5
+
+    criteria_3:
+        name: 'Utilité professionnelle'
+        description: 'Ce cours est-il utile pour la vie professionnelle ?'
+        maxScore: 5
+
+    criteria_4:
+        name: 'Charge de travail'
+        description: 'La charge de travail demandée est-elle raisonnable ?'
+        maxScore: 5
 
 App\Entity\Teacher:
     teacher_1:
@@ -107,21 +183,53 @@ App\Entity\Teacher:
         email: 'pierre.leroy@univ.fr'
         createdAt: '<dateTimeImmutableBetween("-3 years", "-2 years")>'
 
-App\Entity\RatingCriteria:
-    criteria_1:
-        name: 'Clarté du cours'
-        description: 'Le cours est-il bien expliqué et facile à comprendre ?'
-        maxScore: 5
+    teacher_5:
+        firstName: 'Camille'
+        lastName: 'Girard'
+        email: 'camille.girard@univ.fr'
+        createdAt: '<dateTimeImmutableBetween("-3 years", "-2 years")>'
 
-    criteria_2:
-        name: 'Difficulté'
-        description: 'Le niveau de difficulté est-il adapté au niveau demandé ?'
-        maxScore: 5
+    teacher_6:
+        firstName: 'Thomas'
+        lastName: 'Roux'
+        email: 'thomas.roux@univ.fr'
+        createdAt: '<dateTimeImmutableBetween("-3 years", "-2 years")>'
 
-    criteria_3:
-        name: 'Utilité professionnelle'
-        description: 'Ce cours est-il utile pour la vie professionnelle ?'
-        maxScore: 5
+    teacher_7:
+        firstName: 'Julie'
+        lastName: 'Fontaine'
+        email: 'julie.fontaine@univ.fr'
+        createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+
+    teacher_8:
+        firstName: 'Nicolas'
+        lastName: 'Morel'
+        email: 'nicolas.morel@univ.fr'
+        createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+
+    teacher_9:
+        firstName: 'Claire'
+        lastName: 'Lambert'
+        email: 'claire.lambert@univ.fr'
+        createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+
+    teacher_10:
+        firstName: 'Antoine'
+        lastName: 'Perrin'
+        email: 'antoine.perrin@univ.fr'
+        createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+
+    teacher_11:
+        firstName: 'Laura'
+        lastName: 'Faure'
+        email: 'laura.faure@univ.fr'
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+
+    teacher_12:
+        firstName: 'Maxime'
+        lastName: 'Robin'
+        email: 'maxime.robin@univ.fr'
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
 
 App\Entity\Course:
     course_1:
@@ -131,6 +239,8 @@ App\Entity\Course:
         coefficient: 2.0
         hours: 40
         createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+        teachers:
+            - '@teacher_1'
         tags:
             - '@tag_1'
             - '@tag_2'
@@ -142,6 +252,8 @@ App\Entity\Course:
         coefficient: 2.5
         hours: 35
         createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+        teachers:
+            - '@teacher_2'
         tags:
             - '@tag_3'
 
@@ -152,6 +264,9 @@ App\Entity\Course:
         coefficient: 3.0
         hours: 50
         createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - '@teacher_1'
+            - '@teacher_3'
         tags:
             - '@tag_1'
             - '@tag_4'
@@ -163,6 +278,8 @@ App\Entity\Course:
         coefficient: 2.5
         hours: 45
         createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - '@teacher_2'
         tags:
             - '@tag_2'
 
@@ -173,6 +290,8 @@ App\Entity\Course:
         coefficient: 2.0
         hours: 30
         createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - '@teacher_4'
         tags:
             - '@tag_5'
 
@@ -183,6 +302,325 @@ App\Entity\Course:
         coefficient: 3.0
         hours: 40
         createdAt: '<dateTimeImmutableBetween("-8 months", "-3 months")>'
+        teachers:
+            - '@teacher_3'
         tags:
             - '@tag_1'
             - '@tag_4'
+
+    # --- BUT Informatique : semestre 3 (suite) ---
+    course_7:
+        semester: '@semester_3'
+        title: 'Structures de Données'
+        description: 'Listes, piles, files, arbres et graphes : implémentation et complexité.'
+        coefficient: 2.5
+        hours: 35
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - '@teacher_2'
+        tags:
+            - '@tag_2'
+
+    course_8:
+        semester: '@semester_3'
+        title: 'Systèmes d''Exploitation'
+        description: 'Fonctionnement des systèmes Unix/Linux, processus, mémoire et fichiers.'
+        coefficient: 2.0
+        hours: 30
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - '@teacher_4'
+        tags:
+            - '@tag_5'
+
+    # --- Licence Pro Dev Web : S1 (suite) et S2 ---
+    course_9:
+        semester: '@semester_4'
+        title: 'Développement Mobile'
+        description: 'Création d''applications mobiles multiplateformes avec React Native.'
+        coefficient: 2.5
+        hours: 35
+        createdAt: '<dateTimeImmutableBetween("-8 months", "-3 months")>'
+        teachers:
+            - '@teacher_5'
+        tags:
+            - '@tag_1'
+            - '@tag_4'
+
+    course_10:
+        semester: '@semester_5'
+        title: 'UX/UI Design'
+        description: 'Principes de conception d''interfaces centrées utilisateur, prototypage.'
+        coefficient: 2.0
+        hours: 25
+        createdAt: '<dateTimeImmutableBetween("-6 months", "-2 months")>'
+        teachers:
+            - '@teacher_6'
+        tags:
+            - '@tag_4'
+
+    course_11:
+        semester: '@semester_5'
+        title: 'JavaScript Moderne (ES6+)'
+        description: 'Programmation JavaScript avancée, asynchronisme, modules et outillage moderne.'
+        coefficient: 2.5
+        hours: 30
+        createdAt: '<dateTimeImmutableBetween("-6 months", "-2 months")>'
+        teachers:
+            - '@teacher_5'
+        tags:
+            - '@tag_4'
+
+    course_12:
+        semester: '@semester_5'
+        title: 'Déploiement et CI/CD'
+        description: 'Intégration et déploiement continu, conteneurisation avec Docker.'
+        coefficient: 2.5
+        hours: 30
+        createdAt: '<dateTimeImmutableBetween("-6 months", "-2 months")>'
+        teachers:
+            - '@teacher_6'
+        tags:
+            - '@tag_8'
+
+    # --- Master Management de Projet ---
+    course_13:
+        semester: '@trimester_1'
+        title: 'Management d''Équipe'
+        description: 'Fondamentaux du management d''équipe, motivation et gestion des conflits.'
+        coefficient: 2.0
+        hours: 30
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - '@teacher_7'
+        tags:
+            - '@tag_7'
+
+    course_14:
+        semester: '@trimester_1'
+        title: 'Gestion de Projet Agile'
+        description: 'Méthodologies Scrum et Kanban appliquées à la conduite de projets.'
+        coefficient: 3.0
+        hours: 40
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - '@teacher_8'
+        tags:
+            - '@tag_7'
+
+    course_15:
+        semester: '@trimester_2'
+        title: 'Finance pour Managers'
+        description: 'Lecture de bilans, budgétisation et pilotage financier de projets.'
+        coefficient: 2.0
+        hours: 25
+        createdAt: '<dateTimeImmutableBetween("-9 months", "-4 months")>'
+        teachers:
+            - '@teacher_9'
+        tags:
+            - '@tag_7'
+
+    course_16:
+        semester: '@trimester_2'
+        title: 'Communication Professionnelle'
+        description: 'Techniques de communication écrite et orale en contexte professionnel.'
+        coefficient: 1.5
+        hours: 20
+        createdAt: '<dateTimeImmutableBetween("-9 months", "-4 months")>'
+        teachers:
+            - '@teacher_7'
+        tags: []
+
+    course_17:
+        semester: '@trimester_3'
+        title: 'Droit du Travail'
+        description: 'Notions essentielles de droit du travail applicables au management d''équipe.'
+        coefficient: 1.5
+        hours: 20
+        createdAt: '<dateTimeImmutableBetween("-6 months", "-1 month")>'
+        teachers:
+            - '@teacher_9'
+        tags: []
+
+    course_18:
+        semester: '@trimester_3'
+        title: 'Stratégie d''Entreprise'
+        description: 'Analyse stratégique, positionnement concurrentiel et prise de décision.'
+        coefficient: 2.5
+        hours: 30
+        createdAt: '<dateTimeImmutableBetween("-6 months", "-1 month")>'
+        teachers:
+            - '@teacher_8'
+        tags:
+            - '@tag_7'
+
+    # --- BTS SIO ---
+    course_19:
+        semester: '@semester_6'
+        title: 'Support Utilisateur et Helpdesk'
+        description: 'Prise en charge des incidents utilisateurs et gestion de tickets.'
+        coefficient: 1.5
+        hours: 25
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - '@teacher_10'
+        tags: []
+
+    course_20:
+        semester: '@semester_6'
+        title: 'Administration Systèmes Windows/Linux'
+        description: 'Installation, configuration et administration de serveurs Windows et Linux.'
+        coefficient: 2.5
+        hours: 40
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - '@teacher_11'
+        tags:
+            - '@tag_5'
+
+    course_21:
+        semester: '@semester_6'
+        title: 'Cybersécurité des Infrastructures'
+        description: 'Bonnes pratiques de sécurisation des réseaux et systèmes d''information.'
+        coefficient: 2.5
+        hours: 35
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - '@teacher_11'
+        tags:
+            - '@tag_9'
+
+    course_22:
+        semester: '@semester_7'
+        title: 'Scripting et Automatisation'
+        description: 'Automatisation de tâches d''administration avec Bash et PowerShell.'
+        coefficient: 2.0
+        hours: 30
+        createdAt: '<dateTimeImmutableBetween("-8 months", "-3 months")>'
+        teachers:
+            - '@teacher_10'
+        tags:
+            - '@tag_5'
+
+    course_23:
+        semester: '@semester_7'
+        title: 'Introduction au Cloud (SaaS/PaaS/IaaS)'
+        description: 'Panorama des services cloud et déploiement d''applications sur AWS/Azure.'
+        coefficient: 2.5
+        hours: 30
+        createdAt: '<dateTimeImmutableBetween("-8 months", "-3 months")>'
+        teachers:
+            - '@teacher_12'
+        tags:
+            - '@tag_8'
+
+    course_24:
+        semester: '@semester_7'
+        title: 'Bases de Données pour la Production'
+        description: 'Optimisation, sauvegarde et haute disponibilité des bases de données.'
+        coefficient: 2.0
+        hours: 25
+        createdAt: '<dateTimeImmutableBetween("-8 months", "-3 months")>'
+        teachers:
+            - '@teacher_2'
+        tags:
+            - '@tag_3'
+
+    # --- Master Intelligence Artificielle ---
+    course_25:
+        semester: '@trimester_4'
+        title: 'Machine Learning Fondamental'
+        description: 'Apprentissage supervisé et non supervisé, régression, classification, clustering.'
+        coefficient: 3.0
+        hours: 45
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - '@teacher_12'
+        tags:
+            - '@tag_6'
+
+    course_26:
+        semester: '@trimester_4'
+        title: 'Mathématiques pour l''IA'
+        description: 'Algèbre linéaire, probabilités et optimisation appliquées au machine learning.'
+        coefficient: 2.5
+        hours: 35
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - '@teacher_9'
+        tags:
+            - '@tag_6'
+
+    course_27:
+        semester: '@trimester_5'
+        title: 'Deep Learning et Réseaux de Neurones'
+        description: 'Réseaux de neurones, CNN, RNN et frameworks PyTorch/TensorFlow.'
+        coefficient: 3.0
+        hours: 45
+        createdAt: '<dateTimeImmutableBetween("-9 months", "-4 months")>'
+        teachers:
+            - '@teacher_12'
+        tags:
+            - '@tag_6'
+
+    course_28:
+        semester: '@trimester_5'
+        title: 'Data Engineering'
+        description: 'Pipelines de données, ETL et infrastructures big data.'
+        coefficient: 2.5
+        hours: 35
+        createdAt: '<dateTimeImmutableBetween("-9 months", "-4 months")>'
+        teachers:
+            - '@teacher_11'
+        tags:
+            - '@tag_6'
+            - '@tag_8'
+
+    course_29:
+        semester: '@trimester_5'
+        title: 'Traitement du Langage Naturel (NLP)'
+        description: 'Modèles de langage, embeddings et applications de NLP modernes.'
+        coefficient: 2.5
+        hours: 30
+        createdAt: '<dateTimeImmutableBetween("-9 months", "-4 months")>'
+        teachers:
+            - '@teacher_12'
+        tags:
+            - '@tag_6'
+
+    course_30:
+        semester: '@trimester_6'
+        title: 'Vision par Ordinateur'
+        description: 'Traitement d''images, détection d''objets et reconnaissance visuelle.'
+        coefficient: 2.5
+        hours: 30
+        createdAt: '<dateTimeImmutableBetween("-6 months", "-1 month")>'
+        teachers:
+            - '@teacher_9'
+        tags:
+            - '@tag_6'
+
+    course_31:
+        semester: '@trimester_6'
+        title: 'MLOps et Industrialisation IA'
+        description: 'Mise en production, versioning et monitoring de modèles de machine learning.'
+        coefficient: 2.5
+        hours: 30
+        createdAt: '<dateTimeImmutableBetween("-6 months", "-1 month")>'
+        teachers:
+            - '@teacher_11'
+        tags:
+            - '@tag_6'
+            - '@tag_8'
+
+    course_32:
+        semester: '@trimester_6'
+        title: 'Éthique et IA Responsable'
+        description: 'Biais algorithmiques, réglementation et enjeux sociétaux de l''IA.'
+        coefficient: 1.5
+        hours: 20
+        createdAt: '<dateTimeImmutableBetween("-6 months", "-1 month")>'
+        teachers:
+            - '@teacher_9'
+        tags:
+            - '@tag_6'
