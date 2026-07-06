@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Formation;
+use App\Entity\Review;
 use App\Service\ApiLoggerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -44,7 +45,7 @@ class FormationController extends AbstractController
 
             foreach ($semesterCourses as $course) {
                 foreach ($course->getReviews() as $review) {
-                    if ($review->getStatus() === 'published') {
+                    if ($review->getStatus() === Review::STATUS_APPROVED) {
                         $semesterReviewCount++;
                         $totalReviews++;
                         foreach ($review->getRatings() as $rating) {

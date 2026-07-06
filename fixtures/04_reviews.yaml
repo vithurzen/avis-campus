@@ -5,7 +5,7 @@ App\Entity\Review:
         course: '@course_1'
         title: 'Très bon cours d''introduction'
         content: 'Ce cours m''a permis de maîtriser les bases de la programmation rapidement. Les exercices pratiques sont bien pensés et progressifs.'
-        status: 'published'
+        status: 'approved'
         createdAt: '<dateTimeImmutableBetween("-6 months", "-3 months")>'
 
     review_2:
@@ -13,7 +13,7 @@ App\Entity\Review:
         course: '@course_2'
         title: 'Cours dense mais très utile'
         content: 'Le contenu est riche, peut-être un peu dense pour des débutants. Le professeur explique bien mais il faudrait plus d''exercices pratiques.'
-        status: 'published'
+        status: 'approved'
         createdAt: '<dateTimeImmutableBetween("-5 months", "-2 months")>'
 
     review_3:
@@ -21,7 +21,7 @@ App\Entity\Review:
         course: '@course_3'
         title: 'Symfony, un framework puissant !'
         content: 'Excellent cours sur Symfony. Les projets guidés sont très formateurs. Je recommande fortement à tous ceux qui veulent développer des applications web robustes.'
-        status: 'published'
+        status: 'approved'
         createdAt: '<dateTimeImmutableBetween("-4 months", "-1 month")>'
 
     review_4:
@@ -29,7 +29,7 @@ App\Entity\Review:
         course: '@course_4'
         title: 'Algorithmique poussée, attention !'
         content: 'Le cours est très complet mais demande de solides bases en mathématiques. Préférable d''avoir suivi le cours d''introduction avant.'
-        status: 'published'
+        status: 'approved'
         createdAt: '<dateTimeImmutableBetween("-3 months", "-2 weeks")>'
 
     review_5:
@@ -37,7 +37,7 @@ App\Entity\Review:
         course: '@course_5'
         title: 'Bon aperçu des réseaux'
         content: 'Le cours couvre bien les fondamentaux des réseaux. Les TP en salle machine sont très intéressants. Quelques mises à jour sur les protocoles modernes seraient bienvenues.'
-        status: 'published'
+        status: 'approved'
         createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
 
     review_6:
@@ -49,6 +49,805 @@ App\Entity\Review:
         createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
 
 # Notations : 6 reviews × 3 critères = 18 ReviewRating (contrainte unique review+critère)
+
+    review_7:
+        user: '@user_student_10'
+        course: '@course_20'
+        title: 'Vraiment utile pour la suite'
+        content: 'Le contenu de « Administration Systèmes Windows/Linux » est dense mais l''enseignant explique clairement les notions difficiles. Une bonne découverte avec « Administration Systèmes Windows/Linux », le professeur est disponible et pédagogue.'
+        status: 'rejected'
+        rating: 3
+        createdAt: '<dateTimeImmutableBetween("-9 months", "now")>'
+
+    review_8:
+        user: '@user_student_19'
+        course: '@course_28'
+        title: 'Bon équilibre théorie/pratique'
+        content: 'J''aurais aimé plus de retours individuels pendant « Data Engineering », sinon le contenu est solide. Très satisfait de « Data Engineering », les évaluations reflètent bien le contenu enseigné.'
+        status: 'rejected'
+        rating: 1
+        createdAt: '<dateTimeImmutableBetween("-3 weeks", "now")>'
+
+    review_9:
+        user: '@user_student_16'
+        course: '@course_5'
+        title: 'Décevant par rapport aux attentes'
+        content: 'Cours exigeant, « Réseaux Informatiques » demande du travail personnel régulier pour bien suivre. Je recommande « Réseaux Informatiques » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés.'
+        status: 'approved'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-9 months", "now")>'
+
+    review_10:
+        user: '@user_student_3'
+        course: '@course_16'
+        title: 'Cours dense mais formateur'
+        content: 'Le cours « Communication Professionnelle » est vraiment bien structuré, on progresse à un bon rythme. Très satisfait de « Communication Professionnelle », les évaluations reflètent bien le contenu enseigné.'
+        status: 'pending'
+        rating: 2
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    review_11:
+        user: '@user_student_16'
+        course: '@course_22'
+        title: 'Décevant par rapport aux attentes'
+        content: 'Une bonne découverte avec « Scripting et Automatisation », le professeur est disponible et pédagogue. Le rythme de « Scripting et Automatisation » est soutenu mais les supports de cours sont de bonne qualité.'
+        status: 'pending'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    review_12:
+        user: '@user_student_11'
+        course: '@course_5'
+        title: 'Manque de mise en pratique'
+        content: 'Une bonne découverte avec « Réseaux Informatiques », le professeur est disponible et pédagogue. Le rythme de « Réseaux Informatiques » est soutenu mais les supports de cours sont de bonne qualité.'
+        status: 'approved'
+        rating: 3
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    review_13:
+        user: '@user_student_17'
+        course: '@course_21'
+        title: 'Un bon complément au cursus'
+        content: 'Cours exigeant, « Cybersécurité des Infrastructures » demande du travail personnel régulier pour bien suivre. « Cybersécurité des Infrastructures » manque un peu d''exemples concrets, mais reste utile pour la suite du cursus.'
+        status: 'hidden'
+        rating: 3
+        createdAt: '<dateTimeImmutableBetween("-3 weeks", "now")>'
+
+    review_14:
+        user: '@user_student_20'
+        course: '@course_9'
+        title: 'Pédagogie au top'
+        content: 'Le rythme de « Développement Mobile » est soutenu mais les supports de cours sont de bonne qualité. Cours exigeant, « Développement Mobile » demande du travail personnel régulier pour bien suivre.'
+        status: 'pending'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    review_15:
+        user: '@user_student_14'
+        course: '@course_19'
+        title: 'Une valeur sûre du programme'
+        content: 'Le cours « Support Utilisateur et Helpdesk » est vraiment bien structuré, on progresse à un bon rythme. J''aurais aimé plus de retours individuels pendant « Support Utilisateur et Helpdesk », sinon le contenu est solide.'
+        status: 'approved'
+        rating: 1
+        createdAt: '<dateTimeImmutableBetween("-3 months", "now")>'
+
+    review_16:
+        user: '@user_student_18'
+        course: '@course_2'
+        title: 'Décevant par rapport aux attentes'
+        content: 'Le rythme de « Bases de Données Relationnelles » est soutenu mais les supports de cours sont de bonne qualité. Je recommande « Bases de Données Relationnelles » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés.'
+        status: 'approved'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-3 months", "now")>'
+
+    review_17:
+        user: '@user_student_19'
+        course: '@course_31'
+        title: 'Un bon complément au cursus'
+        content: 'Je recommande « MLOps et Industrialisation IA » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés. Cours exigeant, « MLOps et Industrialisation IA » demande du travail personnel régulier pour bien suivre.'
+        status: 'rejected'
+        rating: 3
+        createdAt: '<dateTimeImmutableBetween("-5 months", "now")>'
+
+    review_18:
+        user: '@user_student_15'
+        course: '@course_11'
+        title: 'Cours exigeant mais gratifiant'
+        content: 'Une bonne découverte avec « JavaScript Moderne (ES6+) », le professeur est disponible et pédagogue. Je recommande « JavaScript Moderne (ES6+) » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés.'
+        status: 'approved'
+        createdAt: '<dateTimeImmutableBetween("-3 months", "now")>'
+
+    review_19:
+        user: '@user_student_18'
+        course: '@course_15'
+        title: 'Trop théorique à mon goût'
+        content: 'Très satisfait de « Finance pour Managers », les évaluations reflètent bien le contenu enseigné. Je recommande « Finance pour Managers » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés.'
+        status: 'pending'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-5 months", "now")>'
+
+    review_20:
+        user: '@user_student_18'
+        course: '@course_1'
+        title: 'Une valeur sûre du programme'
+        content: 'Je recommande « Introduction à la Programmation » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés. « Introduction à la Programmation » pourrait gagner en interactivité, certaines séances sont un peu longues.'
+        status: 'pending'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    review_21:
+        user: '@user_student_10'
+        course: '@course_7'
+        title: 'Cours à revoir'
+        content: 'J''ai beaucoup aimé les exercices pratiques proposés pendant « Structures de Données », ça aide à mieux comprendre la théorie. « Structures de Données » est un bon complément aux autres matières du semestre.'
+        status: 'pending'
+        createdAt: '<dateTimeImmutableBetween("-3 weeks", "now")>'
+
+    review_22:
+        user: '@user_student_12'
+        course: '@course_17'
+        title: 'Très bon apprentissage'
+        content: 'Je recommande « Droit du Travail » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés. Le cours « Droit du Travail » est vraiment bien structuré, on progresse à un bon rythme.'
+        status: 'approved'
+        rating: 3
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    review_23:
+        user: '@user_student_2'
+        course: '@course_24'
+        title: 'Une bonne surprise ce semestre'
+        content: 'Une bonne découverte avec « Bases de Données pour la Production », le professeur est disponible et pédagogue. J''ai beaucoup aimé les exercices pratiques proposés pendant « Bases de Données pour la Production », ça aide à mieux comprendre la théorie.'
+        status: 'approved'
+        rating: 3
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    review_24:
+        user: '@user_student_8'
+        course: '@course_4'
+        title: 'Cours dense mais formateur'
+        content: 'Cours exigeant, « Algorithmique Avancée » demande du travail personnel régulier pour bien suivre. Cours exigeant, « Algorithmique Avancée » demande du travail personnel régulier pour bien suivre.'
+        status: 'rejected'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-9 months", "now")>'
+
+    review_25:
+        user: '@user_student_12'
+        course: '@course_6'
+        title: 'Un des meilleurs cours du semestre'
+        content: 'Je recommande « APIs REST avec Symfony » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés. Très satisfait de « APIs REST avec Symfony », les évaluations reflètent bien le contenu enseigné.'
+        status: 'rejected'
+        rating: 2
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    review_26:
+        user: '@user_student_2'
+        course: '@course_31'
+        title: 'Un bon complément au cursus'
+        content: 'Le rythme de « MLOps et Industrialisation IA » est soutenu mais les supports de cours sont de bonne qualité. Le rythme de « MLOps et Industrialisation IA » est soutenu mais les supports de cours sont de bonne qualité.'
+        status: 'approved'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-2 weeks", "now")>'
+
+    review_27:
+        user: '@user_student_12'
+        course: '@course_14'
+        title: 'Vraiment utile pour la suite'
+        content: 'Le cours « Gestion de Projet Agile » est vraiment bien structuré, on progresse à un bon rythme. J''ai beaucoup aimé les exercices pratiques proposés pendant « Gestion de Projet Agile », ça aide à mieux comprendre la théorie.'
+        status: 'approved'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    review_28:
+        user: '@user_student_13'
+        course: '@course_1'
+        title: 'À faire si le temps le permet'
+        content: 'Le rythme de « Introduction à la Programmation » est soutenu mais les supports de cours sont de bonne qualité. Je recommande « Introduction à la Programmation » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés.'
+        status: 'approved'
+        rating: 1
+        createdAt: '<dateTimeImmutableBetween("-3 months", "now")>'
+
+    review_29:
+        user: '@user_student_5'
+        course: '@course_23'
+        title: 'Cours intéressant, quelques réserves'
+        content: '« Introduction au Cloud (SaaS/PaaS/IaaS) » manque un peu d''exemples concrets, mais reste utile pour la suite du cursus. « Introduction au Cloud (SaaS/PaaS/IaaS) » pourrait gagner en interactivité, certaines séances sont un peu longues.'
+        status: 'approved'
+        rating: 1
+        createdAt: '<dateTimeImmutableBetween("-5 months", "now")>'
+
+    review_30:
+        user: '@user_student_17'
+        course: '@course_10'
+        title: 'Cours dense mais formateur'
+        content: 'Le contenu de « UX/UI Design » est dense mais l''enseignant explique clairement les notions difficiles. Le contenu de « UX/UI Design » est dense mais l''enseignant explique clairement les notions difficiles.'
+        status: 'pending'
+        rating: 1
+        createdAt: '<dateTimeImmutableBetween("-11 months", "now")>'
+
+    review_31:
+        user: '@user_student_17'
+        course: '@course_6'
+        title: 'Bon équilibre théorie/pratique'
+        content: '« APIs REST avec Symfony » est un bon complément aux autres matières du semestre. Le contenu de « APIs REST avec Symfony » est dense mais l''enseignant explique clairement les notions difficiles.'
+        status: 'pending'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    review_32:
+        user: '@user_student_4'
+        course: '@course_23'
+        title: 'Manque de mise en pratique'
+        content: 'J''ai beaucoup aimé les exercices pratiques proposés pendant « Introduction au Cloud (SaaS/PaaS/IaaS) », ça aide à mieux comprendre la théorie. Le contenu de « Introduction au Cloud (SaaS/PaaS/IaaS) » est dense mais l''enseignant explique clairement les notions difficiles.'
+        status: 'rejected'
+        createdAt: '<dateTimeImmutableBetween("-9 months", "now")>'
+
+    review_33:
+        user: '@user_student_13'
+        course: '@course_4'
+        title: 'Une bonne surprise ce semestre'
+        content: 'Le contenu de « Algorithmique Avancée » est dense mais l''enseignant explique clairement les notions difficiles. J''aurais aimé plus de retours individuels pendant « Algorithmique Avancée », sinon le contenu est solide.'
+        status: 'approved'
+        rating: 2
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    review_34:
+        user: '@user_student_10'
+        course: '@course_26'
+        title: 'Vraiment utile pour la suite'
+        content: '« Deep Learning et Réseaux de Neurones » est un bon complément aux autres matières du semestre. Le contenu de « Deep Learning et Réseaux de Neurones » est dense mais l''enseignant explique clairement les notions difficiles.'
+        status: 'approved'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    review_35:
+        user: '@user_student_14'
+        course: '@course_25'
+        title: 'À faire si le temps le permet'
+        content: 'Une bonne découverte avec « Machine Learning Fondamental », le professeur est disponible et pédagogue. Une bonne découverte avec « Machine Learning Fondamental », le professeur est disponible et pédagogue.'
+        status: 'pending'
+        rating: 1
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    review_36:
+        user: '@user_student_1'
+        course: '@course_7'
+        title: 'Excellent cours, je recommande !'
+        content: '« Structures de Données » pourrait gagner en interactivité, certaines séances sont un peu longues. Cours exigeant, « Structures de Données » demande du travail personnel régulier pour bien suivre.'
+        status: 'approved'
+        rating: 1
+        createdAt: '<dateTimeImmutableBetween("-3 months", "now")>'
+
+    review_37:
+        user: '@user_student_2'
+        course: '@course_18'
+        title: 'Trop théorique à mon goût'
+        content: 'J''aurais aimé plus de retours individuels pendant « Stratégie d''Entreprise », sinon le contenu est solide. J''aurais aimé plus de retours individuels pendant « Stratégie d''Entreprise », sinon le contenu est solide.'
+        status: 'rejected'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    review_38:
+        user: '@user_student_8'
+        course: '@course_29'
+        title: 'Cours exigeant mais gratifiant'
+        content: 'Cours exigeant, « Éthique et IA Responsable » demande du travail personnel régulier pour bien suivre. Très satisfait de « Éthique et IA Responsable », les évaluations reflètent bien le contenu enseigné.'
+        status: 'pending'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-7 months", "now")>'
+
+    review_39:
+        user: '@user_student_20'
+        course: '@course_17'
+        title: 'À faire si le temps le permet'
+        content: 'Le cours « Droit du Travail » est vraiment bien structuré, on progresse à un bon rythme. Le rythme de « Droit du Travail » est soutenu mais les supports de cours sont de bonne qualité.'
+        status: 'approved'
+        rating: 1
+        createdAt: '<dateTimeImmutableBetween("-5 months", "now")>'
+
+    review_40:
+        user: '@user_student_8'
+        course: '@course_23'
+        title: 'À faire si le temps le permet'
+        content: 'Une bonne découverte avec « Introduction au Cloud (SaaS/PaaS/IaaS) », le professeur est disponible et pédagogue. « Introduction au Cloud (SaaS/PaaS/IaaS) » est un bon complément aux autres matières du semestre.'
+        status: 'hidden'
+        rating: 3
+        createdAt: '<dateTimeImmutableBetween("-5 months", "now")>'
+
+    review_41:
+        user: '@user_student_13'
+        course: '@course_3'
+        title: 'Manque de mise en pratique'
+        content: '« Développement Web avec Symfony » pourrait gagner en interactivité, certaines séances sont un peu longues. Le rythme de « Développement Web avec Symfony » est soutenu mais les supports de cours sont de bonne qualité.'
+        status: 'approved'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    review_42:
+        user: '@user_student_5'
+        course: '@course_11'
+        title: 'Manque de mise en pratique'
+        content: 'Très satisfait de « JavaScript Moderne (ES6+) », les évaluations reflètent bien le contenu enseigné. « JavaScript Moderne (ES6+) » est un bon complément aux autres matières du semestre.'
+        status: 'approved'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    review_43:
+        user: '@user_student_15'
+        course: '@course_8'
+        title: 'Pédagogie au top'
+        content: 'Une bonne découverte avec « Systèmes d''Exploitation », le professeur est disponible et pédagogue. J''ai beaucoup aimé les exercices pratiques proposés pendant « Systèmes d''Exploitation », ça aide à mieux comprendre la théorie.'
+        status: 'pending'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-3 months", "now")>'
+
+    review_44:
+        user: '@user_student_12'
+        course: '@course_8'
+        title: 'Cours intéressant, quelques réserves'
+        content: 'Très satisfait de « Systèmes d''Exploitation », les évaluations reflètent bien le contenu enseigné. Le contenu de « Systèmes d''Exploitation » est dense mais l''enseignant explique clairement les notions difficiles.'
+        status: 'approved'
+        rating: 2
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    review_45:
+        user: '@user_student_18'
+        course: '@course_28'
+        title: 'Cours exigeant mais gratifiant'
+        content: 'J''ai beaucoup aimé les exercices pratiques proposés pendant « Data Engineering », ça aide à mieux comprendre la théorie. Je recommande « Data Engineering » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés.'
+        status: 'pending'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-3 months", "now")>'
+
+    review_46:
+        user: '@user_student_20'
+        course: '@course_8'
+        title: 'Pédagogie au top'
+        content: 'Une bonne découverte avec « Systèmes d''Exploitation », le professeur est disponible et pédagogue. « Systèmes d''Exploitation » est un bon complément aux autres matières du semestre.'
+        status: 'approved'
+        rating: 2
+        createdAt: '<dateTimeImmutableBetween("-3 weeks", "now")>'
+
+    review_47:
+        user: '@user_student_17'
+        course: '@course_28'
+        title: 'Une valeur sûre du programme'
+        content: '« Data Engineering » manque un peu d''exemples concrets, mais reste utile pour la suite du cursus. Le rythme de « Data Engineering » est soutenu mais les supports de cours sont de bonne qualité.'
+        status: 'pending'
+        rating: 3
+        createdAt: '<dateTimeImmutableBetween("-7 months", "now")>'
+
+    review_48:
+        user: '@user_student_17'
+        course: '@course_25'
+        title: 'Difficile de suivre le rythme'
+        content: '« Machine Learning Fondamental » manque un peu d''exemples concrets, mais reste utile pour la suite du cursus. « Machine Learning Fondamental » est un bon complément aux autres matières du semestre.'
+        status: 'rejected'
+        rating: 2
+        createdAt: '<dateTimeImmutableBetween("-3 months", "now")>'
+
+    review_49:
+        user: '@user_student_6'
+        course: '@course_28'
+        title: 'À faire si le temps le permet'
+        content: '« Data Engineering » pourrait gagner en interactivité, certaines séances sont un peu longues. Le rythme de « Data Engineering » est soutenu mais les supports de cours sont de bonne qualité.'
+        status: 'pending'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    review_50:
+        user: '@user_student_17'
+        course: '@course_27'
+        title: 'Vraiment utile pour la suite'
+        content: 'Le cours « Traitement du Langage Naturel (NLP) » est vraiment bien structuré, on progresse à un bon rythme. Une bonne découverte avec « Traitement du Langage Naturel (NLP) », le professeur est disponible et pédagogue.'
+        status: 'approved'
+        createdAt: '<dateTimeImmutableBetween("-9 months", "now")>'
+
+    review_51:
+        user: '@user_student_12'
+        course: '@course_23'
+        title: 'Difficile de suivre le rythme'
+        content: '« Introduction au Cloud (SaaS/PaaS/IaaS) » pourrait gagner en interactivité, certaines séances sont un peu longues. « Introduction au Cloud (SaaS/PaaS/IaaS) » est un bon complément aux autres matières du semestre.'
+        status: 'approved'
+        createdAt: '<dateTimeImmutableBetween("-2 weeks", "now")>'
+
+    review_52:
+        user: '@user_student_20'
+        course: '@course_18'
+        title: 'Pédagogie au top'
+        content: '« Stratégie d''Entreprise » manque un peu d''exemples concrets, mais reste utile pour la suite du cursus. Une bonne découverte avec « Stratégie d''Entreprise », le professeur est disponible et pédagogue.'
+        status: 'approved'
+        createdAt: '<dateTimeImmutableBetween("-3 weeks", "now")>'
+
+    review_53:
+        user: '@user_student_7'
+        course: '@course_11'
+        title: 'Bon équilibre théorie/pratique'
+        content: 'Le contenu de « JavaScript Moderne (ES6+) » est dense mais l''enseignant explique clairement les notions difficiles. Cours exigeant, « JavaScript Moderne (ES6+) » demande du travail personnel régulier pour bien suivre.'
+        status: 'approved'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-3 months", "now")>'
+
+    review_54:
+        user: '@user_student_9'
+        course: '@course_11'
+        title: 'Cours dense mais formateur'
+        content: 'Le cours « JavaScript Moderne (ES6+) » est vraiment bien structuré, on progresse à un bon rythme. « JavaScript Moderne (ES6+) » manque un peu d''exemples concrets, mais reste utile pour la suite du cursus.'
+        status: 'pending'
+        rating: 3
+        createdAt: '<dateTimeImmutableBetween("-5 months", "now")>'
+
+    review_55:
+        user: '@user_student_12'
+        course: '@course_27'
+        title: 'À faire si le temps le permet'
+        content: '« Traitement du Langage Naturel (NLP) » pourrait gagner en interactivité, certaines séances sont un peu longues. Une bonne découverte avec « Traitement du Langage Naturel (NLP) », le professeur est disponible et pédagogue.'
+        status: 'pending'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    review_56:
+        user: '@user_student_17'
+        course: '@course_30'
+        title: 'Vraiment utile pour la suite'
+        content: '« Vision par Ordinateur » est un bon complément aux autres matières du semestre. « Vision par Ordinateur » est un bon complément aux autres matières du semestre.'
+        status: 'pending'
+        rating: 2
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    review_57:
+        user: '@user_student_20'
+        course: '@course_2'
+        title: 'Trop théorique à mon goût'
+        content: 'Le cours « Bases de Données Relationnelles » est vraiment bien structuré, on progresse à un bon rythme. « Bases de Données Relationnelles » pourrait gagner en interactivité, certaines séances sont un peu longues.'
+        status: 'rejected'
+        rating: 3
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    review_58:
+        user: '@user_student_11'
+        course: '@course_9'
+        title: 'Cours exigeant mais gratifiant'
+        content: 'Je recommande « Développement Mobile » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés. Je recommande « Développement Mobile » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés.'
+        status: 'approved'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-5 months", "now")>'
+
+    review_59:
+        user: '@user_student_5'
+        course: '@course_9'
+        title: 'Un bon complément au cursus'
+        content: 'Une bonne découverte avec « Développement Mobile », le professeur est disponible et pédagogue. Une bonne découverte avec « Développement Mobile », le professeur est disponible et pédagogue.'
+        status: 'approved'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-2 weeks", "now")>'
+
+    review_60:
+        user: '@user_student_1'
+        course: '@course_22'
+        title: 'Décevant par rapport aux attentes'
+        content: 'Le contenu de « Scripting et Automatisation » est dense mais l''enseignant explique clairement les notions difficiles. Le contenu de « Scripting et Automatisation » est dense mais l''enseignant explique clairement les notions difficiles.'
+        status: 'approved'
+        rating: 2
+        createdAt: '<dateTimeImmutableBetween("-5 months", "now")>'
+
+    review_61:
+        user: '@user_student_10'
+        course: '@course_16'
+        title: 'Un des meilleurs cours du semestre'
+        content: 'Le contenu de « Communication Professionnelle » est dense mais l''enseignant explique clairement les notions difficiles. Une bonne découverte avec « Communication Professionnelle », le professeur est disponible et pédagogue.'
+        status: 'approved'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-7 months", "now")>'
+
+    review_62:
+        user: '@user_student_11'
+        course: '@course_17'
+        title: 'Vraiment utile pour la suite'
+        content: '« Droit du Travail » est un bon complément aux autres matières du semestre. « Droit du Travail » manque un peu d''exemples concrets, mais reste utile pour la suite du cursus.'
+        status: 'hidden'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-7 months", "now")>'
+
+    review_63:
+        user: '@user_student_8'
+        course: '@course_25'
+        title: 'Trop théorique à mon goût'
+        content: 'Le rythme de « Machine Learning Fondamental » est soutenu mais les supports de cours sont de bonne qualité. J''aurais aimé plus de retours individuels pendant « Machine Learning Fondamental », sinon le contenu est solide.'
+        status: 'approved'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-2 weeks", "now")>'
+
+    review_64:
+        user: '@user_student_5'
+        course: '@course_12'
+        title: 'Cours clair et bien structuré'
+        content: 'Le cours « Déploiement et CI/CD » est vraiment bien structuré, on progresse à un bon rythme. « Déploiement et CI/CD » manque un peu d''exemples concrets, mais reste utile pour la suite du cursus.'
+        status: 'approved'
+        rating: 2
+        createdAt: '<dateTimeImmutableBetween("-11 months", "now")>'
+
+    review_65:
+        user: '@user_student_19'
+        course: '@course_29'
+        title: 'Décevant par rapport aux attentes'
+        content: 'Le rythme de « Éthique et IA Responsable » est soutenu mais les supports de cours sont de bonne qualité. Très satisfait de « Éthique et IA Responsable », les évaluations reflètent bien le contenu enseigné.'
+        status: 'approved'
+        rating: 1
+        createdAt: '<dateTimeImmutableBetween("-9 months", "now")>'
+
+    review_66:
+        user: '@user_student_8'
+        course: '@course_22'
+        title: 'Excellent cours, je recommande !'
+        content: 'Le contenu de « Scripting et Automatisation » est dense mais l''enseignant explique clairement les notions difficiles. J''aurais aimé plus de retours individuels pendant « Scripting et Automatisation », sinon le contenu est solide.'
+        status: 'approved'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    review_67:
+        user: '@user_student_19'
+        course: '@course_15'
+        title: 'Décevant par rapport aux attentes'
+        content: 'Je recommande « Finance pour Managers » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés. Le contenu de « Finance pour Managers » est dense mais l''enseignant explique clairement les notions difficiles.'
+        status: 'approved'
+        rating: 3
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    review_68:
+        user: '@user_student_1'
+        course: '@course_5'
+        title: 'Vraiment utile pour la suite'
+        content: 'Le contenu de « Réseaux Informatiques » est dense mais l''enseignant explique clairement les notions difficiles. « Réseaux Informatiques » manque un peu d''exemples concrets, mais reste utile pour la suite du cursus.'
+        status: 'pending'
+        rating: 1
+        createdAt: '<dateTimeImmutableBetween("-7 months", "now")>'
+
+    review_69:
+        user: '@user_student_3'
+        course: '@course_5'
+        title: 'Cours intéressant, quelques réserves'
+        content: 'J''aurais aimé plus de retours individuels pendant « Réseaux Informatiques », sinon le contenu est solide. Le contenu de « Réseaux Informatiques » est dense mais l''enseignant explique clairement les notions difficiles.'
+        status: 'pending'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-7 months", "now")>'
+
+    review_70:
+        user: '@user_student_7'
+        course: '@course_7'
+        title: 'Décevant par rapport aux attentes'
+        content: 'Une bonne découverte avec « Structures de Données », le professeur est disponible et pédagogue. Le contenu de « Structures de Données » est dense mais l''enseignant explique clairement les notions difficiles.'
+        status: 'approved'
+        rating: 1
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    review_71:
+        user: '@user_student_10'
+        course: '@course_19'
+        title: 'Un des meilleurs cours du semestre'
+        content: 'Une bonne découverte avec « Support Utilisateur et Helpdesk », le professeur est disponible et pédagogue. « Support Utilisateur et Helpdesk » manque un peu d''exemples concrets, mais reste utile pour la suite du cursus.'
+        status: 'approved'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-7 months", "now")>'
+
+    review_72:
+        user: '@user_student_2'
+        course: '@course_27'
+        title: 'Cours dense mais formateur'
+        content: 'Cours exigeant, « Traitement du Langage Naturel (NLP) » demande du travail personnel régulier pour bien suivre. Très satisfait de « Traitement du Langage Naturel (NLP) », les évaluations reflètent bien le contenu enseigné.'
+        status: 'rejected'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-3 months", "now")>'
+
+    review_73:
+        user: '@user_student_20'
+        course: '@course_12'
+        title: 'Cours dense mais formateur'
+        content: 'Je recommande « Déploiement et CI/CD » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés. J''ai beaucoup aimé les exercices pratiques proposés pendant « Déploiement et CI/CD », ça aide à mieux comprendre la théorie.'
+        status: 'approved'
+        rating: 1
+        createdAt: '<dateTimeImmutableBetween("-5 months", "now")>'
+
+    review_74:
+        user: '@user_student_14'
+        course: '@course_26'
+        title: 'Difficile de suivre le rythme'
+        content: 'Je recommande « Deep Learning et Réseaux de Neurones » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés. Je recommande « Deep Learning et Réseaux de Neurones » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés.'
+        status: 'approved'
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    review_75:
+        user: '@user_student_15'
+        course: '@course_25'
+        title: 'Décevant par rapport aux attentes'
+        content: 'J''ai beaucoup aimé les exercices pratiques proposés pendant « Machine Learning Fondamental », ça aide à mieux comprendre la théorie. Le contenu de « Machine Learning Fondamental » est dense mais l''enseignant explique clairement les notions difficiles.'
+        status: 'hidden'
+        rating: 1
+        createdAt: '<dateTimeImmutableBetween("-3 months", "now")>'
+
+    review_76:
+        user: '@user_student_10'
+        course: '@course_9'
+        title: 'Pédagogie au top'
+        content: 'Je recommande « Développement Mobile » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés. « Développement Mobile » est un bon complément aux autres matières du semestre.'
+        status: 'approved'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-5 months", "now")>'
+
+    review_77:
+        user: '@user_student_5'
+        course: '@course_6'
+        title: 'Vraiment utile pour la suite'
+        content: 'Le cours « APIs REST avec Symfony » est vraiment bien structuré, on progresse à un bon rythme. Une bonne découverte avec « APIs REST avec Symfony », le professeur est disponible et pédagogue.'
+        status: 'approved'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-2 weeks", "now")>'
+
+    review_78:
+        user: '@user_student_20'
+        course: '@course_29'
+        title: 'Pédagogie au top'
+        content: 'Une bonne découverte avec « Éthique et IA Responsable », le professeur est disponible et pédagogue. Une bonne découverte avec « Éthique et IA Responsable », le professeur est disponible et pédagogue.'
+        status: 'hidden'
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    review_79:
+        user: '@user_student_15'
+        course: '@course_22'
+        title: 'Manque de mise en pratique'
+        content: '« Scripting et Automatisation » manque un peu d''exemples concrets, mais reste utile pour la suite du cursus. « Scripting et Automatisation » manque un peu d''exemples concrets, mais reste utile pour la suite du cursus.'
+        status: 'approved'
+        createdAt: '<dateTimeImmutableBetween("-11 months", "now")>'
+
+    review_80:
+        user: '@user_student_7'
+        course: '@course_23'
+        title: 'Cours exigeant mais gratifiant'
+        content: 'Le rythme de « Introduction au Cloud (SaaS/PaaS/IaaS) » est soutenu mais les supports de cours sont de bonne qualité. « Introduction au Cloud (SaaS/PaaS/IaaS) » manque un peu d''exemples concrets, mais reste utile pour la suite du cursus.'
+        status: 'pending'
+        rating: 2
+        createdAt: '<dateTimeImmutableBetween("-7 months", "now")>'
+
+    review_81:
+        user: '@user_student_11'
+        course: '@course_7'
+        title: 'Décevant par rapport aux attentes'
+        content: 'Cours exigeant, « Structures de Données » demande du travail personnel régulier pour bien suivre. « Structures de Données » est un bon complément aux autres matières du semestre.'
+        status: 'approved'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    review_82:
+        user: '@user_student_2'
+        course: '@course_5'
+        title: 'Cours à revoir'
+        content: 'Cours exigeant, « Réseaux Informatiques » demande du travail personnel régulier pour bien suivre. Très satisfait de « Réseaux Informatiques », les évaluations reflètent bien le contenu enseigné.'
+        status: 'approved'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-7 months", "now")>'
+
+    review_83:
+        user: '@user_student_7'
+        course: '@course_13'
+        title: 'Une bonne surprise ce semestre'
+        content: 'Le contenu de « Management d''Équipe » est dense mais l''enseignant explique clairement les notions difficiles. J''ai beaucoup aimé les exercices pratiques proposés pendant « Management d''Équipe », ça aide à mieux comprendre la théorie.'
+        status: 'rejected'
+        rating: 3
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    review_84:
+        user: '@user_student_6'
+        course: '@course_12'
+        title: 'Vraiment utile pour la suite'
+        content: 'J''aurais aimé plus de retours individuels pendant « Déploiement et CI/CD », sinon le contenu est solide. « Déploiement et CI/CD » est un bon complément aux autres matières du semestre.'
+        status: 'approved'
+        rating: 2
+        createdAt: '<dateTimeImmutableBetween("-3 months", "now")>'
+
+    review_85:
+        user: '@user_student_14'
+        course: '@course_20'
+        title: 'Cours intéressant, quelques réserves'
+        content: 'Le contenu de « Administration Systèmes Windows/Linux » est dense mais l''enseignant explique clairement les notions difficiles. Le rythme de « Administration Systèmes Windows/Linux » est soutenu mais les supports de cours sont de bonne qualité.'
+        status: 'approved'
+        rating: 2
+        createdAt: '<dateTimeImmutableBetween("-3 months", "now")>'
+
+    review_86:
+        user: '@user_student_4'
+        course: '@course_28'
+        title: 'Cours clair et bien structuré'
+        content: '« Data Engineering » pourrait gagner en interactivité, certaines séances sont un peu longues. « Data Engineering » pourrait gagner en interactivité, certaines séances sont un peu longues.'
+        status: 'approved'
+        rating: 3
+        createdAt: '<dateTimeImmutableBetween("-7 months", "now")>'
+
+    review_87:
+        user: '@user_student_16'
+        course: '@course_30'
+        title: 'Trop théorique à mon goût'
+        content: 'Cours exigeant, « Vision par Ordinateur » demande du travail personnel régulier pour bien suivre. « Vision par Ordinateur » est un bon complément aux autres matières du semestre.'
+        status: 'approved'
+        createdAt: '<dateTimeImmutableBetween("-11 months", "now")>'
+
+    review_88:
+        user: '@user_student_3'
+        course: '@course_4'
+        title: 'À faire si le temps le permet'
+        content: 'Une bonne découverte avec « Algorithmique Avancée », le professeur est disponible et pédagogue. Très satisfait de « Algorithmique Avancée », les évaluations reflètent bien le contenu enseigné.'
+        status: 'pending'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-3 weeks", "now")>'
+
+    review_89:
+        user: '@user_student_7'
+        course: '@course_17'
+        title: 'Très bon apprentissage'
+        content: 'J''ai beaucoup aimé les exercices pratiques proposés pendant « Droit du Travail », ça aide à mieux comprendre la théorie. Le cours « Droit du Travail » est vraiment bien structuré, on progresse à un bon rythme.'
+        status: 'pending'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-7 months", "now")>'
+
+    review_90:
+        user: '@user_student_13'
+        course: '@course_26'
+        title: 'Bon équilibre théorie/pratique'
+        content: '« Deep Learning et Réseaux de Neurones » est un bon complément aux autres matières du semestre. Le contenu de « Deep Learning et Réseaux de Neurones » est dense mais l''enseignant explique clairement les notions difficiles.'
+        status: 'approved'
+        rating: 1
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    review_91:
+        user: '@user_student_16'
+        course: '@course_1'
+        title: 'Très bon apprentissage'
+        content: 'Je recommande « Introduction à la Programmation » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés. Le contenu de « Introduction à la Programmation » est dense mais l''enseignant explique clairement les notions difficiles.'
+        status: 'approved'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    review_92:
+        user: '@user_student_1'
+        course: '@course_29'
+        title: 'Excellent cours, je recommande !'
+        content: 'Cours exigeant, « Éthique et IA Responsable » demande du travail personnel régulier pour bien suivre. « Éthique et IA Responsable » est un bon complément aux autres matières du semestre.'
+        status: 'approved'
+        createdAt: '<dateTimeImmutableBetween("-3 weeks", "now")>'
+
+    review_93:
+        user: '@user_student_15'
+        course: '@course_4'
+        title: 'Très bon apprentissage'
+        content: '« Algorithmique Avancée » pourrait gagner en interactivité, certaines séances sont un peu longues. Le rythme de « Algorithmique Avancée » est soutenu mais les supports de cours sont de bonne qualité.'
+        status: 'pending'
+        createdAt: '<dateTimeImmutableBetween("-5 months", "now")>'
+
+    review_94:
+        user: '@user_student_13'
+        course: '@course_22'
+        title: 'Bon équilibre théorie/pratique'
+        content: '« Scripting et Automatisation » pourrait gagner en interactivité, certaines séances sont un peu longues. Je recommande « Scripting et Automatisation » à ceux qui veulent renforcer leurs compétences, les TP sont bien pensés.'
+        status: 'approved'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    review_95:
+        user: '@user_student_15'
+        course: '@course_10'
+        title: 'Contenu solide, rythme soutenu'
+        content: 'J''aurais aimé plus de retours individuels pendant « UX/UI Design », sinon le contenu est solide. « UX/UI Design » manque un peu d''exemples concrets, mais reste utile pour la suite du cursus.'
+        status: 'approved'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-3 weeks", "now")>'
+
+    review_96:
+        user: '@user_student_7'
+        course: '@course_19'
+        title: 'Manque de mise en pratique'
+        content: '« Support Utilisateur et Helpdesk » est un bon complément aux autres matières du semestre. Le cours « Support Utilisateur et Helpdesk » est vraiment bien structuré, on progresse à un bon rythme.'
+        status: 'approved'
+        rating: 3
+        createdAt: '<dateTimeImmutableBetween("-5 months", "now")>'
+
 App\Entity\ReviewRating:
     rating_r1_c1:
         review: '@review_1'
@@ -128,6 +927,907 @@ App\Entity\ReviewRating:
         ratingCriteria: '@criteria_3'
         score: 5
 
+
+    rating_r7_c4:
+        review: '@review_7'
+        ratingCriteria: '@criteria_4'
+        score: 2
+
+    rating_r7_c3:
+        review: '@review_7'
+        ratingCriteria: '@criteria_3'
+        score: 2
+
+    rating_r8_c3:
+        review: '@review_8'
+        ratingCriteria: '@criteria_3'
+        score: 2
+
+    rating_r8_c1:
+        review: '@review_8'
+        ratingCriteria: '@criteria_1'
+        score: 5
+
+    rating_r9_c1:
+        review: '@review_9'
+        ratingCriteria: '@criteria_1'
+        score: 3
+
+    rating_r9_c2:
+        review: '@review_9'
+        ratingCriteria: '@criteria_2'
+        score: 2
+
+    rating_r10_c4:
+        review: '@review_10'
+        ratingCriteria: '@criteria_4'
+        score: 5
+
+    rating_r10_c1:
+        review: '@review_10'
+        ratingCriteria: '@criteria_1'
+        score: 3
+
+    rating_r11_c4:
+        review: '@review_11'
+        ratingCriteria: '@criteria_4'
+        score: 2
+
+    rating_r11_c1:
+        review: '@review_11'
+        ratingCriteria: '@criteria_1'
+        score: 3
+
+    rating_r12_c2:
+        review: '@review_12'
+        ratingCriteria: '@criteria_2'
+        score: 4
+
+    rating_r12_c3:
+        review: '@review_12'
+        ratingCriteria: '@criteria_3'
+        score: 5
+
+    rating_r13_c4:
+        review: '@review_13'
+        ratingCriteria: '@criteria_4'
+        score: 2
+
+    rating_r13_c3:
+        review: '@review_13'
+        ratingCriteria: '@criteria_3'
+        score: 2
+
+    rating_r14_c3:
+        review: '@review_14'
+        ratingCriteria: '@criteria_3'
+        score: 3
+
+    rating_r14_c4:
+        review: '@review_14'
+        ratingCriteria: '@criteria_4'
+        score: 2
+
+    rating_r15_c4:
+        review: '@review_15'
+        ratingCriteria: '@criteria_4'
+        score: 1
+
+    rating_r15_c1:
+        review: '@review_15'
+        ratingCriteria: '@criteria_1'
+        score: 1
+
+    rating_r16_c3:
+        review: '@review_16'
+        ratingCriteria: '@criteria_3'
+        score: 4
+
+    rating_r16_c4:
+        review: '@review_16'
+        ratingCriteria: '@criteria_4'
+        score: 1
+
+    rating_r17_c2:
+        review: '@review_17'
+        ratingCriteria: '@criteria_2'
+        score: 1
+
+    rating_r17_c1:
+        review: '@review_17'
+        ratingCriteria: '@criteria_1'
+        score: 3
+
+    rating_r18_c2:
+        review: '@review_18'
+        ratingCriteria: '@criteria_2'
+        score: 1
+
+    rating_r18_c4:
+        review: '@review_18'
+        ratingCriteria: '@criteria_4'
+        score: 4
+
+    rating_r19_c2:
+        review: '@review_19'
+        ratingCriteria: '@criteria_2'
+        score: 2
+
+    rating_r19_c1:
+        review: '@review_19'
+        ratingCriteria: '@criteria_1'
+        score: 2
+
+    rating_r20_c4:
+        review: '@review_20'
+        ratingCriteria: '@criteria_4'
+        score: 5
+
+    rating_r20_c1:
+        review: '@review_20'
+        ratingCriteria: '@criteria_1'
+        score: 5
+
+    rating_r21_c2:
+        review: '@review_21'
+        ratingCriteria: '@criteria_2'
+        score: 2
+
+    rating_r21_c3:
+        review: '@review_21'
+        ratingCriteria: '@criteria_3'
+        score: 2
+
+    rating_r22_c3:
+        review: '@review_22'
+        ratingCriteria: '@criteria_3'
+        score: 1
+
+    rating_r22_c4:
+        review: '@review_22'
+        ratingCriteria: '@criteria_4'
+        score: 1
+
+    rating_r23_c2:
+        review: '@review_23'
+        ratingCriteria: '@criteria_2'
+        score: 4
+
+    rating_r23_c1:
+        review: '@review_23'
+        ratingCriteria: '@criteria_1'
+        score: 4
+
+    rating_r24_c4:
+        review: '@review_24'
+        ratingCriteria: '@criteria_4'
+        score: 2
+
+    rating_r24_c2:
+        review: '@review_24'
+        ratingCriteria: '@criteria_2'
+        score: 4
+
+    rating_r25_c2:
+        review: '@review_25'
+        ratingCriteria: '@criteria_2'
+        score: 4
+
+    rating_r25_c4:
+        review: '@review_25'
+        ratingCriteria: '@criteria_4'
+        score: 2
+
+    rating_r26_c4:
+        review: '@review_26'
+        ratingCriteria: '@criteria_4'
+        score: 3
+
+    rating_r26_c3:
+        review: '@review_26'
+        ratingCriteria: '@criteria_3'
+        score: 1
+
+    rating_r27_c3:
+        review: '@review_27'
+        ratingCriteria: '@criteria_3'
+        score: 5
+
+    rating_r27_c1:
+        review: '@review_27'
+        ratingCriteria: '@criteria_1'
+        score: 2
+
+    rating_r28_c2:
+        review: '@review_28'
+        ratingCriteria: '@criteria_2'
+        score: 5
+
+    rating_r28_c3:
+        review: '@review_28'
+        ratingCriteria: '@criteria_3'
+        score: 4
+
+    rating_r29_c3:
+        review: '@review_29'
+        ratingCriteria: '@criteria_3'
+        score: 2
+
+    rating_r29_c2:
+        review: '@review_29'
+        ratingCriteria: '@criteria_2'
+        score: 4
+
+    rating_r30_c2:
+        review: '@review_30'
+        ratingCriteria: '@criteria_2'
+        score: 4
+
+    rating_r30_c3:
+        review: '@review_30'
+        ratingCriteria: '@criteria_3'
+        score: 3
+
+    rating_r31_c3:
+        review: '@review_31'
+        ratingCriteria: '@criteria_3'
+        score: 3
+
+    rating_r31_c2:
+        review: '@review_31'
+        ratingCriteria: '@criteria_2'
+        score: 3
+
+    rating_r32_c1:
+        review: '@review_32'
+        ratingCriteria: '@criteria_1'
+        score: 4
+
+    rating_r32_c4:
+        review: '@review_32'
+        ratingCriteria: '@criteria_4'
+        score: 1
+
+    rating_r33_c2:
+        review: '@review_33'
+        ratingCriteria: '@criteria_2'
+        score: 4
+
+    rating_r33_c4:
+        review: '@review_33'
+        ratingCriteria: '@criteria_4'
+        score: 2
+
+    rating_r34_c1:
+        review: '@review_34'
+        ratingCriteria: '@criteria_1'
+        score: 4
+
+    rating_r34_c4:
+        review: '@review_34'
+        ratingCriteria: '@criteria_4'
+        score: 1
+
+    rating_r35_c4:
+        review: '@review_35'
+        ratingCriteria: '@criteria_4'
+        score: 4
+
+    rating_r35_c3:
+        review: '@review_35'
+        ratingCriteria: '@criteria_3'
+        score: 1
+
+    rating_r36_c3:
+        review: '@review_36'
+        ratingCriteria: '@criteria_3'
+        score: 3
+
+    rating_r36_c4:
+        review: '@review_36'
+        ratingCriteria: '@criteria_4'
+        score: 2
+
+    rating_r37_c2:
+        review: '@review_37'
+        ratingCriteria: '@criteria_2'
+        score: 1
+
+    rating_r37_c4:
+        review: '@review_37'
+        ratingCriteria: '@criteria_4'
+        score: 3
+
+    rating_r38_c3:
+        review: '@review_38'
+        ratingCriteria: '@criteria_3'
+        score: 5
+
+    rating_r38_c4:
+        review: '@review_38'
+        ratingCriteria: '@criteria_4'
+        score: 4
+
+    rating_r39_c2:
+        review: '@review_39'
+        ratingCriteria: '@criteria_2'
+        score: 3
+
+    rating_r39_c3:
+        review: '@review_39'
+        ratingCriteria: '@criteria_3'
+        score: 4
+
+    rating_r40_c4:
+        review: '@review_40'
+        ratingCriteria: '@criteria_4'
+        score: 2
+
+    rating_r40_c2:
+        review: '@review_40'
+        ratingCriteria: '@criteria_2'
+        score: 2
+
+    rating_r41_c3:
+        review: '@review_41'
+        ratingCriteria: '@criteria_3'
+        score: 2
+
+    rating_r41_c1:
+        review: '@review_41'
+        ratingCriteria: '@criteria_1'
+        score: 5
+
+    rating_r42_c4:
+        review: '@review_42'
+        ratingCriteria: '@criteria_4'
+        score: 3
+
+    rating_r42_c1:
+        review: '@review_42'
+        ratingCriteria: '@criteria_1'
+        score: 4
+
+    rating_r43_c1:
+        review: '@review_43'
+        ratingCriteria: '@criteria_1'
+        score: 4
+
+    rating_r43_c2:
+        review: '@review_43'
+        ratingCriteria: '@criteria_2'
+        score: 4
+
+    rating_r44_c1:
+        review: '@review_44'
+        ratingCriteria: '@criteria_1'
+        score: 5
+
+    rating_r44_c3:
+        review: '@review_44'
+        ratingCriteria: '@criteria_3'
+        score: 4
+
+    rating_r45_c4:
+        review: '@review_45'
+        ratingCriteria: '@criteria_4'
+        score: 1
+
+    rating_r45_c1:
+        review: '@review_45'
+        ratingCriteria: '@criteria_1'
+        score: 3
+
+    rating_r46_c4:
+        review: '@review_46'
+        ratingCriteria: '@criteria_4'
+        score: 4
+
+    rating_r46_c1:
+        review: '@review_46'
+        ratingCriteria: '@criteria_1'
+        score: 4
+
+    rating_r47_c2:
+        review: '@review_47'
+        ratingCriteria: '@criteria_2'
+        score: 2
+
+    rating_r47_c3:
+        review: '@review_47'
+        ratingCriteria: '@criteria_3'
+        score: 3
+
+    rating_r48_c1:
+        review: '@review_48'
+        ratingCriteria: '@criteria_1'
+        score: 4
+
+    rating_r48_c2:
+        review: '@review_48'
+        ratingCriteria: '@criteria_2'
+        score: 4
+
+    rating_r49_c2:
+        review: '@review_49'
+        ratingCriteria: '@criteria_2'
+        score: 3
+
+    rating_r49_c3:
+        review: '@review_49'
+        ratingCriteria: '@criteria_3'
+        score: 2
+
+    rating_r50_c3:
+        review: '@review_50'
+        ratingCriteria: '@criteria_3'
+        score: 2
+
+    rating_r50_c4:
+        review: '@review_50'
+        ratingCriteria: '@criteria_4'
+        score: 4
+
+    rating_r51_c4:
+        review: '@review_51'
+        ratingCriteria: '@criteria_4'
+        score: 5
+
+    rating_r51_c3:
+        review: '@review_51'
+        ratingCriteria: '@criteria_3'
+        score: 2
+
+    rating_r52_c4:
+        review: '@review_52'
+        ratingCriteria: '@criteria_4'
+        score: 3
+
+    rating_r52_c3:
+        review: '@review_52'
+        ratingCriteria: '@criteria_3'
+        score: 3
+
+    rating_r53_c3:
+        review: '@review_53'
+        ratingCriteria: '@criteria_3'
+        score: 4
+
+    rating_r53_c4:
+        review: '@review_53'
+        ratingCriteria: '@criteria_4'
+        score: 4
+
+    rating_r54_c2:
+        review: '@review_54'
+        ratingCriteria: '@criteria_2'
+        score: 2
+
+    rating_r54_c3:
+        review: '@review_54'
+        ratingCriteria: '@criteria_3'
+        score: 4
+
+    rating_r55_c4:
+        review: '@review_55'
+        ratingCriteria: '@criteria_4'
+        score: 2
+
+    rating_r55_c1:
+        review: '@review_55'
+        ratingCriteria: '@criteria_1'
+        score: 4
+
+    rating_r56_c1:
+        review: '@review_56'
+        ratingCriteria: '@criteria_1'
+        score: 2
+
+    rating_r56_c2:
+        review: '@review_56'
+        ratingCriteria: '@criteria_2'
+        score: 5
+
+    rating_r57_c4:
+        review: '@review_57'
+        ratingCriteria: '@criteria_4'
+        score: 1
+
+    rating_r57_c1:
+        review: '@review_57'
+        ratingCriteria: '@criteria_1'
+        score: 2
+
+    rating_r58_c2:
+        review: '@review_58'
+        ratingCriteria: '@criteria_2'
+        score: 4
+
+    rating_r58_c4:
+        review: '@review_58'
+        ratingCriteria: '@criteria_4'
+        score: 2
+
+    rating_r59_c2:
+        review: '@review_59'
+        ratingCriteria: '@criteria_2'
+        score: 5
+
+    rating_r59_c4:
+        review: '@review_59'
+        ratingCriteria: '@criteria_4'
+        score: 5
+
+    rating_r60_c3:
+        review: '@review_60'
+        ratingCriteria: '@criteria_3'
+        score: 5
+
+    rating_r60_c2:
+        review: '@review_60'
+        ratingCriteria: '@criteria_2'
+        score: 3
+
+    rating_r61_c4:
+        review: '@review_61'
+        ratingCriteria: '@criteria_4'
+        score: 5
+
+    rating_r61_c2:
+        review: '@review_61'
+        ratingCriteria: '@criteria_2'
+        score: 3
+
+    rating_r62_c4:
+        review: '@review_62'
+        ratingCriteria: '@criteria_4'
+        score: 2
+
+    rating_r62_c3:
+        review: '@review_62'
+        ratingCriteria: '@criteria_3'
+        score: 2
+
+    rating_r63_c3:
+        review: '@review_63'
+        ratingCriteria: '@criteria_3'
+        score: 3
+
+    rating_r63_c1:
+        review: '@review_63'
+        ratingCriteria: '@criteria_1'
+        score: 2
+
+    rating_r64_c2:
+        review: '@review_64'
+        ratingCriteria: '@criteria_2'
+        score: 4
+
+    rating_r64_c3:
+        review: '@review_64'
+        ratingCriteria: '@criteria_3'
+        score: 3
+
+    rating_r65_c1:
+        review: '@review_65'
+        ratingCriteria: '@criteria_1'
+        score: 4
+
+    rating_r65_c2:
+        review: '@review_65'
+        ratingCriteria: '@criteria_2'
+        score: 1
+
+    rating_r66_c4:
+        review: '@review_66'
+        ratingCriteria: '@criteria_4'
+        score: 4
+
+    rating_r66_c2:
+        review: '@review_66'
+        ratingCriteria: '@criteria_2'
+        score: 2
+
+    rating_r67_c3:
+        review: '@review_67'
+        ratingCriteria: '@criteria_3'
+        score: 4
+
+    rating_r67_c1:
+        review: '@review_67'
+        ratingCriteria: '@criteria_1'
+        score: 1
+
+    rating_r68_c2:
+        review: '@review_68'
+        ratingCriteria: '@criteria_2'
+        score: 3
+
+    rating_r68_c1:
+        review: '@review_68'
+        ratingCriteria: '@criteria_1'
+        score: 5
+
+    rating_r69_c3:
+        review: '@review_69'
+        ratingCriteria: '@criteria_3'
+        score: 5
+
+    rating_r69_c1:
+        review: '@review_69'
+        ratingCriteria: '@criteria_1'
+        score: 1
+
+    rating_r70_c3:
+        review: '@review_70'
+        ratingCriteria: '@criteria_3'
+        score: 2
+
+    rating_r70_c4:
+        review: '@review_70'
+        ratingCriteria: '@criteria_4'
+        score: 5
+
+    rating_r71_c4:
+        review: '@review_71'
+        ratingCriteria: '@criteria_4'
+        score: 2
+
+    rating_r71_c2:
+        review: '@review_71'
+        ratingCriteria: '@criteria_2'
+        score: 2
+
+    rating_r72_c4:
+        review: '@review_72'
+        ratingCriteria: '@criteria_4'
+        score: 1
+
+    rating_r72_c3:
+        review: '@review_72'
+        ratingCriteria: '@criteria_3'
+        score: 5
+
+    rating_r73_c2:
+        review: '@review_73'
+        ratingCriteria: '@criteria_2'
+        score: 2
+
+    rating_r73_c3:
+        review: '@review_73'
+        ratingCriteria: '@criteria_3'
+        score: 4
+
+    rating_r74_c2:
+        review: '@review_74'
+        ratingCriteria: '@criteria_2'
+        score: 3
+
+    rating_r74_c1:
+        review: '@review_74'
+        ratingCriteria: '@criteria_1'
+        score: 1
+
+    rating_r75_c3:
+        review: '@review_75'
+        ratingCriteria: '@criteria_3'
+        score: 5
+
+    rating_r75_c2:
+        review: '@review_75'
+        ratingCriteria: '@criteria_2'
+        score: 4
+
+    rating_r76_c2:
+        review: '@review_76'
+        ratingCriteria: '@criteria_2'
+        score: 2
+
+    rating_r76_c3:
+        review: '@review_76'
+        ratingCriteria: '@criteria_3'
+        score: 1
+
+    rating_r77_c3:
+        review: '@review_77'
+        ratingCriteria: '@criteria_3'
+        score: 2
+
+    rating_r77_c4:
+        review: '@review_77'
+        ratingCriteria: '@criteria_4'
+        score: 3
+
+    rating_r78_c4:
+        review: '@review_78'
+        ratingCriteria: '@criteria_4'
+        score: 3
+
+    rating_r78_c1:
+        review: '@review_78'
+        ratingCriteria: '@criteria_1'
+        score: 4
+
+    rating_r79_c3:
+        review: '@review_79'
+        ratingCriteria: '@criteria_3'
+        score: 4
+
+    rating_r79_c2:
+        review: '@review_79'
+        ratingCriteria: '@criteria_2'
+        score: 1
+
+    rating_r80_c2:
+        review: '@review_80'
+        ratingCriteria: '@criteria_2'
+        score: 5
+
+    rating_r80_c3:
+        review: '@review_80'
+        ratingCriteria: '@criteria_3'
+        score: 3
+
+    rating_r81_c2:
+        review: '@review_81'
+        ratingCriteria: '@criteria_2'
+        score: 3
+
+    rating_r81_c4:
+        review: '@review_81'
+        ratingCriteria: '@criteria_4'
+        score: 2
+
+    rating_r82_c1:
+        review: '@review_82'
+        ratingCriteria: '@criteria_1'
+        score: 2
+
+    rating_r82_c4:
+        review: '@review_82'
+        ratingCriteria: '@criteria_4'
+        score: 2
+
+    rating_r83_c1:
+        review: '@review_83'
+        ratingCriteria: '@criteria_1'
+        score: 2
+
+    rating_r83_c2:
+        review: '@review_83'
+        ratingCriteria: '@criteria_2'
+        score: 2
+
+    rating_r84_c2:
+        review: '@review_84'
+        ratingCriteria: '@criteria_2'
+        score: 5
+
+    rating_r84_c4:
+        review: '@review_84'
+        ratingCriteria: '@criteria_4'
+        score: 2
+
+    rating_r85_c2:
+        review: '@review_85'
+        ratingCriteria: '@criteria_2'
+        score: 4
+
+    rating_r85_c4:
+        review: '@review_85'
+        ratingCriteria: '@criteria_4'
+        score: 3
+
+    rating_r86_c2:
+        review: '@review_86'
+        ratingCriteria: '@criteria_2'
+        score: 5
+
+    rating_r86_c3:
+        review: '@review_86'
+        ratingCriteria: '@criteria_3'
+        score: 1
+
+    rating_r87_c2:
+        review: '@review_87'
+        ratingCriteria: '@criteria_2'
+        score: 3
+
+    rating_r87_c3:
+        review: '@review_87'
+        ratingCriteria: '@criteria_3'
+        score: 5
+
+    rating_r88_c3:
+        review: '@review_88'
+        ratingCriteria: '@criteria_3'
+        score: 2
+
+    rating_r88_c1:
+        review: '@review_88'
+        ratingCriteria: '@criteria_1'
+        score: 1
+
+    rating_r89_c3:
+        review: '@review_89'
+        ratingCriteria: '@criteria_3'
+        score: 2
+
+    rating_r89_c2:
+        review: '@review_89'
+        ratingCriteria: '@criteria_2'
+        score: 5
+
+    rating_r90_c2:
+        review: '@review_90'
+        ratingCriteria: '@criteria_2'
+        score: 4
+
+    rating_r90_c1:
+        review: '@review_90'
+        ratingCriteria: '@criteria_1'
+        score: 2
+
+    rating_r91_c4:
+        review: '@review_91'
+        ratingCriteria: '@criteria_4'
+        score: 5
+
+    rating_r91_c2:
+        review: '@review_91'
+        ratingCriteria: '@criteria_2'
+        score: 1
+
+    rating_r92_c1:
+        review: '@review_92'
+        ratingCriteria: '@criteria_1'
+        score: 2
+
+    rating_r92_c3:
+        review: '@review_92'
+        ratingCriteria: '@criteria_3'
+        score: 4
+
+    rating_r93_c2:
+        review: '@review_93'
+        ratingCriteria: '@criteria_2'
+        score: 1
+
+    rating_r93_c4:
+        review: '@review_93'
+        ratingCriteria: '@criteria_4'
+        score: 4
+
+    rating_r94_c4:
+        review: '@review_94'
+        ratingCriteria: '@criteria_4'
+        score: 4
+
+    rating_r94_c3:
+        review: '@review_94'
+        ratingCriteria: '@criteria_3'
+        score: 3
+
+    rating_r95_c2:
+        review: '@review_95'
+        ratingCriteria: '@criteria_2'
+        score: 3
+
+    rating_r95_c3:
+        review: '@review_95'
+        ratingCriteria: '@criteria_3'
+        score: 4
+
+    rating_r96_c3:
+        review: '@review_96'
+        ratingCriteria: '@criteria_3'
+        score: 2
+
+    rating_r96_c4:
+        review: '@review_96'
+        ratingCriteria: '@criteria_4'
+        score: 5
+
 App\Entity\Comment:
     comment_1:
         user: '@user_student_2'
@@ -170,3 +1870,318 @@ App\Entity\Comment:
         content: 'Un avis partagé. Le cours manque un peu de pratique à mon goût.'
         status: 'visible'
         createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    comment_7:
+        user: '@user_student_16'
+        review: '@review_10'
+        content: 'Effectivement, il faut s''accrocher mais ça vaut le coup.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-3 months", "now")>'
+
+    comment_8:
+        user: '@user_student_16'
+        review: '@review_22'
+        content: 'Je nuancerais un peu, le cours m''a semblé plus accessible que ça.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-2 weeks", "now")>'
+
+    comment_9:
+        user: '@user_student_14'
+        review: '@review_55'
+        content: 'Perso j''ai eu une expérience différente, plutôt positive.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    comment_10:
+        user: '@user_student_11'
+        review: '@review_92'
+        content: 'Je recommande aussi de bien suivre dès le début du semestre.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    comment_11:
+        user: '@user_student_14'
+        review: '@review_34'
+        content: 'Merci pour ce partage, ça confirme ce que j''avais ressenti aussi.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-9 months", "now")>'
+
+    comment_12:
+        user: '@user_student_6'
+        review: '@review_6'
+        content: 'Je suis totalement d''accord avec ce retour, très utile pour la suite.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-3 weeks", "now")>'
+
+    comment_13:
+        user: '@user_student_2'
+        review: '@review_32'
+        content: 'Effectivement, il faut s''accrocher mais ça vaut le coup.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-9 months", "now")>'
+
+    comment_14:
+        user: '@user_student_11'
+        review: '@review_25'
+        content: 'Merci pour ce partage, ça confirme ce que j''avais ressenti aussi.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    comment_15:
+        user: '@user_student_15'
+        review: '@review_84'
+        content: 'Bon résumé, j''ajouterais que les ressources en ligne sont bien faites.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-2 weeks", "now")>'
+
+    comment_16:
+        user: '@user_student_6'
+        review: '@review_16'
+        content: 'Je nuancerais un peu, le cours m''a semblé plus accessible que ça.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    comment_17:
+        user: '@user_student_20'
+        review: '@review_12'
+        content: 'À prendre en compte avant de choisir ce cours en option.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-3 months", "now")>'
+
+    comment_18:
+        user: '@user_student_8'
+        review: '@review_2'
+        content: 'Perso j''ai eu une expérience différente, plutôt positive.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-9 months", "now")>'
+
+    comment_19:
+        user: '@user_student_12'
+        review: '@review_64'
+        content: 'Bon résumé, j''ajouterais que les ressources en ligne sont bien faites.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-5 months", "now")>'
+
+    comment_20:
+        user: '@user_student_6'
+        review: '@review_8'
+        content: 'Pareil pour moi, l''enseignant est vraiment pédagogue.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    comment_21:
+        user: '@user_student_7'
+        review: '@review_62'
+        content: 'Merci pour ce partage, ça confirme ce que j''avais ressenti aussi.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-3 weeks", "now")>'
+
+    comment_22:
+        user: '@user_student_3'
+        review: '@review_91'
+        content: 'Effectivement, il faut s''accrocher mais ça vaut le coup.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-3 weeks", "now")>'
+
+    comment_23:
+        user: '@user_student_15'
+        review: '@review_90'
+        content: 'Un avis qui reflète bien la réalité du cours.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-11 months", "now")>'
+
+    comment_24:
+        user: '@user_student_7'
+        review: '@review_1'
+        content: 'Je suis totalement d''accord avec ce retour, très utile pour la suite.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    comment_25:
+        user: '@user_student_16'
+        review: '@review_82'
+        content: 'Pareil pour moi, l''enseignant est vraiment pédagogue.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-11 months", "now")>'
+
+    comment_26:
+        user: '@user_student_2'
+        review: '@review_25'
+        content: 'Bon résumé, j''ajouterais que les ressources en ligne sont bien faites.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    comment_27:
+        user: '@user_student_8'
+        review: '@review_93'
+        content: 'Merci pour ce partage, ça confirme ce que j''avais ressenti aussi.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-11 months", "now")>'
+
+    comment_28:
+        user: '@user_student_19'
+        review: '@review_91'
+        content: 'Je recommande aussi de bien suivre dès le début du semestre.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-11 months", "now")>'
+
+    comment_29:
+        user: '@user_student_7'
+        review: '@review_6'
+        content: 'Effectivement, il faut s''accrocher mais ça vaut le coup.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-11 months", "now")>'
+
+    comment_30:
+        user: '@user_student_2'
+        review: '@review_16'
+        content: 'Je suis totalement d''accord avec ce retour, très utile pour la suite.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    comment_31:
+        user: '@user_student_3'
+        review: '@review_1'
+        content: 'Bon résumé, j''ajouterais que les ressources en ligne sont bien faites.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    comment_32:
+        user: '@user_student_16'
+        review: '@review_59'
+        content: 'Merci pour ce partage, ça confirme ce que j''avais ressenti aussi.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-3 weeks", "now")>'
+
+    comment_33:
+        user: '@user_student_5'
+        review: '@review_11'
+        content: 'Perso j''ai eu une expérience différente, plutôt positive.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    comment_34:
+        user: '@user_student_13'
+        review: '@review_76'
+        content: 'Bon résumé, j''ajouterais que les ressources en ligne sont bien faites.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-2 weeks", "now")>'
+
+    comment_35:
+        user: '@user_student_17'
+        review: '@review_51'
+        content: 'À prendre en compte avant de choisir ce cours en option.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-5 months", "now")>'
+
+    comment_36:
+        user: '@user_student_19'
+        review: '@review_27'
+        content: 'Bon résumé, j''ajouterais que les ressources en ligne sont bien faites.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    comment_37:
+        user: '@user_student_16'
+        review: '@review_20'
+        content: 'Effectivement, il faut s''accrocher mais ça vaut le coup.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-3 weeks", "now")>'
+
+    comment_38:
+        user: '@user_student_6'
+        review: '@review_68'
+        content: 'Je suis totalement d''accord avec ce retour, très utile pour la suite.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    comment_39:
+        user: '@user_student_13'
+        review: '@review_9'
+        content: 'Bon résumé, j''ajouterais que les ressources en ligne sont bien faites.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-2 weeks", "now")>'
+
+    comment_40:
+        user: '@user_student_11'
+        review: '@review_50'
+        content: 'Perso j''ai eu une expérience différente, plutôt positive.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    comment_41:
+        user: '@user_student_20'
+        review: '@review_15'
+        content: 'Je suis totalement d''accord avec ce retour, très utile pour la suite.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-9 months", "now")>'
+
+    comment_42:
+        user: '@user_student_2'
+        review: '@review_62'
+        content: 'Je recommande aussi de bien suivre dès le début du semestre.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-9 months", "now")>'
+
+    comment_43:
+        user: '@user_student_1'
+        review: '@review_78'
+        content: 'Perso j''ai eu une expérience différente, plutôt positive.'
+        status: 'hidden'
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    comment_44:
+        user: '@user_student_9'
+        review: '@review_80'
+        content: 'Effectivement, il faut s''accrocher mais ça vaut le coup.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-2 weeks", "now")>'
+
+    comment_45:
+        user: '@user_student_9'
+        review: '@review_7'
+        content: 'Effectivement, il faut s''accrocher mais ça vaut le coup.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-1 week", "now")>'
+
+    comment_46:
+        user: '@user_student_1'
+        review: '@review_9'
+        content: 'Perso j''ai eu une expérience différente, plutôt positive.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    comment_47:
+        user: '@user_student_15'
+        review: '@review_41'
+        content: 'Je recommande aussi de bien suivre dès le début du semestre.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-9 months", "now")>'
+
+    comment_48:
+        user: '@user_student_20'
+        review: '@review_57'
+        content: 'Un avis qui reflète bien la réalité du cours.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-5 months", "now")>'
+
+    comment_49:
+        user: '@user_student_18'
+        review: '@review_45'
+        content: 'Pareil pour moi, l''enseignant est vraiment pédagogue.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-7 months", "now")>'
+
+    comment_50:
+        user: '@user_student_9'
+        review: '@review_65'
+        content: 'À prendre en compte avant de choisir ce cours en option.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-2 weeks", "now")>'
+
+    comment_51:
+        user: '@user_student_19'
+        review: '@review_94'
+        content: 'À prendre en compte avant de choisir ce cours en option.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-3 months", "now")>'

@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Course;
+use App\Entity\Review;
 use App\Repository\CourseRepository;
 use App\Repository\ReviewRepository;
 use App\Service\ApiLoggerService;
@@ -70,9 +71,9 @@ class CourseController extends AbstractController
     #[Route('/{id}/reviews', name: 'reviews', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function reviews(Request $request, Course $course, ReviewRepository $reviewRepository): JsonResponse
     {
-        $status = $request->query->get('status', 'published');
-        if (!in_array($status, ['published', 'pending', 'all'], true)) {
-            $status = 'published';
+        $status = $request->query->get('status', Review::STATUS_APPROVED);
+        if (!in_array($status, [Review::STATUS_APPROVED, Review::STATUS_PENDING, 'all'], true)) {
+            $status = Review::STATUS_APPROVED;
         }
 
         $criteria = $status === 'all'
