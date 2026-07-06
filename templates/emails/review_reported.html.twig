@@ -1,4 +1,5 @@
 {% extends 'emails/base.html.twig' %}
+{% import 'emails/_button.html.twig' as buttons %}
 
 {% block subject %}Votre avis a été signalé{% endblock %}
 
@@ -6,7 +7,11 @@
     <h2 style="font-size: 16px; color: #dc2626;">Votre avis a été signalé</h2>
     <p>
         Votre avis « <strong>{{ review.title }}</strong> »{% if review.course %} sur le cours
-        <strong>{{ review.course.title }}</strong>{% endif %} a fait l'objet d'un signalement.
+        <strong>{{ review.course.title }}</strong>{% endif %} a fait l'objet d'un signalement par un autre utilisateur.
     </p>
-    <p>Notre équipe de modération va l'examiner. Aucune action n'est requise de votre part pour le moment.</p>
+    <p>Notre équipe de modération va l'examiner sous peu. Aucune action n'est requise de votre part pour le moment ; vous serez prévenu·e de la décision par email.</p>
+{% endblock %}
+
+{% block cta %}
+    {{ buttons.cta(url('app_review_show', {id: review.id}), 'Voir mon avis') }}
 {% endblock %}
