@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Report;
 use App\Entity\Review;
 use App\Entity\Teacher;
+use App\Repository\ApiLogRepository;
+use App\Repository\EmailLogRepository;
+use App\Repository\ModerationActionRepository;
 use App\Repository\ReportRepository;
 use App\Repository\ReviewRepository;
 use App\Repository\TeacherRepository;
@@ -163,5 +166,18 @@ final class AdminController extends AbstractController
         }
 
         return $this->redirectToRoute('app_admin_reports', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/audit', name: 'app_admin_audit', methods: ['GET'])]
+    public function audit(
+        EmailLogRepository $emailLogRepository,
+        ApiLogRepository $apiLogRepository,
+        ModerationActionRepository $moderationActionRepository,
+    ): Response {
+        return $this->render('admin/audit.html.twig', [
+            'emailLogs'        => $emailLogRepository->findBy([], ['sentAt' => 'DESC'], 200),
+            'apiLogs'          => $apiLogRepository->findBy([], ['createdAt' => 'DESC'], 200),
+            'moderationActions' => $moderationActionRepository->findBy([], ['createdAt' => 'DESC'], 200),
+        ]);
     }
 }

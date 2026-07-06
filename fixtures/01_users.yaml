@@ -22,3 +22,10 @@ App\Entity\User:
         roles: [ROLE_ADMIN]
         isVerified: true
         createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+
+    user_admin_2:
+        email: 'admin\@admin.fr'
+        password: '\$2y\$13\$qboDSH6Q8IaYb/Y/2OO4zOmb7aQb35gkeRB2qRuM2vVZhFbiTmnSu'
+        roles: [ROLE_ADMIN]
+        isVerified: true
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
