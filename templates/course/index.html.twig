@@ -74,53 +74,68 @@
                     {% set avgRating = (total / ratedReviews|length)|round(2) %}
                 {% endif %}
 
-                <a href="{{ path('app_course_show', { id: course.id }) }}"
-                   data-name="{{ course.title|lower }} {{ course.semester ? course.semester.formation.name|lower : '' }} {% for tag in course.tags %}{{ tag.name|lower }} {% endfor %}"
-                   data-formation="{{ course.semester ? course.semester.formation.id : '' }}"
-                   data-avg="{{ avgRating }}"
-                   data-reviews="{{ approvedReviews|length }}"
-                   class="course-card group bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-md transition flex flex-col gap-4">
+                <div data-name="{{ course.title|lower }} {{ course.semester ? course.semester.formation.name|lower : '' }} {% for tag in course.tags %}{{ tag.name|lower }} {% endfor %}"
+                     data-formation="{{ course.semester ? course.semester.formation.id : '' }}"
+                     data-avg="{{ avgRating }}"
+                     data-reviews="{{ approvedReviews|length }}"
+                     class="course-card group bg-white rounded-2xl border border-gray-200 hover:shadow-md transition flex flex-col">
 
-                    <div class="flex items-start justify-between gap-2">
-                        <h2 class="text-base font-semibold text-gray-900 group-hover:text-brand transition line-clamp-2">
-                            {{ course.title }}
-                        </h2>
-                        {% if avgRating > 0 %}
-                            <span class="shrink-0 flex items-center gap-1 text-xs font-semibold text-amber-500 bg-amber-50 px-2 py-0.5 rounded-full">
-                                <span class="text-amber-400">★</span> {{ avgRating|number_format(1) }}
-                            </span>
-                        {% endif %}
-                    </div>
+                    <a href="{{ path('app_course_show', { id: course.id }) }}"
+                       class="flex flex-col gap-4 p-6 flex-grow">
 
-                    {% if course.tags is not empty %}
-                        <div class="flex flex-wrap gap-1">
-                            {% for tag in course.tags %}
-                                <span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium"
-                                      style="background-color: {{ tag.color }}22; color: {{ tag.color }}">
-                                    {{ tag.name }}
+                        <div class="flex items-start justify-between gap-2">
+                            <h2 class="text-base font-semibold text-gray-900 group-hover:text-brand transition line-clamp-2">
+                                {{ course.title }}
+                            </h2>
+                            {% if avgRating > 0 %}
+                                <span class="shrink-0 flex items-center gap-1 text-xs font-semibold text-amber-500 bg-amber-50 px-2 py-0.5 rounded-full">
+                                    <span class="text-amber-400">★</span> {{ avgRating|number_format(1) }}
                                 </span>
-                            {% endfor %}
+                            {% endif %}
                         </div>
-                    {% endif %}
 
-                    {% if course.description %}
-                        <p class="text-sm text-gray-500 line-clamp-2">{{ course.description }}</p>
-                    {% endif %}
+                        {% if course.tags is not empty %}
+                            <div class="flex flex-wrap gap-1">
+                                {% for tag in course.tags %}
+                                    <span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium"
+                                          style="background-color: {{ tag.color }}22; color: {{ tag.color }}">
+                                        {{ tag.name }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
 
-                    <div class="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
-                        <span>
-                            <i class="fa-solid fa-graduation-cap mr-1"></i>
-                            {{ course.semester ? course.semester.formation.name : '—' }}
-                        </span>
-                        <div class="flex items-center gap-3">
+                        {% if course.description %}
+                            <p class="text-sm text-gray-500 line-clamp-2">{{ course.description }}</p>
+                        {% endif %}
+
+                    </a>
+
+                    <div class="px-6 pb-5 pt-3 border-t border-gray-100 flex items-center justify-between">
+                        <div class="flex items-center gap-3 text-xs text-gray-400">
+                            <span>
+                                <i class="fa-solid fa-graduation-cap mr-1"></i>
+                                {{ course.semester ? course.semester.formation.name : '—' }}
+                            </span>
                             <span><i class="fa-solid fa-comment mr-1"></i>{{ approvedReviews|length }} avis</span>
                             {% if course.hours %}
                                 <span><i class="fa-regular fa-clock mr-1"></i>{{ course.hours }}h</span>
                             {% endif %}
                         </div>
+                        {% if is_granted('ROLE_USER') %}
+                            <form method="post" action="{{ path('app_favorite_toggle', { id: course.id }) }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('favorite' ~ course.id) }}">
+                                <input type="hidden" name="redirect" value="{{ path('app_course_index') }}">
+                                <button type="submit"
+                                        title="{{ course.id in favoriteCourseIds ? 'Retirer des favoris' : 'Ajouter aux favoris' }}"
+                                        class="{{ course.id in favoriteCourseIds ? 'text-red-400 hover:text-red-600' : 'text-gray-300 hover:text-red-400' }} transition text-sm">
+                                    <i class="{{ course.id in favoriteCourseIds ? 'fa-solid' : 'fa-regular' }} fa-heart"></i>
+                                </button>
+                            </form>
+                        {% endif %}
                     </div>
 
-                </a>
+                </div>
             {% endfor %}
         </div>
 

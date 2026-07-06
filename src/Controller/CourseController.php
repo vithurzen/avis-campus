@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Course;
 use App\Form\CourseType;
 use App\Repository\CourseRepository;
+use App\Repository\FavoriteRepository;
 use App\Repository\FormationRepository;
 use App\Repository\SemesterRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,11 +19,19 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class CourseController extends AbstractController
 {
     #[Route(name: 'app_course_index', methods: ['GET'])]
-    public function index(CourseRepository $courseRepository, FormationRepository $formationRepository): Response
+    public function index(CourseRepository $courseRepository, FormationRepository $formationRepository, FavoriteRepository $favoriteRepository): Response
     {
+        $favoriteCourseIds = [];
+        if ($this->getUser()) {
+            foreach ($favoriteRepository->findByUser($this->getUser()) as $fav) {
+                $favoriteCourseIds[] = $fav->getCourse()->getId();
+            }
+        }
+
         return $this->render('course/index.html.twig', [
-            'courses'    => $courseRepository->findAllWithRelations(),
-            'formations' => $formationRepository->findBy([], ['name' => 'ASC']),
+            'courses'           => $courseRepository->findAllWithRelations(),
+            'formations'        => $formationRepository->findBy([], ['name' => 'ASC']),
+            'favoriteCourseIds' => $favoriteCourseIds,
         ]);
     }
 
@@ -65,13 +74,16 @@ final class CourseController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_course_show', methods: ['GET'])]
-    public function show(Course $course, Request $request): Response
+    public function show(Course $course, Request $request, FavoriteRepository $favoriteRepository): Response
     {
         $fromFormation = $request->query->get('from') === 'formation';
+        $isFavorited = $this->getUser()
+            && $favoriteRepository->findOneByUserAndCourse($this->getUser(), $course) !== null;
 
         return $this->render('course/show.html.twig', [
-            'course' => $course,
+            'course'        => $course,
             'fromFormation' => $fromFormation,
+            'isFavorited'   => $isFavorited,
         ]);
     }
 

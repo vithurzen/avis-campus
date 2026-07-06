@@ -4,32 +4,56 @@
 <body class="bg-white text-gray-900 font-sans antialiased flex flex-col min-h-screen">
     {% include 'layout/partials/app/header.html.twig' %}
     <main class="flex-grow">
-        {% for message in app.flashes('success') %}
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 pt-6">
-                <div class="flex items-center gap-3 bg-green-50 border border-green-200 text-green-800 text-sm rounded-xl px-4 py-3">
-                    <i class="fa-solid fa-circle-check text-green-500 shrink-0"></i>
-                    {{ message }}
-                </div>
-            </div>
-        {% endfor %}
-        {% for message in app.flashes('info') %}
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 pt-6">
-                <div class="flex items-center gap-3 bg-brand/5 border border-brand/20 text-brand text-sm rounded-xl px-4 py-3">
-                    <i class="fa-solid fa-circle-info shrink-0"></i>
-                    {{ message }}
-                </div>
-            </div>
-        {% endfor %}
-        {% for message in app.flashes('error') %}
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 pt-6">
-                <div class="flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3">
-                    <i class="fa-solid fa-circle-exclamation text-red-500 shrink-0"></i>
-                    {{ message }}
-                </div>
-            </div>
-        {% endfor %}
         {% block content %}{% endblock %}
     </main>
     {% include 'layout/partials/app/footer.html.twig' %}
+
+    {# ── Toasts flottants (fixed, hors du flux) ── #}
+    <div id="toast-container"
+         class="fixed top-4 right-4 z-[60] flex flex-col gap-2 pointer-events-none"
+         style="width:22rem;max-width:calc(100vw - 2rem)">
+        {% set _types = {
+            'success': { icon: 'fa-circle-check',        color: 'text-green-500' },
+            'info':    { icon: 'fa-circle-info',          color: 'text-brand'     },
+            'error':   { icon: 'fa-circle-exclamation',   color: 'text-red-500'   },
+            'warning': { icon: 'fa-triangle-exclamation', color: 'text-amber-500' }
+        } %}
+        {% for type, cfg in _types %}
+            {% for message in app.flashes(type) %}
+                <div class="toast pointer-events-auto flex items-center gap-3 bg-white border border-gray-200 rounded-2xl shadow-lg px-4 py-3 opacity-0 translate-x-4 transition-all duration-300">
+                    <i class="fa-solid {{ cfg.icon }} {{ cfg.color }} shrink-0 text-sm"></i>
+                    <span class="flex-grow text-sm text-gray-700 leading-snug">{{ message }}</span>
+                    <button type="button"
+                            class="shrink-0 text-gray-300 hover:text-gray-500 transition"
+                            onclick="dismissToast(this.closest('.toast'))">
+                        <i class="fa-solid fa-xmark text-xs"></i>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+    <script>
+    (function () {
+        function dismissToast(el) {
+            el.classList.add('opacity-0', 'translate-x-4');
+            setTimeout(function () { el.remove(); }, 300);
+        }
+        window.dismissToast = dismissToast;
+
+        function initToasts() {
+            document.querySelectorAll('.toast:not([data-init])').forEach(function (toast, i) {
+                toast.dataset.init = '1';
+                setTimeout(function () {
+                    toast.classList.remove('opacity-0', 'translate-x-4');
+                    setTimeout(function () { dismissToast(toast); }, 4000);
+                }, 50 + i * 120);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initToasts);
+        document.addEventListener('turbo:load', initToasts);
+    })();
+    </script>
 </body>
 {% endblock %}

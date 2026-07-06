@@ -21,12 +21,24 @@
 
         <div class="flex items-start justify-between gap-4 mb-4">
             <h1 class="text-2xl font-bold text-gray-900">{{ course.title }}</h1>
-            {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('app_course_edit', { id: course.id }) }}"
-                   class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-4 py-2 rounded-full transition shrink-0">
-                    <i class="fa-solid fa-pen mr-1"></i> Modifier
-                </a>
-            {% endif %}
+            <div class="flex items-center gap-2 shrink-0">
+                {% if is_granted('ROLE_USER') %}
+                    <form method="post" action="{{ path('app_favorite_toggle', { id: course.id }) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('favorite' ~ course.id) }}">
+                        <button type="submit"
+                                class="{{ isFavorited ? 'bg-red-50 hover:bg-red-100 text-red-500 border border-red-200' : 'bg-gray-50 hover:bg-gray-100 text-gray-500 border border-gray-200' }} text-sm font-medium px-4 py-2 rounded-full transition flex items-center gap-1.5">
+                            <i class="{{ isFavorited ? 'fa-solid fa-heart text-red-400' : 'fa-regular fa-heart' }}"></i>
+                            {{ isFavorited ? 'Sauvegardé' : 'Sauvegarder' }}
+                        </button>
+                    </form>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_course_edit', { id: course.id }) }}"
+                       class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-4 py-2 rounded-full transition">
+                        <i class="fa-solid fa-pen mr-1"></i> Modifier
+                    </a>
+                {% endif %}
+            </div>
         </div>
 
         <div class="flex flex-wrap gap-2 mb-6">

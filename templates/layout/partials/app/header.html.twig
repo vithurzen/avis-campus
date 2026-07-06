@@ -30,6 +30,17 @@
 
             <div class="flex items-center gap-3">
                 {% if app.user %}
+                    <a href="{{ path('app_favorite_index') }}"
+                       class="relative inline-flex items-center justify-center text-red-400 hover:text-red-500 transition"
+                       title="Mes favoris">
+                        {% set favCount = app.user.favorites|length %}
+                        <i class="fa-solid fa-heart text-base"></i>
+                        {% if favCount > 0 %}
+                            <span class="absolute inset-0 flex items-center justify-center text-white font-black leading-none" style="font-size:{{ favCount > 9 ? 6 : 8 }}px;padding-bottom:1px">
+                                {{ favCount > 99 ? '99' : favCount }}
+                            </span>
+                        {% endif %}
+                    </a>
                     <span class="text-sm text-gray-500 hidden sm:block">{{ app.user.email }}</span>
                     <a href="{{ path('app_logout') }}"
                        class="text-sm text-gray-600 hover:text-brand transition"
