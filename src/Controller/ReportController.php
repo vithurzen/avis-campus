@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Report;
 use App\Form\ReportType;
 use App\Repository\ReviewRepository;
+use App\Repository\UserRepository;
+use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +23,8 @@ final class ReportController extends AbstractController
         Request $request,
         EntityManagerInterface $em,
         ReviewRepository $reviewRepository,
+        UserRepository $userRepository,
+        EmailService $emailService,
     ): Response {
         $report = new Report();
         $form   = $this->createForm(ReportType::class, $report);
@@ -38,6 +42,25 @@ final class ReportController extends AbstractController
 
             $em->persist($report);
             $em->flush();
+
+            $emailService->sendTemplateToMany(
+                $userRepository->findModerators(),
+                'Nouveau signalement',
+                'emails/report_submitted.html.twig',
+                ['report' => $report],
+                'report_submitted',
+            );
+
+            if ($review !== null && $review->getUser() !== null) {
+                $emailService->sendTemplate(
+                    $review->getUser()->getEmail(),
+                    'Votre avis a été signalé',
+                    'emails/review_reported.html.twig',
+                    ['review' => $review],
+                    'review_reported',
+                    $review->getUser(),
+                );
+            }
 
             $this->addFlash('success', 'Votre signalement a bien été envoyé. Merci !');
 

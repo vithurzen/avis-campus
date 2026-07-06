@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\StudentProfile;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -21,6 +22,7 @@ class RegistrationController extends AbstractController
         UserPasswordHasherInterface $userPasswordHasher,
         EntityManagerInterface $entityManager,
         Security $security,
+        EmailService $emailService,
     ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -46,6 +48,15 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->persist($profile);
             $entityManager->flush();
+
+            $emailService->sendTemplate(
+                $user->getEmail(),
+                'Bienvenue sur Avis Campus',
+                'emails/registration_welcome.html.twig',
+                ['user' => $user, 'profile' => $profile],
+                'registration_welcome',
+                $user,
+            );
 
             // log the user in automatically on the main firewall
             $security->login($user, 'form_login', 'main');

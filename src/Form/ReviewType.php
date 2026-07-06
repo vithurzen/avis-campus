@@ -57,32 +57,52 @@ class ReviewType extends AbstractType
 
         // Champs dépendants construits dynamiquement (voir listeners).
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData']);
+        $builder->addEventListener(FormEvents::POST_SET_DATA, [$this, 'onPostSetData']);
         $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'onPreSubmit']);
     }
 
     /**
      * Affichage initial / édition : on déduit la formation et le semestre à
-     * partir du cours de l'avis, puis on pré-remplit toute la cascade.
+     * partir du cours de l'avis, puis on construit les choix de la cascade.
      */
     public function onPreSetData(FormEvent $event): void
     {
-        $review = $event->getData();
-        $form   = $event->getForm();
-
-        $course    = $review instanceof Review ? $review->getCourse() : null;
-        $semester  = $course?->getSemester();
-        $formation = $semester?->getFormation();
+        $form = $event->getForm();
+        [$formation, $semester, $course] = $this->cascadeFrom($event->getData());
 
         $this->addSemesterField($form, $this->semesterChoicesFor($formation));
         $this->addCourseField($form, $this->courseChoicesFor($semester, $course));
+    }
 
-        // Pré-sélection des champs non mappés (mode édition).
+    /**
+     * Pré-sélection des champs non mappés (formation/semestre) : elle doit se
+     * faire après le mapping automatique du formulaire (POST_SET_DATA), sinon
+     * le DataMapper de Symfony réinitialise tout champ non mappé à sa donnée
+     * par défaut (null) juste après PRE_SET_DATA.
+     */
+    public function onPostSetData(FormEvent $event): void
+    {
+        $form = $event->getForm();
+        [$formation, $semester] = $this->cascadeFrom($event->getData());
+
         if ($formation !== null) {
             $form->get('formation')->setData($formation);
         }
         if ($semester !== null) {
             $form->get('semester')->setData($semester);
         }
+    }
+
+    /**
+     * @return array{0: ?Formation, 1: ?Semester, 2: ?Course}
+     */
+    private function cascadeFrom(mixed $review): array
+    {
+        $course    = $review instanceof Review ? $review->getCourse() : null;
+        $semester  = $course?->getSemester();
+        $formation = $semester?->getFormation();
+
+        return [$formation, $semester, $course];
     }
 
     /**

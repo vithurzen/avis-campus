@@ -6,6 +6,7 @@ use App\Entity\Report;
 use App\Entity\Review;
 use App\Form\ReportType;
 use App\Form\ReviewType;
+use App\Repository\CourseRepository;
 use App\Repository\ReviewRepository;
 use App\Repository\UserRepository;
 use App\Security\Voter\ReviewVoter;
@@ -32,9 +33,18 @@ final class ReviewController extends AbstractController
 
     #[Route('/new', name: 'app_review_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function new(Request $request, EntityManagerInterface $entityManager, EmailService $emailService, UserRepository $userRepository, ExternalModerationService $moderation): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, EmailService $emailService, UserRepository $userRepository, ExternalModerationService $moderation, CourseRepository $courseRepository): Response
     {
         $review = new Review();
+
+
+        if (!$request->isMethod('POST')) {
+            $course = $courseRepository->find($request->query->getInt('course'));
+            if ($course !== null) {
+                $review->setCourse($course);
+            }
+        }
+
         $form = $this->createForm(ReviewType::class, $review);
         $form->handleRequest($request);
 
@@ -50,6 +60,15 @@ final class ReviewController extends AbstractController
 
             $entityManager->persist($review);
             $entityManager->flush();
+
+            $emailService->sendTemplate(
+                $review->getUser()->getEmail(),
+                'Votre avis a bien été déposé',
+                'emails/review_deposited.html.twig',
+                ['review' => $review],
+                'review_deposited',
+                $review->getUser(),
+            );
 
             if ($result->isAggressive()) {
                 $this->addFlash('warning', sprintf(
@@ -103,7 +122,7 @@ final class ReviewController extends AbstractController
     #[IsGranted(ReviewVoter::DELETE, subject: 'review')]
     public function delete(Request $request, Review $review, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$review->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $review->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($review);
             $entityManager->flush();
         }

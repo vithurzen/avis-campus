@@ -1,0 +1,9 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block subject %}Bienvenue sur Avis Campus{% endblock %}
+
+{% block content %}
+    <h2 style="font-size: 16px;">Bienvenue{% if profile.firstName %}, {{ profile.firstName }}{% endif %} !</h2>
+    <p>Votre inscription sur Avis Campus a bien été validée. Vous pouvez dès à présent consulter et déposer des avis sur vos cours.</p>
+    <p>Merci de nous avoir rejoint !</p>
+{% endblock %}
