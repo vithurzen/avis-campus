@@ -37,3 +37,12 @@ App\Entity\AdminProfile:
         adminCode: "ADMIN001"
         superAdmin: true
         createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+
+    admin_profile_2:
+        user: "@user_admin_2"
+        firstName: "Admin"
+        lastName: "Système"
+        bio: "Compte administrateur technique."
+        adminCode: "ADMIN002"
+        superAdmin: true
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'

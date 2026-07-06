@@ -219,11 +219,16 @@ class AppFixtures extends Fixture
         }
 
         // --- 8. Users + profiles --------------------------------------------
-        // 1 admin
+        // 2 admins
         $adminProfile = (new AdminProfile())
             ->setAdminCode($this->faker->bothify('ADM-####'))
             ->setSuperAdmin(true);
         $this->makeUser($manager, ['ROLE_ADMIN'], $adminProfile);
+
+        $admin2Profile = (new AdminProfile())
+            ->setAdminCode('ADMIN002')
+            ->setSuperAdmin(true);
+        $this->makeUser($manager, ['ROLE_ADMIN'], $admin2Profile, 'admin@admin.fr', '$2y$13$qboDSH6Q8IaYb/Y/2OO4zOmb7aQb35gkeRB2qRuM2vVZhFbiTmnSu');
 
         // 3 moderators
         for ($i = 0; $i < 3; $i++) {
@@ -328,12 +333,12 @@ class AppFixtures extends Fixture
     /**
      * Create a User with a hashed password and link it to its profile.
      */
-    private function makeUser(ObjectManager $manager, array $roles, Profile $profile, ?string $email = null): User
+    private function makeUser(ObjectManager $manager, array $roles, Profile $profile, ?string $email = null, ?string $rawPasswordHash = null): User
     {
         $user = new User();
         $user->setEmail($email ?? $this->faker->unique()->safeEmail())
             ->setRoles($roles)
-            ->setPassword($this->hasher->hashPassword($user, 'password'))
+            ->setPassword($rawPasswordHash ?? $this->hasher->hashPassword($user, 'password'))
             ->setIsVerified(true)
             ->setCreatedAt($this->dt('-1 year'));
 

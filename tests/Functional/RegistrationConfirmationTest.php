@@ -5,9 +5,11 @@ namespace App\Tests\Functional;
 use App\Entity\EmailLog;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\MailerAssertionsTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\UriSigner;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class RegistrationConfirmationTest extends WebTestCase
@@ -58,7 +60,7 @@ class RegistrationConfirmationTest extends WebTestCase
         // Exactly one confirmation email was sent.
         self::assertEmailCount(1);
         $message = self::getMailerMessage();
-        self::assertNotNull($message);
+        self::assertInstanceOf(Email::class, $message);
         self::assertSame('Confirmez votre inscription sur Avis Campus', $message->getSubject());
 
         // It was recorded in the email log with the expected type.
@@ -114,7 +116,7 @@ class RegistrationConfirmationTest extends WebTestCase
         self::assertFalse($user->isVerified(), 'A tampered link must not verify the account.');
     }
 
-    private function submitRegistration($client, string $email): void
+    private function submitRegistration(KernelBrowser $client, string $email): void
     {
         $crawler = $client->request('GET', '/register');
         self::assertResponseIsSuccessful();
