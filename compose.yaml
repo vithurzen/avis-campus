@@ -26,7 +26,7 @@ services:
       - database_data:/var/lib/postgresql/data:rw
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
+  ###< doctrine/doctrine-bundle ###
 
   adminer:
     image: adminer
@@ -39,8 +39,8 @@ services:
   mailpit:
     image: axllent/mailpit
     ports:
-      - "1025:1025"   # SMTP
-      - "8025:8025"   # web UI
+      - "127.0.0.1:11025:1025" # SMTP
+      - "127.0.0.1:18026:8025" # web UI
   ###< symfony/mailer ###
 
 volumes:
