@@ -1,9 +1,14 @@
 {% extends 'emails/base.html.twig' %}
+{% import 'emails/_button.html.twig' as buttons %}
 
 {% block subject %}Bienvenue sur Avis Campus{% endblock %}
 
 {% block content %}
     <h2 style="font-size: 16px;">Bienvenue{% if profile.firstName %}, {{ profile.firstName }}{% endif %} !</h2>
-    <p>Votre inscription sur Avis Campus a bien été validée. Vous pouvez dès à présent consulter et déposer des avis sur vos cours.</p>
-    <p>Merci de nous avoir rejoint !</p>
+    <p>Votre compte Avis Campus a bien été créé{% if profile.firstName %}, {{ profile.firstName }}{% endif %}.</p>
+    <p>Vous pouvez dès à présent consulter les avis déposés par les autres étudiants sur vos cours, et partager le vôtre pour aider la communauté.</p>
+{% endblock %}
+
+{% block cta %}
+    {{ buttons.cta(url('app_home'), 'Accéder à Avis Campus') }}
 {% endblock %}

@@ -1,19 +1,46 @@
 {% extends 'emails/base.html.twig' %}
+{% import 'emails/_button.html.twig' as buttons %}
 
-{% block subject %}Nouveau signalement{% endblock %}
+{% block subject %}Nouveau signalement à traiter{% endblock %}
 
 {% block content %}
     <h2 style="font-size: 16px;">Un nouveau signalement a été déposé</h2>
     <p>Un contenu vient d'être signalé et nécessite votre attention.</p>
-    <ul>
-        <li><strong>Motif :</strong> {{ report.reason }}</li>
-        {% if report.description %}<li><strong>Description :</strong> {{ report.description }}</li>{% endif %}
-        {% if report.review %}
-            <li><strong>Avis concerné :</strong> {{ report.review.title }}</li>
-        {% elseif report.comment %}
-            <li><strong>Commentaire concerné :</strong> #{{ report.comment.id }}</li>
+    <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
+        <tr>
+            <td style="padding: 4px 8px 4px 0; color: #6b7280; white-space: nowrap;">Motif</td>
+            <td style="padding: 4px 0;"><strong>{{ report.reason }}</strong></td>
+        </tr>
+        {% if report.description %}
+            <tr>
+                <td style="padding: 4px 8px 4px 0; color: #6b7280; white-space: nowrap; vertical-align: top;">Description</td>
+                <td style="padding: 4px 0;">{{ report.description }}</td>
+            </tr>
         {% endif %}
-        {% if report.user %}<li><strong>Signalé par :</strong> {{ report.user.email }}</li>{% endif %}
-        <li><strong>Statut :</strong> {{ report.status }}</li>
-    </ul>
+        {% if report.review %}
+            <tr>
+                <td style="padding: 4px 8px 4px 0; color: #6b7280; white-space: nowrap;">Avis concerné</td>
+                <td style="padding: 4px 0;">{{ report.review.title }}</td>
+            </tr>
+        {% elseif report.comment %}
+            <tr>
+                <td style="padding: 4px 8px 4px 0; color: #6b7280; white-space: nowrap;">Commentaire concerné</td>
+                <td style="padding: 4px 0;">#{{ report.comment.id }}</td>
+            </tr>
+        {% endif %}
+        {% if report.user %}
+            <tr>
+                <td style="padding: 4px 8px 4px 0; color: #6b7280; white-space: nowrap;">Signalé par</td>
+                <td style="padding: 4px 0;">{{ report.user.email }}</td>
+            </tr>
+        {% endif %}
+        <tr>
+            <td style="padding: 4px 8px 4px 0; color: #6b7280; white-space: nowrap;">Signalé le</td>
+            <td style="padding: 4px 0;">{{ report.createdAt|date('d/m/Y à H:i') }}</td>
+        </tr>
+    </table>
+{% endblock %}
+
+{% block cta %}
+    {{ buttons.cta(url('app_moderation_index'), 'Traiter les signalements') }}
 {% endblock %}
