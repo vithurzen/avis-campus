@@ -1,0 +1,14 @@
+{% extends 'emails/base.html.twig' %}
+{% import 'emails/_button.html.twig' as buttons %}
+
+{% block subject %}Confirmez votre inscription sur Avis Campus{% endblock %}
+
+{% block content %}
+    <h2 style="font-size: 16px;">Bonjour{% if profile.firstName %}, {{ profile.firstName }}{% endif %} !</h2>
+    <p>Merci de vous être inscrit sur Avis Campus. Pour activer votre compte, cliquez sur le bouton ci-dessous.</p>
+    <p style="font-size: 13px; color: #6b7280;">Ce lien est valable pendant 1&nbsp;heure. Si vous n'êtes pas à l'origine de cette inscription, ignorez cet email.</p>
+{% endblock %}
+
+{% block cta %}
+    {{ buttons.cta(confirmUrl, 'Confirmer mon compte') }}
+{% endblock %}
