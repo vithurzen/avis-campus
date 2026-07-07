@@ -7,9 +7,6 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/**
- * Add formations.period_type to distinguish semester- and trimester-based formations.
- */
 final class Version20260704000000 extends AbstractMigration
 {
     public function getDescription(): string

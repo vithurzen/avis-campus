@@ -1,0 +1,334 @@
+App\Entity\Formation:
+    formation_1:
+        name: "Bachelor Informatique"
+        description: "Cycle Bachelor de l'ESGI (3 ans, Bac à Bac+3) : socle généraliste en programmation, algorithmique, réseaux et bases de données avant spécialisation."
+        degreeLevel: "Bac+3"
+        periodType: !php/enum App\Enum\PeriodType::Semester
+        createdAt: '<dateTimeImmutableBetween("-3 years", "-2 years")>'
+
+    formation_2:
+        name: "Mastère Cybersécurité & Ethical Hacking"
+        description: "Spécialisation de cycle ingénieur ESGI (Bac+5) dédiée à la sécurité offensive et défensive des systèmes d'information."
+        degreeLevel: "Bac+5"
+        periodType: !php/enum App\Enum\PeriodType::Semester
+        createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+
+    formation_3:
+        name: "Mastère Intelligence Artificielle & Big Data"
+        description: "Spécialisation de cycle ingénieur ESGI (Bac+5) en science des données, machine learning et traitement de données massives."
+        degreeLevel: "Bac+5"
+        periodType: !php/enum App\Enum\PeriodType::Semester
+        createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+
+    formation_4:
+        name: "Mastère DevOps & Cloud Computing"
+        description: "Spécialisation de cycle ingénieur ESGI (Bac+5) en automatisation des déploiements, conteneurisation et infrastructures cloud."
+        degreeLevel: "Bac+5"
+        periodType: !php/enum App\Enum\PeriodType::Semester
+        createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+
+    formation_5:
+        name: "Mastère Architecture Logicielle & Génie Logiciel"
+        description: "Spécialisation de cycle ingénieur ESGI (Bac+5) en conception d'architectures logicielles robustes et pratiques de génie logiciel."
+        degreeLevel: "Bac+5"
+        periodType: !php/enum App\Enum\PeriodType::Semester
+        createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+
+App\Entity\Semester:
+    semester_1:
+        formation: "@formation_1"
+        name: "S1"
+        number: 1
+
+    semester_2:
+        formation: "@formation_1"
+        name: "S2"
+        number: 2
+
+    semester_3:
+        formation: "@formation_2"
+        name: "S7"
+        number: 1
+
+    semester_4:
+        formation: "@formation_2"
+        name: "S8"
+        number: 2
+
+    semester_5:
+        formation: "@formation_3"
+        name: "S7"
+        number: 1
+
+    semester_6:
+        formation: "@formation_3"
+        name: "S8"
+        number: 2
+
+    semester_7:
+        formation: "@formation_4"
+        name: "S7"
+        number: 1
+
+    semester_8:
+        formation: "@formation_4"
+        name: "S8"
+        number: 2
+
+    semester_9:
+        formation: "@formation_5"
+        name: "S7"
+        number: 1
+
+    semester_10:
+        formation: "@formation_5"
+        name: "S8"
+        number: 2
+
+App\Entity\Tag:
+    tag_1:
+        name: "Programmation"
+        color: "#3498db"
+
+    tag_2:
+        name: "Algorithmique"
+        color: "#e74c3c"
+
+    tag_3:
+        name: "Bases de données"
+        color: "#2ecc71"
+
+    tag_4:
+        name: "Réseau"
+        color: "#9b59b6"
+
+    tag_5:
+        name: "Sécurité"
+        color: "#c0392b"
+
+    tag_6:
+        name: "Intelligence Artificielle"
+        color: "#1abc9c"
+
+    tag_7:
+        name: "Cloud & DevOps"
+        color: "#34495e"
+
+    tag_8:
+        name: "Architecture Logicielle"
+        color: "#8e44ad"
+
+App\Entity\RatingCriteria:
+    criteria_1:
+        name: "Clarté du cours"
+        description: "Le cours est-il bien expliqué et facile à comprendre ?"
+        maxScore: 5
+
+    criteria_2:
+        name: "Difficulté"
+        description: "Le niveau de difficulté est-il adapté au niveau demandé ?"
+        maxScore: 5
+
+    criteria_3:
+        name: "Utilité professionnelle"
+        description: "Ce cours est-il utile pour la vie professionnelle ?"
+        maxScore: 5
+
+    criteria_4:
+        name: "Charge de travail"
+        description: "La charge de travail demandée est-elle raisonnable ?"
+        maxScore: 5
+
+App\Entity\Teacher:
+    teacher_1:
+        firstName: "Marie"
+        lastName: "Dupont"
+        email: "marie.dupont@esgi.fr"
+        createdAt: '<dateTimeImmutableBetween("-3 years", "-2 years")>'
+
+    teacher_2:
+        firstName: "Jean"
+        lastName: "Martin"
+        email: "jean.martin@esgi.fr"
+        createdAt: '<dateTimeImmutableBetween("-3 years", "-2 years")>'
+
+    teacher_3:
+        firstName: "Sophie"
+        lastName: "Bernard"
+        email: "sophie.bernard@esgi.fr"
+        createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+
+    teacher_4:
+        firstName: "Karim"
+        lastName: "Haddad"
+        email: "karim.haddad@esgi.fr"
+        createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+
+    teacher_5:
+        firstName: "Camille"
+        lastName: "Girard"
+        email: "camille.girard@esgi.fr"
+        createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+
+    teacher_6:
+        firstName: "Thomas"
+        lastName: "Roux"
+        email: "thomas.roux@esgi.fr"
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+
+    teacher_7:
+        firstName: "Julie"
+        lastName: "Fontaine"
+        email: "julie.fontaine@esgi.fr"
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+
+App\Entity\Course:
+    # --- Bachelor Informatique (tronc commun, S1-S2) ---
+    course_1:
+        semester: "@semester_1"
+        title: "Algorithmique et Programmation"
+        description: "Bases de la programmation procédurale en Python et C, structures de contrôle et premiers algorithmes."
+        coefficient: 2.0
+        hours: 40
+        createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+        teachers:
+            - "@teacher_1"
+        tags:
+            - "@tag_1"
+            - "@tag_2"
+
+    course_2:
+        semester: "@semester_1"
+        title: "Bases de Données Relationnelles"
+        description: "Modélisation entité-association, langage SQL et administration d'une base PostgreSQL."
+        coefficient: 2.5
+        hours: 35
+        createdAt: '<dateTimeImmutableBetween("-2 years", "-1 year")>'
+        teachers:
+            - "@teacher_2"
+        tags:
+            - "@tag_3"
+
+    course_3:
+        semester: "@semester_2"
+        title: "Programmation Orientée Objet en Java"
+        description: "Concepts de la POO (héritage, polymorphisme, interfaces) appliqués en Java, avec projet fil rouge."
+        coefficient: 3.0
+        hours: 45
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - "@teacher_1"
+        tags:
+            - "@tag_1"
+
+    course_4:
+        semester: "@semester_2"
+        title: "Réseaux Informatiques"
+        description: "Modèle OSI/TCP-IP, adressage, routage et travaux pratiques de configuration réseau."
+        coefficient: 2.0
+        hours: 30
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - "@teacher_4"
+        tags:
+            - "@tag_4"
+
+    # --- Mastère Cybersécurité & Ethical Hacking (S7-S8) ---
+    course_5:
+        semester: "@semester_3"
+        title: "Ethical Hacking et Tests d'Intrusion"
+        description: "Méthodologie du pentest, reconnaissance, exploitation de vulnérabilités et rédaction de rapports d'audit."
+        coefficient: 3.0
+        hours: 40
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - "@teacher_4"
+        tags:
+            - "@tag_5"
+
+    course_6:
+        semester: "@semester_4"
+        title: "Cryptographie Appliquée et Sécurité des Systèmes"
+        description: "Chiffrement symétrique/asymétrique, PKI, durcissement des systèmes et gestion des incidents de sécurité."
+        coefficient: 2.5
+        hours: 35
+        createdAt: '<dateTimeImmutableBetween("-8 months", "-3 months")>'
+        teachers:
+            - "@teacher_4"
+        tags:
+            - "@tag_5"
+
+    # --- Mastère Intelligence Artificielle & Big Data (S7-S8) ---
+    course_7:
+        semester: "@semester_5"
+        title: "Machine Learning"
+        description: "Apprentissage supervisé et non supervisé : régression, classification, clustering, avec scikit-learn."
+        coefficient: 3.0
+        hours: 45
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - "@teacher_5"
+        tags:
+            - "@tag_6"
+
+    course_8:
+        semester: "@semester_6"
+        title: "Big Data et Traitement de Données Massives"
+        description: "Écosystème Hadoop/Spark, pipelines de données distribués et stockage NoSQL à grande échelle."
+        coefficient: 2.5
+        hours: 35
+        createdAt: '<dateTimeImmutableBetween("-8 months", "-3 months")>'
+        teachers:
+            - "@teacher_5"
+        tags:
+            - "@tag_6"
+
+    # --- Mastère DevOps & Cloud Computing (S7-S8) ---
+    course_9:
+        semester: "@semester_7"
+        title: "Conteneurisation et Orchestration (Docker/Kubernetes)"
+        description: "Conception d'images Docker, déploiement et mise à l'échelle d'applications sur un cluster Kubernetes."
+        coefficient: 2.5
+        hours: 35
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - "@teacher_6"
+        tags:
+            - "@tag_7"
+
+    course_10:
+        semester: "@semester_8"
+        title: "Cloud Computing (AWS/Azure) et Infrastructure as Code"
+        description: "Services cloud managés, déploiement automatisé avec Terraform et intégration/déploiement continu."
+        coefficient: 2.5
+        hours: 30
+        createdAt: '<dateTimeImmutableBetween("-8 months", "-3 months")>'
+        teachers:
+            - "@teacher_6"
+        tags:
+            - "@tag_7"
+
+    # --- Mastère Architecture Logicielle & Génie Logiciel (S7-S8) ---
+    course_11:
+        semester: "@semester_9"
+        title: "Architecture Logicielle et Design Patterns"
+        description: "Architectures microservices, patrons de conception et principes SOLID appliqués à des cas réels."
+        coefficient: 2.5
+        hours: 35
+        createdAt: '<dateTimeImmutableBetween("-1 year", "-6 months")>'
+        teachers:
+            - "@teacher_7"
+        tags:
+            - "@tag_8"
+
+    course_12:
+        semester: "@semester_10"
+        title: "Génie Logiciel, Qualité et Tests Automatisés"
+        description: "Tests unitaires/intégration, intégration continue et bonnes pratiques de qualité logicielle (Clean Code)."
+        coefficient: 2.0
+        hours: 30
+        createdAt: '<dateTimeImmutableBetween("-8 months", "-3 months")>'
+        teachers:
+            - "@teacher_7"
+        tags:
+            - "@tag_8"
