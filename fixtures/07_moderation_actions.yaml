@@ -57,3 +57,22 @@ App\Entity\ModerationAction:
         action: 'user_warned'
         reason: 'L''utilisateur a reçu un avertissement pour publication de contenu copié (spam). Récidive entraînera une suspension.'
         createdAt: '<dateTimeImmutableBetween("-3 months", "-1 month")>'
+
+    # --- Actions d'administrateurs (panneau /admin, hors flux de modération) ---
+    moderation_action_7:
+        moderator: '@admin_profile_1'
+        review: '@review_15'
+        comment: null
+        report: null
+        action: 'hide'
+        reason: 'Avis masqué directement depuis le panneau admin suite à une structure jugée trop confuse.'
+        createdAt: '<dateTimeImmutableBetween("-1 month", "-2 weeks")>'
+
+    moderation_action_8:
+        moderator: '@admin_profile_2'
+        review: null
+        comment: null
+        report: '@report_7'
+        action: 'report_dismissed'
+        reason: 'Signalement traité depuis le panneau admin : commentaire jugé conforme après vérification.'
+        createdAt: '<dateTimeImmutableBetween("-3 months", "-1 month")>'
