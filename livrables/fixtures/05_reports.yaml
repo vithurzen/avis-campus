@@ -1,0 +1,74 @@
+App\Entity\Report:
+    # --- Signalements portant sur des avis ---
+    report_1:
+        user: '@user_student_2'
+        review: '@review_4'
+        comment: null
+        reason: 'Contenu inapproprié'
+        description: 'Cet avis contient des informations fausses sur la difficulté du cours.'
+        status: 'open'
+        createdAt: '<dateTimeImmutableBetween("-2 months", "-1 month")>'
+
+    report_2:
+        user: '@user_student_3'
+        review: '@review_2'
+        comment: null
+        reason: 'Informations fausses'
+        description: 'L''auteur prétend que le cours n''a pas de TP, ce qui est inexact.'
+        status: 'resolved'
+        createdAt: '<dateTimeImmutableBetween("-3 months", "-2 months")>'
+
+    report_3:
+        user: '@user_student_4'
+        review: '@review_1'
+        comment: null
+        reason: 'Spam'
+        description: 'Cet avis semble avoir été copié d''un autre site, pas de contenu original.'
+        status: 'dismissed'
+        createdAt: '<dateTimeImmutableBetween("-3 months", "-2 months")>'
+
+    report_4:
+        user: '@user_student_5'
+        review: '@review_3'
+        comment: null
+        reason: 'Harcèlement'
+        description: 'L''avis cible personnellement l''enseignant de façon agressive.'
+        status: 'open'
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    # --- Signalements portant sur des commentaires ---
+    report_5:
+        user: '@user_student_1'
+        review: null
+        comment: '@comment_3'
+        reason: 'Contenu inapproprié'
+        description: 'Ce commentaire contient des propos irrespectueux envers les autres étudiants.'
+        status: 'open'
+        createdAt: '<dateTimeImmutableBetween("-2 months", "-1 month")>'
+
+    report_6:
+        user: '@user_student_3'
+        review: null
+        comment: '@comment_5'
+        reason: 'Langage offensant'
+        description: 'Le commentaire utilise un vocabulaire inapproprié pour une plateforme académique.'
+        status: 'resolved'
+        createdAt: '<dateTimeImmutableBetween("-2 months", "-1 month")>'
+
+    report_7:
+        user: '@user_student_4'
+        review: null
+        comment: '@comment_1'
+        reason: 'Spam'
+        description: 'Ce commentaire est une publicité déguisée pour un service externe.'
+        status: 'dismissed'
+        createdAt: '<dateTimeImmutableBetween("-3 months", "-1 month")>'
+
+    report_8:
+        user: '@user_student_2'
+        review: null
+        comment: '@comment_6'
+        reason: 'Harcèlement'
+        description: 'Le commentaire cible de manière personnelle l''auteur de l''avis.'
+        status: 'open'
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'

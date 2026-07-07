@@ -1,0 +1,267 @@
+App\Entity\Review:
+    # Contrainte unique : 1 avis par étudiant par cours
+    review_1:
+        user: '@user_student_1'
+        course: '@course_1'
+        title: 'Très bon cours d''introduction'
+        content: 'Ce cours m''a permis de maîtriser les bases de la programmation rapidement, en Python puis en C. Les exercices pratiques sont bien pensés et progressifs.'
+        status: 'approved'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-6 months", "-3 months")>'
+
+    review_2:
+        user: '@user_student_2'
+        course: '@course_2'
+        title: 'Cours dense mais très utile'
+        content: 'Le contenu SQL est riche, peut-être un peu dense pour des débutants. L''enseignant explique bien mais il faudrait plus d''exercices pratiques sur PostgreSQL.'
+        status: 'approved'
+        rating: 3
+        createdAt: '<dateTimeImmutableBetween("-5 months", "-2 months")>'
+
+    review_3:
+        user: '@user_student_3'
+        course: '@course_3'
+        title: 'La POO enfin claire !'
+        content: 'Le passage à la programmation orientée objet en Java était un cap difficile, mais ce cours rend les concepts d''héritage et de polymorphisme très accessibles. Le projet fil rouge est formateur.'
+        status: 'approved'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-4 months", "-1 month")>'
+
+    review_4:
+        user: '@user_student_4'
+        course: '@course_5'
+        title: 'Excellent pour découvrir le pentest'
+        content: 'Cours très concret sur l''Ethical Hacking : la méthodologie de reconnaissance et d''exploitation est bien détaillée, et les labs de mise en pratique sont proches de la réalité du métier.'
+        status: 'approved'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-3 months", "-2 weeks")>'
+
+    review_5:
+        user: '@user_student_5'
+        course: '@course_7'
+        title: 'Bonne intro au Machine Learning'
+        content: 'Le cours couvre bien les fondamentaux (régression, classification, clustering) avec scikit-learn. Quelques exemples plus poussés en deep learning seraient un plus.'
+        status: 'approved'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    review_6:
+        user: '@user_student_1'
+        course: '@course_9'
+        title: 'Docker/Kubernetes, indispensable en 2024'
+        content: 'Cours très moderne et directement applicable en entreprise. La partie orchestration avec Kubernetes est particulièrement bien traitée, même si le rythme est soutenu.'
+        status: 'pending'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+    review_7:
+        user: '@user_student_2'
+        course: '@course_4'
+        title: 'Bonne remise à niveau sur les réseaux'
+        content: 'Le cours reprend bien le modèle OSI et TCP/IP depuis les bases. Les TP de configuration réseau en salle machine sont particulièrement utiles.'
+        status: 'approved'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-5 months", "-2 months")>'
+
+    review_8:
+        user: '@user_student_3'
+        course: '@course_6'
+        title: 'Excellent cours sur la cryptographie'
+        content: 'Les notions de chiffrement symétrique et asymétrique sont expliquées avec des exemples concrets. La partie PKI a été un vrai déclic pour moi.'
+        status: 'approved'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-4 months", "-1 month")>'
+
+    review_9:
+        user: '@user_student_4'
+        course: '@course_8'
+        title: 'Utile mais rythme soutenu'
+        content: 'Bonne découverte de l''écosystème Hadoop/Spark, mais le cours va vite pour ceux qui n''ont pas déjà manipulé de gros volumes de données.'
+        status: 'approved'
+        rating: 3
+        createdAt: '<dateTimeImmutableBetween("-3 months", "-1 month")>'
+
+    review_10:
+        user: '@user_student_5'
+        course: '@course_10'
+        title: 'Très bon aperçu du cloud'
+        content: 'Le cours donne un excellent panorama d''AWS et Azure, avec une mise en pratique de Terraform qui m''a servi dès mon stage.'
+        status: 'approved'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-2 months", "-3 weeks")>'
+
+    review_11:
+        user: '@user_student_2'
+        course: '@course_11'
+        title: 'Les design patterns enfin utiles en pratique'
+        content: 'Le cours d''architecture logicielle montre bien l''intérêt des design patterns sur des cas concrets, pas seulement en théorie. Très formateur.'
+        status: 'approved'
+        rating: 5
+        createdAt: '<dateTimeImmutableBetween("-3 months", "-1 month")>'
+
+    review_12:
+        user: '@user_student_3'
+        course: '@course_12'
+        title: 'Bonnes pratiques indispensables'
+        content: 'Ce cours sur les tests automatisés et le Clean Code devrait être vu bien plus tôt dans le cursus tellement c''est utile au quotidien.'
+        status: 'approved'
+        rating: 4
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    review_13:
+        user: '@user_student_4'
+        course: '@course_1'
+        title: 'Correct mais peut mieux faire'
+        content: 'Les bases sont là mais j''ai trouvé le rythme un peu lent par moments. Ça reste indispensable pour la suite du cursus.'
+        status: 'approved'
+        rating: 2
+        createdAt: '<dateTimeImmutableBetween("-5 months", "-3 months")>'
+
+    review_14:
+        user: '@user_student_5'
+        course: '@course_2'
+        title: 'Un bon complément à la formation'
+        content: 'Cours solide sur la modélisation et le SQL. J''aurais aimé un peu plus de temps sur l''optimisation des requêtes.'
+        status: 'approved'
+        createdAt: '<dateTimeImmutableBetween("-4 months", "-2 months")>'
+
+    review_15:
+        user: '@user_student_3'
+        course: '@course_5'
+        title: 'À revoir sur la forme'
+        content: 'Le contenu est intéressant mais le cours manque un peu de structure d''une séance à l''autre.'
+        status: 'hidden'
+        rating: 2
+        createdAt: '<dateTimeImmutableBetween("-2 months", "-1 month")>'
+
+    review_16:
+        user: '@user_student_4'
+        course: '@course_9'
+        title: 'Une bonne mise en pratique du DevOps'
+        content: 'Le cours permet de vraiment manipuler Docker et Kubernetes plutôt que de rester dans la théorie. Parfait avant un stage en DevOps.'
+        status: 'approved'
+        rating: 3
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
+
+# Notations : 6 reviews × 3 critères = 18 ReviewRating (contrainte unique review+critère)
+App\Entity\ReviewRating:
+    rating_r1_c1:
+        review: '@review_1'
+        ratingCriteria: '@criteria_1'
+        score: 5
+    rating_r1_c2:
+        review: '@review_1'
+        ratingCriteria: '@criteria_2'
+        score: 4
+    rating_r1_c3:
+        review: '@review_1'
+        ratingCriteria: '@criteria_3'
+        score: 4
+
+    rating_r2_c1:
+        review: '@review_2'
+        ratingCriteria: '@criteria_1'
+        score: 3
+    rating_r2_c2:
+        review: '@review_2'
+        ratingCriteria: '@criteria_2'
+        score: 4
+    rating_r2_c3:
+        review: '@review_2'
+        ratingCriteria: '@criteria_3'
+        score: 5
+
+    rating_r3_c1:
+        review: '@review_3'
+        ratingCriteria: '@criteria_1'
+        score: 5
+    rating_r3_c2:
+        review: '@review_3'
+        ratingCriteria: '@criteria_2'
+        score: 3
+    rating_r3_c3:
+        review: '@review_3'
+        ratingCriteria: '@criteria_3'
+        score: 5
+
+    rating_r4_c1:
+        review: '@review_4'
+        ratingCriteria: '@criteria_1'
+        score: 4
+    rating_r4_c2:
+        review: '@review_4'
+        ratingCriteria: '@criteria_2'
+        score: 4
+    rating_r4_c3:
+        review: '@review_4'
+        ratingCriteria: '@criteria_3'
+        score: 5
+
+    rating_r5_c1:
+        review: '@review_5'
+        ratingCriteria: '@criteria_1'
+        score: 4
+    rating_r5_c2:
+        review: '@review_5'
+        ratingCriteria: '@criteria_2'
+        score: 3
+    rating_r5_c3:
+        review: '@review_5'
+        ratingCriteria: '@criteria_3'
+        score: 4
+
+    rating_r6_c1:
+        review: '@review_6'
+        ratingCriteria: '@criteria_1'
+        score: 5
+    rating_r6_c2:
+        review: '@review_6'
+        ratingCriteria: '@criteria_2'
+        score: 4
+    rating_r6_c3:
+        review: '@review_6'
+        ratingCriteria: '@criteria_3'
+        score: 5
+
+App\Entity\Comment:
+    comment_1:
+        user: '@user_student_2'
+        review: '@review_1'
+        content: 'Je suis totalement d''accord, ce cours est une excellente introduction !'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-5 months", "-2 months")>'
+
+    comment_2:
+        user: '@user_student_3'
+        review: '@review_1'
+        content: 'Merci pour ce retour détaillé. Très utile pour les futurs étudiants.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-5 months", "-2 months")>'
+
+    comment_3:
+        user: '@user_student_1'
+        review: '@review_2'
+        content: 'Effectivement, le cours est dense. Je recommande de commencer tôt dans le semestre.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-4 months", "-1 month")>'
+
+    comment_4:
+        user: '@user_student_4'
+        review: '@review_3'
+        content: 'Je confirme ! La POO en Java demande un temps d''adaptation mais devient vite naturelle avec ce cours.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-3 months", "-2 weeks")>'
+
+    comment_5:
+        user: '@user_student_5'
+        review: '@review_4'
+        content: 'Bon retour, mieux vaut avoir de bonnes bases en réseaux avant d''attaquer ce cours de pentest.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-2 months", "now")>'
+
+    comment_6:
+        user: '@user_student_2'
+        review: '@review_5'
+        content: 'Un avis partagé. Le cours manque un peu de pratique à mon goût, surtout sur le deep learning.'
+        status: 'visible'
+        createdAt: '<dateTimeImmutableBetween("-1 month", "now")>'
