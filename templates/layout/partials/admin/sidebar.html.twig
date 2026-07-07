@@ -41,9 +41,9 @@
             Professeurs
         </a>
 
-        <a href="{{ path('app_course_index') }}"
+        <a href="{{ path('app_admin_courses') }}"
            class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition
-                  {{ app.request.attributes.get('_route') starts with 'app_course' ? 'bg-brand text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                  {{ app.request.attributes.get('_route') starts with 'app_admin_course' ? 'bg-brand text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
             <i class="fa-solid fa-book w-4 text-center"></i>
             Cours
         </a>

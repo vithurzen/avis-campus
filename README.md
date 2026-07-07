@@ -1,3 +1,5 @@
+SITE EN LIGNE: https://www.avis-campus.fr/
+
 # avis-campus
 
 Plateforme d'avis étudiants sur les cours (Symfony 7.4 / PHP 8.2 / PostgreSQL).
@@ -6,15 +8,14 @@ Plateforme d'avis étudiants sur les cours (Symfony 7.4 / PHP 8.2 / PostgreSQL).
 
 ## Installation & mise en route
 
-
 ### Prérequis
 
-| Outil | Version | Remarque |
-|-------|---------|----------|
-| PHP | ≥ 8.2 | extensions `ctype`, `iconv`, `pdo_pgsql`, `pdo_sqlite`, `intl`, `mbstring` |
-| Composer | 2.x | gestion des dépendances PHP |
-| Docker + Docker Compose | récent | PostgreSQL, Adminer et Mailpit |
-| Symfony CLI | *optionnel* | serveur de dev pratique (`symfony serve`) |
+| Outil                   | Version     | Remarque                                                                   |
+| ----------------------- | ----------- | -------------------------------------------------------------------------- |
+| PHP                     | ≥ 8.2       | extensions `ctype`, `iconv`, `pdo_pgsql`, `pdo_sqlite`, `intl`, `mbstring` |
+| Composer                | 2.x         | gestion des dépendances PHP                                                |
+| Docker + Docker Compose | récent      | PostgreSQL, Adminer et Mailpit                                             |
+| Symfony CLI             | _optionnel_ | serveur de dev pratique (`symfony serve`)                                  |
 
 ### 1. Récupérer le projet et les dépendances
 
@@ -32,11 +33,11 @@ Le fichier `compose.yaml` fournit trois services :
 docker compose up -d
 ```
 
-| Service | Rôle | Accès (hôte) |
-|---------|------|--------------|
-| `database` | PostgreSQL 16 (base `avis_campus`) | `127.0.0.1:5433` |
-| `adminer` | Explorateur de base de données | http://localhost:8080 |
-| `mailpit` | Serveur SMTP de test + webmail | SMTP `127.0.0.1:11025` — UI http://127.0.0.1:18026 |
+| Service    | Rôle                               | Accès (hôte)                                       |
+| ---------- | ---------------------------------- | -------------------------------------------------- |
+| `database` | PostgreSQL 16 (base `avis_campus`) | `127.0.0.1:5433`                                   |
+| `adminer`  | Explorateur de base de données     | http://localhost:8080                              |
+| `mailpit`  | Serveur SMTP de test + webmail     | SMTP `127.0.0.1:11025` — UI http://127.0.0.1:18026 |
 
 La connexion à la base est déjà configurée dans `.env` :
 
@@ -109,10 +110,10 @@ Tous les comptes générés par les fixtures partagent le **mot de passe : `pass
 Les comptes ci-dessous possèdent une adresse **déterministe** (toujours identique
 après un chargement des fixtures) :
 
-| Rôle | E-mail | Mot de passe |
-|------|--------|--------------|
-| Administrateur (`ROLE_ADMIN`) | `admin@admin.fr` | `password` |
-| Étudiant (`ROLE_STUDENT`) | `etudiant1@campus.fr` | `password` |
+| Rôle                          | E-mail                | Mot de passe |
+| ----------------------------- | --------------------- | ------------ |
+| Administrateur (`ROLE_ADMIN`) | `admin@admin.fr`      | `password`   |
+| Étudiant (`ROLE_STUDENT`)     | `etudiant1@campus.fr` | `password`   |
 
 Le second administrateur, les **3 modérateurs** (`ROLE_MODERATOR`) et les 19 autres
 étudiants reçoivent des adresses e-mail générées aléatoirement. Pour les lister
@@ -137,11 +138,11 @@ php bin/console dbal:run-sql "SELECT email, roles FROM users ORDER BY roles"
 L'authentification repose sur le composant Security de Symfony (firewall `main`,
 provider Doctrine basé sur l'entité `App\Entity\User`, propriété `email`).
 
-| Action | Route | Détails |
-|--------|-------|---------|
+| Action      | Route                                 | Détails                                                                                                                                                                                                                                    |
+| ----------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Inscription | `GET/POST /register` (`app_register`) | `RegistrationController` + `RegistrationFormType`. Le mot de passe est hashé via `UserPasswordHasherInterface` (algorithme `auto`), l'utilisateur reçoit le rôle `ROLE_STUDENT`, un `StudentProfile` est créé, puis connexion automatique. |
-| Connexion | `GET/POST /login` (`app_login`) | `SecurityController`, authentificateur `form_login` (CSRF activé : `enable_csrf: true`). |
-| Déconnexion | `GET /logout` (`app_logout`) | Interceptée par le firewall (`logout.path: app_logout`). |
+| Connexion   | `GET/POST /login` (`app_login`)       | `SecurityController`, authentificateur `form_login` (CSRF activé : `enable_csrf: true`).                                                                                                                                                   |
+| Déconnexion | `GET /logout` (`app_logout`)          | Interceptée par le firewall (`logout.path: app_logout`).                                                                                                                                                                                   |
 
 ### Rôles et hiérarchie
 
@@ -150,9 +151,9 @@ toujours `ROLE_USER`. Hiérarchie (`config/packages/security.yaml`) :
 
 ```yaml
 role_hierarchy:
-    ROLE_STUDENT:   ROLE_USER
+    ROLE_STUDENT: ROLE_USER
     ROLE_MODERATOR: ROLE_USER
-    ROLE_ADMIN:     [ROLE_MODERATOR, ROLE_USER]
+    ROLE_ADMIN: [ROLE_MODERATOR, ROLE_USER]
 ```
 
 Ainsi un `ROLE_ADMIN` hérite des droits modérateur, et tout utilisateur connecté
@@ -164,12 +165,12 @@ Deux niveaux de contrôle d'accès :
 
 1. **Par URL** (`access_control`) :
 
-   ```yaml
-   access_control:
-       - { path: ^/admin,      roles: ROLE_ADMIN }
-       - { path: ^/moderation, roles: ROLE_MODERATOR }
-       - { path: ^/review/new, roles: ROLE_USER }
-   ```
+    ```yaml
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/moderation, roles: ROLE_MODERATOR }
+        - { path: ^/review/new, roles: ROLE_USER }
+    ```
 
 2. **Par action** via l'attribut `#[IsGranted(...)]` (ex. `ModerationController`
    est protégé au niveau de la classe par `#[IsGranted('ROLE_MODERATOR')]` ; les
@@ -180,11 +181,11 @@ Deux niveaux de contrôle d'accès :
 `src/Security/Voter/ReviewVoter.php` applique des règles au niveau de l'objet
 `Review` (au-delà du simple rôle) :
 
-| Attribut | Autorisé si |
-|----------|-------------|
-| `REVIEW_EDIT` | admin, **ou** auteur **et** avis encore en attente (`pending`) |
-| `REVIEW_DELETE` | admin, **ou** auteur **et** avis encore `pending` |
-| `REVIEW_APPROVE` / `REVIEW_REJECT` / `REVIEW_HIDE` | `ROLE_MODERATOR` (les admins en héritent) |
+| Attribut                                           | Autorisé si                                                    |
+| -------------------------------------------------- | -------------------------------------------------------------- |
+| `REVIEW_EDIT`                                      | admin, **ou** auteur **et** avis encore en attente (`pending`) |
+| `REVIEW_DELETE`                                    | admin, **ou** auteur **et** avis encore `pending`              |
+| `REVIEW_APPROVE` / `REVIEW_REJECT` / `REVIEW_HIDE` | `ROLE_MODERATOR` (les admins en héritent)                      |
 
 Un administrateur peut tout faire (court-circuit `isGranted('ROLE_ADMIN')`).
 Le voter est câblé dans les contrôleurs via
@@ -195,10 +196,10 @@ Le voter est câblé dans les contrôleurs via
 Ajout/retrait d'un cours en favori (réservé aux utilisateurs connectés, protégé
 par jeton CSRF, limité au propriétaire) :
 
-| Action | Route |
-|--------|-------|
+| Action                      | Route                                                       |
+| --------------------------- | ----------------------------------------------------------- |
 | Ajouter / retirer (bascule) | `POST /favorite/course/{id}/toggle` (`app_favorite_toggle`) |
-| Supprimer un favori précis | `POST /favorite/{id}/remove` (`app_favorite_remove`) |
+| Supprimer un favori précis  | `POST /favorite/{id}/remove` (`app_favorite_remove`)        |
 
 ### Modération automatique du contenu
 

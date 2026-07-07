@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Course;
 use App\Entity\ModerationAction;
 use App\Entity\Report;
 use App\Entity\Review;
 use App\Entity\Teacher;
 use App\Repository\ApiLogRepository;
+use App\Repository\CourseRepository;
 use App\Repository\EmailLogRepository;
 use App\Repository\ModerationActionRepository;
 use App\Repository\ReportRepository;
@@ -129,6 +131,30 @@ final class AdminController extends AbstractController
         }
 
         return $this->redirectToRoute('app_admin_teachers', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/courses', name: 'app_admin_courses', methods: ['GET'])]
+    public function courses(CourseRepository $courseRepository): Response
+    {
+        return $this->render('admin/courses.html.twig', [
+            'courses' => $courseRepository->findAllWithRelations(),
+        ]);
+    }
+
+    #[Route('/courses/{id}/delete', name: 'app_admin_course_delete', methods: ['POST'])]
+    public function deleteCourse(Request $request, Course $course, EntityManagerInterface $em): Response
+    {
+        if ($this->isCsrfTokenValid('delete_course_' . $course->getId(), $request->getPayload()->getString('_token'))) {
+            if (!$course->getReviews()->isEmpty()) {
+                $this->addFlash('error', 'Impossible de supprimer ce cours : des avis y sont rattachés.');
+            } else {
+                $em->remove($course);
+                $em->flush();
+                $this->addFlash('success', 'Cours supprimé.');
+            }
+        }
+
+        return $this->redirectToRoute('app_admin_courses', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/reports', name: 'app_admin_reports', methods: ['GET'])]

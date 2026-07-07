@@ -77,7 +77,7 @@ class Review
     /**
      * @var Collection<int, Comment>
      */
-    #[ORM\OneToMany(mappedBy: 'review', targetEntity: Comment::class)]
+    #[ORM\OneToMany(mappedBy: 'review', targetEntity: Comment::class, cascade: ['remove'])]
     #[Groups(['review:read'])]
     private Collection $comments;
 

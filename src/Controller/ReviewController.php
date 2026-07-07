@@ -124,9 +124,10 @@ final class ReviewController extends AbstractController
 
     #[Route('/{id}', name: 'app_review_delete', methods: ['POST'])]
     #[IsGranted(ReviewVoter::DELETE, subject: 'review')]
-    public function delete(Request $request, Review $review, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Review $review, EntityManagerInterface $entityManager, ReviewRepository $reviewRepository): Response
     {
         if ($this->isCsrfTokenValid('delete' . $review->getId(), $request->getPayload()->getString('_token'))) {
+            $reviewRepository->detachAuditReferencesBeforeDelete($review);
             $entityManager->remove($review);
             $entityManager->flush();
         }

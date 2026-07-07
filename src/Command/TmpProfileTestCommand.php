@@ -73,7 +73,7 @@ class TmpProfileTestCommand extends Command
                     'type' => PasswordType::class,
                     'first_options' => ['label' => false, 'attr' => ['class' => $inputClass]],
                     'second_options' => ['label' => false, 'attr' => ['class' => $inputClass]],
-                    'constraints' => [new NotBlank(), new Length(['min' => 8])],
+                    'constraints' => [new NotBlank(), new Length(min: 8)],
                 ])
                 ->getForm();
 

@@ -71,14 +71,13 @@
                 </a>
             {% endif %}
             {% if is_granted('REVIEW_DELETE', review) %}
-                <form method="post" action="{{ path('app_review_delete', { id: review.id }) }}"
-                      onsubmit="return confirm('Supprimer cet avis ?')">
+                <form id="form-delete-review" method="post" action="{{ path('app_review_delete', { id: review.id }) }}">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ review.id) }}">
-                    <button type="submit"
-                            class="text-sm bg-red-50 hover:bg-red-100 text-red-600 font-medium px-4 py-2 rounded-full transition">
-                        <i class="fa-solid fa-trash mr-1"></i> Supprimer
-                    </button>
                 </form>
+                <button type="button" id="delete-review-btn"
+                        class="text-sm bg-red-50 hover:bg-red-100 text-red-600 font-medium px-4 py-2 rounded-full transition">
+                    <i class="fa-solid fa-trash mr-1"></i> Supprimer
+                </button>
             {% endif %}
             {% if is_granted('ROLE_USER') and app.user != review.user %}
                 <button type="button" id="report-btn"
@@ -190,6 +189,58 @@
     </div>
 
 </div>
+
+{% if is_granted('REVIEW_DELETE', review) %}
+{# ── Modale suppression d'avis ── #}
+<div id="modal-delete-review" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="modal-delete-review-backdrop"></div>
+    <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-trash text-red-500"></i>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-900">Supprimer cet avis</h3>
+                <p class="text-xs text-gray-400">Cette action est irréversible.</p>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 bg-gray-50 rounded-xl px-4 py-3 mb-6">
+            Supprimer « <span class="font-semibold text-gray-900">{{ review.title }}</span> » ?
+        </p>
+        <div class="flex items-center justify-end gap-3">
+            <button type="button" id="modal-delete-review-cancel"
+                    class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition">
+                Annuler
+            </button>
+            <button type="button" id="modal-delete-review-confirm"
+                    class="px-5 py-2 text-sm font-semibold bg-red-500 hover:bg-red-600 text-white rounded-full transition">
+                Oui, supprimer
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    const modal    = document.getElementById('modal-delete-review');
+    const openBtn  = document.getElementById('delete-review-btn');
+    const closeBtn = document.getElementById('modal-delete-review-cancel');
+    const backdrop = document.getElementById('modal-delete-review-backdrop');
+    const confirmBtn = document.getElementById('modal-delete-review-confirm');
+    const form     = document.getElementById('form-delete-review');
+
+    if (!openBtn) return;
+
+    openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+    closeBtn.addEventListener('click', close);
+    backdrop.addEventListener('click', close);
+    confirmBtn.addEventListener('click', () => form.submit());
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+    function close() { modal.classList.add('hidden'); }
+})();
+</script>
+{% endif %}
 
 {% if is_granted('ROLE_USER') and app.user != review.user %}
 {# ── Modale signalement ── #}
