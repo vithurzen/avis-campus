@@ -68,46 +68,55 @@
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Tous les avis</h2>
     {% endif %}
 
-    {# ── Filtres par étoiles ── #}
-    <div class="flex items-center gap-2 mb-4 flex-wrap">
-        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide mr-1">Filtrer :</span>
-        <button data-filter="all"
-                class="filter-btn active-filter px-4 py-1.5 rounded-full text-sm font-medium border transition">
-            Tous
-        </button>
-        <button data-filter="gte4"
-                class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium border border-gray-200 text-gray-600 hover:border-amber-400 hover:text-amber-600 transition">
-            <span class="text-amber-400">★★★★</span>+ (≥ 4 étoiles)
-        </button>
-        <button data-filter="lt4"
-                class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium border border-gray-200 text-gray-600 hover:border-gray-400 transition">
-            &lt; 4 étoiles
-        </button>
-        <button data-filter="norating"
-                class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium border border-gray-200 text-gray-600 hover:border-gray-400 transition">
-            Sans note
-        </button>
-    </div>
+    {# ── Barre de filtres ── #}
+    <div class="bg-white border border-gray-200 rounded-2xl p-4 mb-6 flex flex-wrap gap-3 items-center">
 
-    {# ── Tri ── #}
-    <div class="flex items-center gap-2 mb-6 flex-wrap">
-        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide mr-1">Trier :</span>
-        <button data-sort="recent"
-                class="sort-btn active-sort px-4 py-1.5 rounded-full text-sm font-medium border transition">
-            Plus récents
-        </button>
-        <button data-sort="stars"
-                class="sort-btn px-4 py-1.5 rounded-full text-sm font-medium border border-gray-200 text-gray-600 hover:border-amber-400 hover:text-amber-600 transition">
-            Plus d'étoiles
-        </button>
-        <button data-sort="course"
-                class="sort-btn px-4 py-1.5 rounded-full text-sm font-medium border border-gray-200 text-gray-600 hover:border-gray-400 transition">
-            Cours (A → Z)
-        </button>
-        <select id="course-select"
-                class="px-3 py-1.5 rounded-full text-sm font-medium border border-gray-200 text-gray-600 bg-white hover:border-gray-400 transition cursor-pointer">
-            <option value="">Tous les cours</option>
-        </select>
+        {# Filtre par cours #}
+        <div class="min-w-[180px]">
+            <select id="course-select"
+                    class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white text-gray-700">
+                <option value="">Tous les cours</option>
+            </select>
+        </div>
+
+        {# Filtre par note #}
+        <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-xs text-gray-400 font-medium">Filtrer :</span>
+            <button data-filter="all"
+                    class="filter-btn active-filter px-3 py-1.5 rounded-full text-xs font-medium border transition">
+                Tous
+            </button>
+            <button data-filter="gte4"
+                    class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 transition">
+                <span class="text-amber-400">★★★★</span>+ (≥ 4)
+            </button>
+            <button data-filter="lt4"
+                    class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 transition">
+                &lt; 4 étoiles
+            </button>
+            <button data-filter="norating"
+                    class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 transition">
+                Sans note
+            </button>
+        </div>
+
+        {# Tri #}
+        <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-xs text-gray-400 font-medium">Trier :</span>
+            <button data-sort="recent"
+                    class="sort-btn active-sort px-3 py-1.5 rounded-full text-xs font-medium border transition">
+                Plus récents
+            </button>
+            <button data-sort="stars"
+                    class="sort-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 transition">
+                <i class="fa-solid fa-star text-amber-400 mr-0.5"></i> Mieux notés
+            </button>
+            <button data-sort="course"
+                    class="sort-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 text-gray-600 transition">
+                Cours (A → Z)
+            </button>
+        </div>
+
     </div>
 
     {% if reviews is empty %}
