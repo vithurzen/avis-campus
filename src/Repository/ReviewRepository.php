@@ -76,4 +76,28 @@ class ReviewRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Reports and moderation actions reference a review/comment via nullable FKs with no
+     * ORM-level cascade (they're an audit trail, kept even once the content is gone).
+     * Comments themselves DO cascade-remove with the review, so both must be detached
+     * before the review is removed, or Postgres rejects the delete with a FK violation.
+     */
+    public function detachAuditReferencesBeforeDelete(Review $review): void
+    {
+        $em = $this->getEntityManager();
+        $commentIds = array_map(static fn($c) => $c->getId(), $review->getComments()->toArray());
+
+        $em->createQuery('UPDATE App\Entity\Report r SET r.review = NULL WHERE r.review = :review')
+            ->setParameter('review', $review)->execute();
+        $em->createQuery('UPDATE App\Entity\ModerationAction m SET m.review = NULL WHERE m.review = :review')
+            ->setParameter('review', $review)->execute();
+
+        if ($commentIds !== []) {
+            $em->createQuery('UPDATE App\Entity\Report r SET r.comment = NULL WHERE r.comment IN (:ids)')
+                ->setParameter('ids', $commentIds)->execute();
+            $em->createQuery('UPDATE App\Entity\ModerationAction m SET m.comment = NULL WHERE m.comment IN (:ids)')
+                ->setParameter('ids', $commentIds)->execute();
+        }
+    }
 }

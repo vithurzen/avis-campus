@@ -51,14 +51,14 @@ final class ProfileController extends AbstractController
                 'label'       => false,
                 'data'        => $user->getEmail(),
                 'constraints' => [
-                    new NotBlank(['message' => 'L\'e-mail est requis.']),
-                    new Email(['message' => 'Adresse e-mail invalide.']),
+                    new NotBlank(message: 'L\'e-mail est requis.'),
+                    new Email(message: 'Adresse e-mail invalide.'),
                 ],
                 'attr' => ['class' => $inputClass],
             ])
             ->add('currentPassword', PasswordType::class, [
                 'label'       => false,
-                'constraints' => [new NotBlank(['message' => 'Le mot de passe actuel est requis.'])],
+                'constraints' => [new NotBlank(message: 'Le mot de passe actuel est requis.')],
                 'attr'        => ['class' => $inputClass],
             ])
             ->getForm();
@@ -92,7 +92,7 @@ final class ProfileController extends AbstractController
         $passwordForm = $this->createFormBuilder(null, ['attr' => ['id' => 'password-form']])
             ->add('currentPassword', PasswordType::class, [
                 'label'       => false,
-                'constraints' => [new NotBlank(['message' => 'Le mot de passe actuel est requis.'])],
+                'constraints' => [new NotBlank(message: 'Le mot de passe actuel est requis.')],
                 'attr'        => ['class' => $inputClass],
             ])
             ->add('newPassword', RepeatedType::class, [
@@ -107,8 +107,8 @@ final class ProfileController extends AbstractController
                     'attr'  => ['class' => $inputClass, 'placeholder' => ''],
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Le nouveau mot de passe est requis.']),
-                    new Length(['min' => 8, 'minMessage' => 'Minimum 8 caractères.']),
+                    new NotBlank(message: 'Le nouveau mot de passe est requis.'),
+                    new Length(min: 8, minMessage: 'Minimum 8 caractères.'),
                 ],
             ])
             ->getForm();

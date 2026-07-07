@@ -82,11 +82,12 @@ final class CommentController extends AbstractController
 
     #[Route('/{id}/delete', name: 'app_comment_delete', methods: ['POST'])]
     #[IsGranted(CommentVoter::DELETE, subject: 'comment')]
-    public function delete(Request $request, Comment $comment, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Comment $comment, EntityManagerInterface $entityManager, CommentRepository $commentRepository): Response
     {
         $reviewId = $comment->getReview()?->getId();
 
         if ($this->isCsrfTokenValid('delete' . $comment->getId(), $request->getPayload()->getString('_token'))) {
+            $commentRepository->detachAuditReferencesBeforeDelete($comment);
             $entityManager->remove($comment);
             $entityManager->flush();
 

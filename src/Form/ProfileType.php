@@ -20,15 +20,15 @@ class ProfileType extends AbstractType
             ->add('firstName', TextType::class, [
                 'label'       => false,
                 'constraints' => [
-                    new NotBlank(['message' => 'Le prénom est requis.']),
-                    new Length(['max' => 100]),
+                    new NotBlank(message: 'Le prénom est requis.'),
+                    new Length(max: 100),
                 ],
             ])
             ->add('lastName', TextType::class, [
                 'label'       => false,
                 'constraints' => [
-                    new NotBlank(['message' => 'Le nom est requis.']),
-                    new Length(['max' => 100]),
+                    new NotBlank(message: 'Le nom est requis.'),
+                    new Length(max: 100),
                 ],
             ])
             ->add('bio', TextareaType::class, [
@@ -42,7 +42,7 @@ class ProfileType extends AbstractType
             $builder->add('level', TextType::class, [
                 'label'    => false,
                 'required' => false,
-                'constraints' => [new Length(['max' => 100])],
+                'constraints' => [new Length(max: 100)],
             ]);
         }
     }
