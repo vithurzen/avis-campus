@@ -6,8 +6,10 @@ use App\Entity\EmailLog;
 use App\Entity\StudentProfile;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\MailerAssertionsTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class PasswordResetTest extends WebTestCase
@@ -49,6 +51,7 @@ class PasswordResetTest extends WebTestCase
         self::assertResponseRedirects('/login');
         self::assertEmailCount(1);
         $message = self::getMailerMessage();
+        \assert($message instanceof Email);
         self::assertSame('Réinitialisation de votre mot de passe', $message->getSubject());
 
         $log = $this->entityManager->getRepository(EmailLog::class)->findOneBy([
@@ -138,7 +141,7 @@ class PasswordResetTest extends WebTestCase
         self::assertTrue($hasher->isPasswordValid($user, 'oldpassword'), 'Password must be unchanged.');
     }
 
-    private function submitForgot($client, string $email): void
+    private function submitForgot(KernelBrowser $client, string $email): void
     {
         $crawler = $client->request('GET', '/forgot-password');
         self::assertResponseIsSuccessful();
@@ -151,7 +154,9 @@ class PasswordResetTest extends WebTestCase
 
     private function extractResetUrl(): string
     {
-        $html = self::getMailerMessage()->getHtmlBody();
+        $message = self::getMailerMessage();
+        \assert($message instanceof Email);
+        $html = $message->getHtmlBody();
         self::assertMatchesRegularExpression('#/reset-password/#', (string) $html);
         preg_match('#href="([^"]*/reset-password/[^"]+)"#', (string) $html, $m);
 
