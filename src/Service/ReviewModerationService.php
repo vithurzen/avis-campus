@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Entity\ModerationAction;
-use App\Entity\ModeratorProfile;
 use App\Entity\Review;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -103,12 +102,11 @@ class ReviewModerationService
         // 1. Status transition
         $review->setStatus($newStatus);
 
-        // Audit trail only when the actor has a moderator profile: the
-        // ModerationAction→ModeratorProfile relation is required in schema, and
-        // admins (who may also moderate, per ReviewVoter) have an AdminProfile
-        // instead — their actions still apply, just without this audit row.
+        // Audit trail whenever the actor has a profile (moderator or admin —
+        // per ReviewVoter, admins may also moderate reviews). ModerationAction
+        // requires one in schema, so actors without any profile are skipped.
         $profile = $moderator->getProfile();
-        if ($profile instanceof ModeratorProfile) {
+        if ($profile !== null) {
             $action = (new ModerationAction())
                 ->setModerator($profile)
                 ->setReview($review)

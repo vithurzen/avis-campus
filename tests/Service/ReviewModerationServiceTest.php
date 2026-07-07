@@ -2,6 +2,7 @@
 
 namespace App\Tests\Service;
 
+use App\Entity\AdminProfile;
 use App\Entity\ModerationAction;
 use App\Entity\ModeratorProfile;
 use App\Entity\Review;
@@ -40,6 +41,15 @@ class ReviewModerationServiceTest extends TestCase
         $moderator->setProfile(new ModeratorProfile());
 
         return $moderator;
+    }
+
+    private function createAdmin(): User
+    {
+        $admin = new User();
+        $admin->setEmail('admin@example.com');
+        $admin->setProfile(new AdminProfile());
+
+        return $admin;
     }
 
     private function createReview(string $status, string $title = 'Un super cours'): Review
@@ -121,19 +131,35 @@ class ReviewModerationServiceTest extends TestCase
         $this->service->approve($review, $moderator);
     }
 
-    public function testApproveByActorWithoutModeratorProfileSkipsAuditTrail(): void
+    public function testApproveByAdminAlsoRecordsAuditTrail(): void
     {
-        // Admins may also approve (per ReviewVoter), but ModerationAction requires a
-        // ModeratorProfile in schema: acting users without one (e.g. admins) still
-        // get the status transition + notification + email, just no audit row.
+        // Admins may also approve (per ReviewVoter), and Profile is single-table
+        // inherited so an AdminProfile fits the ModerationAction relation too.
         $review = $this->createReview(Review::STATUS_PENDING);
-        $notModerator = new User();
-        $notModerator->setEmail('admin@example.com');
+        $admin = $this->createAdmin();
+
+        $this->entityManager->expects($this->once())
+            ->method('persist')
+            ->with($this->callback(fn($action) => $action instanceof ModerationAction
+                && $action->getModerator() === $admin->getProfile()
+                && $action->getAction() === 'approve'));
+        $this->entityManager->expects($this->once())->method('flush');
+
+        $this->service->approve($review, $admin);
+
+        $this->assertTrue($review->isApproved());
+    }
+
+    public function testApproveByActorWithoutAnyProfileSkipsAuditTrail(): void
+    {
+        $review = $this->createReview(Review::STATUS_PENDING);
+        $noProfile = new User();
+        $noProfile->setEmail('ghost@example.com');
 
         $this->entityManager->expects($this->never())->method('persist');
         $this->entityManager->expects($this->once())->method('flush');
 
-        $this->service->approve($review, $notModerator);
+        $this->service->approve($review, $noProfile);
 
         $this->assertTrue($review->isApproved());
     }
@@ -243,16 +269,33 @@ class ReviewModerationServiceTest extends TestCase
         $this->service->hide($review, $moderator);
     }
 
-    public function testHideByActorWithoutModeratorProfileSkipsAuditTrail(): void
+    public function testHideByAdminAlsoRecordsAuditTrail(): void
     {
         $review = $this->createReview(Review::STATUS_APPROVED);
-        $notModerator = new User();
-        $notModerator->setEmail('admin@example.com');
+        $admin = $this->createAdmin();
+
+        $this->entityManager->expects($this->once())
+            ->method('persist')
+            ->with($this->callback(fn($action) => $action instanceof ModerationAction
+                && $action->getModerator() === $admin->getProfile()
+                && $action->getAction() === 'hide'));
+        $this->entityManager->expects($this->once())->method('flush');
+
+        $this->service->hide($review, $admin);
+
+        $this->assertTrue($review->isHidden());
+    }
+
+    public function testHideByActorWithoutAnyProfileSkipsAuditTrail(): void
+    {
+        $review = $this->createReview(Review::STATUS_APPROVED);
+        $noProfile = new User();
+        $noProfile->setEmail('ghost@example.com');
 
         $this->entityManager->expects($this->never())->method('persist');
         $this->entityManager->expects($this->once())->method('flush');
 
-        $this->service->hide($review, $notModerator);
+        $this->service->hide($review, $noProfile);
 
         $this->assertTrue($review->isHidden());
     }

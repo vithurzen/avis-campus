@@ -14,9 +14,10 @@ class ModerationAction
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: ModeratorProfile::class)]
+
+    #[ORM\ManyToOne(targetEntity: Profile::class)]
     #[ORM\JoinColumn(name: 'moderator_profile_id', referencedColumnName: 'id', nullable: false)]
-    private ?ModeratorProfile $moderator = null;
+    private ?Profile $moderator = null;
 
     #[ORM\ManyToOne(targetEntity: Review::class)]
     #[ORM\JoinColumn(name: 'review_id', referencedColumnName: 'id', nullable: true)]
@@ -44,12 +45,12 @@ class ModerationAction
         return $this->id;
     }
 
-    public function getModerator(): ?ModeratorProfile
+    public function getModerator(): ?Profile
     {
         return $this->moderator;
     }
 
-    public function setModerator(?ModeratorProfile $moderator): static
+    public function setModerator(?Profile $moderator): static
     {
         $this->moderator = $moderator;
 
