@@ -161,8 +161,7 @@ final class AdminController extends AbstractController
     public function reports(ReportRepository $reportRepository): Response
     {
         return $this->render('admin/reports.html.twig', [
-            'reports'   => $reportRepository->findAllOrdered(),
-            'openCount' => $reportRepository->countOpen(),
+            'reports' => $reportRepository->findAllOrdered(),
         ]);
     }
 
