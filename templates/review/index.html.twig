@@ -100,6 +100,14 @@
                 class="sort-btn px-4 py-1.5 rounded-full text-sm font-medium border border-gray-200 text-gray-600 hover:border-amber-400 hover:text-amber-600 transition">
             Plus d'étoiles
         </button>
+        <button data-sort="course"
+                class="sort-btn px-4 py-1.5 rounded-full text-sm font-medium border border-gray-200 text-gray-600 hover:border-gray-400 transition">
+            Cours (A → Z)
+        </button>
+        <select id="course-select"
+                class="px-3 py-1.5 rounded-full text-sm font-medium border border-gray-200 text-gray-600 bg-white hover:border-gray-400 transition cursor-pointer">
+            <option value="">Tous les cours</option>
+        </select>
     </div>
 
     {% if reviews is empty %}
@@ -113,6 +121,8 @@
                 <a href="{{ path('app_review_show', { id: review.id }) }}"
                    data-rating="{{ review.rating ?? '' }}"
                    data-created="{{ review.createdAt ? review.createdAt.timestamp : 0 }}"
+                   data-course="{{ review.course ? review.course.title|lower : '' }}"
+                   data-course-label="{{ review.course ? review.course.title : '' }}"
                    class="review-card group bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-md transition flex flex-col gap-4">
 
                     <div class="flex items-start justify-between gap-3">
@@ -141,8 +151,15 @@
                     <p class="text-sm text-gray-600 line-clamp-3">{{ review.content }}</p>
 
                     <div class="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
-                        <span><i class="fa-solid fa-book mr-1"></i>{{ review.course ? review.course.title : '—' }}</span>
-                        <span>{{ review.createdAt ? review.createdAt|date('d/m/Y') : '' }}</span>
+                        <span class="truncate"><i class="fa-solid fa-book mr-1"></i>{{ review.course ? review.course.title : '—' }}</span>
+                        <span class="flex items-center gap-3 shrink-0">
+                            {% if review.comments|length > 0 %}
+                                <span title="{{ review.comments|length }} commentaire{{ review.comments|length > 1 ? 's' : '' }}">
+                                    <i class="fa-regular fa-comment mr-1"></i>{{ review.comments|length }}
+                                </span>
+                            {% endif %}
+                            <span>{{ review.createdAt ? review.createdAt|date('d/m/Y') : '' }}</span>
+                        </span>
                     </div>
 
                 </a>
@@ -158,6 +175,7 @@
 (function () {
     const filterButtons = document.querySelectorAll('.filter-btn');
     const sortButtons    = document.querySelectorAll('.sort-btn');
+    const courseSelect   = document.getElementById('course-select');
     const grid     = document.getElementById('reviews-grid');
     const cards    = grid ? Array.from(grid.querySelectorAll('.review-card')) : [];
     const noResult = document.getElementById('no-results');
@@ -168,6 +186,25 @@
 
     let currentFilter = 'all';
     let currentSort   = 'recent';
+    let currentCourse = '';
+
+    // Remplit le select avec les cours réellement présents dans la liste, triés alphabétiquement.
+    if (courseSelect) {
+        const courses = new Map();
+        cards.forEach(card => {
+            const value = card.dataset.course;
+            const label = card.dataset.courseLabel;
+            if (value && !courses.has(value)) courses.set(value, label);
+        });
+        [...courses.entries()]
+            .sort((a, b) => a[1].localeCompare(b[1]))
+            .forEach(([value, label]) => {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = label;
+                courseSelect.appendChild(option);
+            });
+    }
 
     function matchesFilter(card, filter) {
         const r = card.dataset.rating === '' ? null : parseInt(card.dataset.rating, 10);
@@ -189,12 +226,15 @@
                 if (bR === null) return -1;
                 return bR - aR;
             }
+            if (currentSort === 'course') {
+                return a.dataset.course.localeCompare(b.dataset.course);
+            }
             return parseInt(b.dataset.created, 10) - parseInt(a.dataset.created, 10);
         });
 
         let visible = 0;
         sorted.forEach(card => {
-            const show = matchesFilter(card, currentFilter);
+            const show = matchesFilter(card, currentFilter) && (!currentCourse || card.dataset.course === currentCourse);
             card.style.display = show ? '' : 'none';
             if (show) visible++;
             grid.appendChild(card);
@@ -229,6 +269,13 @@
             render();
         });
     });
+
+    if (courseSelect) {
+        courseSelect.addEventListener('change', () => {
+            currentCourse = courseSelect.value;
+            render();
+        });
+    }
 
     // Style initial des boutons actifs
     document.querySelector('[data-filter="all"]').classList.add(...activeClass);
