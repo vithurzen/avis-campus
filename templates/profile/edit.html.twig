@@ -1,0 +1,116 @@
+{% extends 'layout/app.html.twig' %}
+
+{% block title %}Mon profil — Avis Campus{% endblock %}
+
+{% set inputClass = 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white' %}
+{% set labelClass = 'block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5' %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900">Mon profil</h1>
+        <p class="text-sm text-gray-500 mt-1">{{ user.email }}</p>
+    </div>
+
+    {# ── Informations du profil ── #}
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+        <h2 class="text-base font-semibold text-gray-900 mb-6">Informations</h2>
+
+        {{ form_start(form, { attr: { class: 'space-y-5' } }) }}
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    {{ form_label(form.firstName, 'Prénom', { label_attr: { class: labelClass } }) }}
+                    {{ form_widget(form.firstName, { attr: { class: inputClass } }) }}
+                    <div class="mt-1.5 text-xs text-red-600 space-y-0.5">{{ form_errors(form.firstName) }}</div>
+                </div>
+                <div>
+                    {{ form_label(form.lastName, 'Nom', { label_attr: { class: labelClass } }) }}
+                    {{ form_widget(form.lastName, { attr: { class: inputClass } }) }}
+                    <div class="mt-1.5 text-xs text-red-600 space-y-0.5">{{ form_errors(form.lastName) }}</div>
+                </div>
+            </div>
+
+            {% if form.level is defined %}
+                <div>
+                    {{ form_label(form.level, 'Niveau', { label_attr: { class: labelClass } }) }}
+                    {{ form_widget(form.level, { attr: { class: inputClass } }) }}
+                    <div class="mt-1.5 text-xs text-red-600 space-y-0.5">{{ form_errors(form.level) }}</div>
+                </div>
+            {% endif %}
+
+            <div>
+                {{ form_label(form.bio, 'Bio', { label_attr: { class: labelClass } }) }}
+                {{ form_widget(form.bio, { attr: { class: inputClass } }) }}
+                <div class="mt-1.5 text-xs text-red-600 space-y-0.5">{{ form_errors(form.bio) }}</div>
+            </div>
+
+            <button type="submit"
+                    class="bg-brand hover:bg-brandHover text-white font-semibold text-sm px-6 py-2.5 rounded-full transition">
+                Enregistrer
+            </button>
+
+        {{ form_end(form) }}
+    </div>
+
+    {# ── Adresse e-mail ── #}
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+        <h2 class="text-base font-semibold text-gray-900 mb-6">Adresse e-mail</h2>
+
+        {{ form_start(emailForm, { attr: { class: 'space-y-5' } }) }}
+
+            <div>
+                {{ form_label(emailForm.email, 'Nouvel e-mail', { label_attr: { class: labelClass } }) }}
+                {{ form_widget(emailForm.email, { attr: { class: inputClass } }) }}
+                <div class="mt-1.5 text-xs text-red-600 space-y-0.5">{{ form_errors(emailForm.email) }}</div>
+            </div>
+
+            <div>
+                {{ form_label(emailForm.currentPassword, 'Mot de passe actuel', { label_attr: { class: labelClass } }) }}
+                {{ form_widget(emailForm.currentPassword, { attr: { class: inputClass } }) }}
+                <div class="mt-1.5 text-xs text-red-600 space-y-0.5">{{ form_errors(emailForm.currentPassword) }}</div>
+            </div>
+
+            <button type="submit"
+                    class="bg-brand hover:bg-brandHover text-white font-semibold text-sm px-6 py-2.5 rounded-full transition">
+                Mettre à jour l'e-mail
+            </button>
+
+        {{ form_end(emailForm) }}
+    </div>
+
+    {# ── Mot de passe ── #}
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+        <h2 class="text-base font-semibold text-gray-900 mb-6">Mot de passe</h2>
+
+        {{ form_start(passwordForm, { attr: { class: 'space-y-5' } }) }}
+
+            <div>
+                {{ form_label(passwordForm.currentPassword, 'Mot de passe actuel', { label_attr: { class: labelClass } }) }}
+                {{ form_widget(passwordForm.currentPassword, { attr: { class: inputClass } }) }}
+                <div class="mt-1.5 text-xs text-red-600 space-y-0.5">{{ form_errors(passwordForm.currentPassword) }}</div>
+            </div>
+
+            <div>
+                {{ form_label(passwordForm.newPassword.first, 'Nouveau mot de passe', { label_attr: { class: labelClass } }) }}
+                {{ form_widget(passwordForm.newPassword.first, { attr: { class: inputClass } }) }}
+                <div class="mt-1.5 text-xs text-red-600 space-y-0.5">{{ form_errors(passwordForm.newPassword.first) }}</div>
+            </div>
+
+            <div>
+                {{ form_label(passwordForm.newPassword.second, 'Confirmer le nouveau mot de passe', { label_attr: { class: labelClass } }) }}
+                {{ form_widget(passwordForm.newPassword.second, { attr: { class: inputClass } }) }}
+                <div class="mt-1.5 text-xs text-red-600 space-y-0.5">{{ form_errors(passwordForm.newPassword.second) }}</div>
+            </div>
+
+            <button type="submit"
+                    class="bg-brand hover:bg-brandHover text-white font-semibold text-sm px-6 py-2.5 rounded-full transition">
+                Changer le mot de passe
+            </button>
+
+        {{ form_end(passwordForm) }}
+    </div>
+
+</div>
+{% endblock %}
