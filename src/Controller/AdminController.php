@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\ModerationAction;
 use App\Entity\Report;
 use App\Entity\Review;
 use App\Entity\Teacher;
@@ -45,6 +46,7 @@ final class AdminController extends AbstractController
     {
         if ($this->isCsrfTokenValid('admin_review_' . $review->getId(), $request->getPayload()->getString('_token'))) {
             $review->setStatus(Review::STATUS_HIDDEN);
+            $this->logAdminAction($em, 'hide', review: $review);
             $em->flush();
 
             $author = $review->getUser();
@@ -70,6 +72,7 @@ final class AdminController extends AbstractController
     {
         if ($this->isCsrfTokenValid('admin_review_' . $review->getId(), $request->getPayload()->getString('_token'))) {
             $review->setStatus(Review::STATUS_APPROVED);
+            $this->logAdminAction($em, 'restore', review: $review);
             $em->flush();
             $this->addFlash('success', 'Avis restauré.');
         }
@@ -143,12 +146,17 @@ final class AdminController extends AbstractController
         if ($this->isCsrfTokenValid('admin_report_' . $report->getId(), $request->getPayload()->getString('_token'))) {
             $report->setStatus(Report::STATUS_RESOLVED);
 
-            if ($request->getPayload()->getBoolean('hide_content')) {
-                if ($report->getReview()) {
-                    $report->getReview()->setStatus(Review::STATUS_HIDDEN);
-                }
+            $hideContent = $request->getPayload()->getBoolean('hide_content');
+            if ($hideContent && $report->getReview()) {
+                $report->getReview()->setStatus(Review::STATUS_HIDDEN);
             }
 
+            $this->logAdminAction(
+                $em,
+                'report_resolved',
+                review: $hideContent ? $report->getReview() : null,
+                report: $report,
+            );
             $em->flush();
             $this->addFlash('success', 'Signalement traité.');
         }
@@ -161,6 +169,7 @@ final class AdminController extends AbstractController
     {
         if ($this->isCsrfTokenValid('admin_report_' . $report->getId(), $request->getPayload()->getString('_token'))) {
             $report->setStatus(Report::STATUS_DISMISSED);
+            $this->logAdminAction($em, 'report_dismissed', report: $report);
             $em->flush();
             $this->addFlash('success', 'Signalement ignoré.');
         }
@@ -179,5 +188,33 @@ final class AdminController extends AbstractController
             'apiLogs'          => $apiLogRepository->findBy([], ['createdAt' => 'DESC'], 200),
             'moderationActions' => $moderationActionRepository->findBy([], ['createdAt' => 'DESC'], 200),
         ]);
+    }
+
+    /**
+     * Records the connected admin's action in the moderation audit trail.
+     * Admin routes act directly on entities (unlike ReviewModerationService),
+     * so each one logs its own ModerationAction explicitly.
+     */
+    private function logAdminAction(
+        EntityManagerInterface $em,
+        string $action,
+        ?Review $review = null,
+        ?Report $report = null,
+        ?string $reason = null,
+    ): void {
+        $profile = $this->getUser()?->getProfile();
+        if ($profile === null) {
+            return;
+        }
+
+        $entry = (new ModerationAction())
+            ->setModerator($profile)
+            ->setReview($review)
+            ->setReport($report)
+            ->setAction($action)
+            ->setReason($reason)
+            ->setCreatedAt(new \DateTimeImmutable());
+
+        $em->persist($entry);
     }
 }

@@ -1,6 +1,12 @@
 parameters:
 	ignoreErrors:
 		-
+			message: '#^Call to an undefined method Symfony\\Component\\Security\\Core\\User\\UserInterface\:\:getProfile\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Controller/AdminController.php
+
+		-
 			message: '#^Call to an undefined method App\\Repository\\CourseRepository\:\:findTopRatedCourses\(\)\.$#'
 			identifier: method.notFound
 			count: 1
