@@ -16,8 +16,6 @@ final class Version20260704000000 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // Add with a default to backfill existing rows, then drop the DB default:
-        // new rows always receive a value from the PeriodType enum property.
         $this->addSql("ALTER TABLE formations ADD period_type VARCHAR(20) DEFAULT 'semester' NOT NULL");
         $this->addSql('ALTER TABLE formations ALTER COLUMN period_type DROP DEFAULT');
     }
