@@ -1,0 +1,112 @@
+{% extends 'layout/app.html.twig' %}
+
+{% block title %}Modifier le commentaire — Avis Campus{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 py-10">
+
+    <div class="mb-8">
+        <a href="{{ path('app_review_show', { id: comment.review.id }) }}" class="text-sm text-gray-500 hover:text-brand transition">
+            <i class="fa-solid fa-arrow-left mr-1"></i> Retour à l'avis
+        </a>
+        <h1 class="text-2xl font-bold text-gray-900 mt-4">Modifier le commentaire</h1>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 p-8">
+
+        <div class="flex items-center gap-2 mb-6">
+            <div class="w-7 h-7 rounded-full bg-brand flex items-center justify-center text-white text-xs font-bold">
+                {% set cp = comment.user.profile %}
+                {{ cp ? (cp.firstName|first ~ cp.lastName|first)|upper : comment.user.email|first|upper }}
+            </div>
+            <span class="text-sm font-medium text-gray-800">
+                {% set cp = comment.user.profile %}
+                {{ cp ? (cp.firstName ~ ' ' ~ cp.lastName) : comment.user.email }}
+            </span>
+            <span class="text-xs text-gray-400 ml-auto">
+                {{ comment.createdAt ? comment.createdAt|date('d/m/Y') : '' }}
+            </span>
+        </div>
+
+        {{ form_start(form, { attr: { class: 'space-y-6' } }) }}
+
+            <div>
+                {{ form_widget(form.content, {
+                    attr: {
+                        class: 'w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white min-h-[120px]',
+                        placeholder: 'Rédigez votre commentaire…'
+                    }
+                }) }}
+                <div class="mt-1.5 text-xs text-red-600">{{ form_errors(form.content) }}</div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 pt-2">
+                <a href="{{ path('app_review_show', { id: comment.review.id }) }}"
+                   class="text-sm text-gray-500 hover:text-gray-700 transition px-4 py-2">
+                    Annuler
+                </a>
+                <button type="submit"
+                        class="bg-brand hover:bg-brandHover text-white font-semibold text-sm px-6 py-2.5 rounded-full transition">
+                    Enregistrer
+                </button>
+            </div>
+
+        {{ form_end(form) }}
+    </div>
+
+    <div class="mt-4 flex justify-start">
+        <form id="form-delete-comment" method="post" action="{{ path('app_comment_delete', { id: comment.id }) }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+        </form>
+        <button type="button" id="delete-comment-btn" class="text-sm text-red-500 hover:text-red-700 transition font-medium">
+            <i class="fa-solid fa-trash mr-1"></i> Supprimer le commentaire
+        </button>
+    </div>
+
+</div>
+
+{# ── Modale suppression de commentaire ── #}
+<div id="modal-delete-comment" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="modal-delete-comment-backdrop"></div>
+    <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-trash text-red-500"></i>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-900">Supprimer ce commentaire</h3>
+                <p class="text-xs text-gray-400">Cette action est irréversible.</p>
+            </div>
+        </div>
+        <div class="flex items-center justify-end gap-3">
+            <button type="button" id="modal-delete-comment-cancel"
+                    class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition">
+                Annuler
+            </button>
+            <button type="button" id="modal-delete-comment-confirm"
+                    class="px-5 py-2 text-sm font-semibold bg-red-500 hover:bg-red-600 text-white rounded-full transition">
+                Oui, supprimer
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    const modal      = document.getElementById('modal-delete-comment');
+    const openBtn    = document.getElementById('delete-comment-btn');
+    const closeBtn   = document.getElementById('modal-delete-comment-cancel');
+    const backdrop   = document.getElementById('modal-delete-comment-backdrop');
+    const confirmBtn = document.getElementById('modal-delete-comment-confirm');
+    const form       = document.getElementById('form-delete-comment');
+
+    openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+    closeBtn.addEventListener('click', close);
+    backdrop.addEventListener('click', close);
+    confirmBtn.addEventListener('click', () => form.submit());
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+    function close() { modal.classList.add('hidden'); }
+})();
+</script>
+{% endblock %}

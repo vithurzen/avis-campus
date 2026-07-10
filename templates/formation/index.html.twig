@@ -19,12 +19,14 @@
     </div>
 
     {# ── Barre de recherche ── #}
-    <div class="relative mb-8 max-w-md">
-        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
-        <input type="search"
-               id="formation-search"
-               placeholder="Rechercher une formation…"
-               class="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-200 rounded-full focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white">
+    <div class="bg-white border border-gray-200 rounded-2xl p-4 mb-6 flex flex-wrap gap-3 items-center">
+        <div class="relative flex-1 min-w-[180px]">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
+            <input type="search"
+                   id="formation-search"
+                   placeholder="Rechercher une formation…"
+                   class="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white">
+        </div>
     </div>
 
     {% if formations is empty %}
