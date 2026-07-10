@@ -1,5 +1,15 @@
 SITE EN LIGNE: https://www.avis-campus.fr/
 
+## Membres de l'équipe
+
+| Pseudo GitHub | Nom       | Prénom   |
+| ------------- | --------- | -------- |
+| `vithurzen`   | VILVARAJAH        | Vithurzen |
+| `githubdavi`  | VALERIUS          | David     |
+| `jelain`      | JOHN JESURATNAM   | Jelain    |
+
+---
+
 # avis-campus
 
 Plateforme d'avis étudiants sur les cours (Symfony 7.4 / PHP 8.2 / PostgreSQL).
